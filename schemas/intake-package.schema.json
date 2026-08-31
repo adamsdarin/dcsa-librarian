@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/dcsa-library-custodian/intake-package.schema.json",
+  "title": "DCSA Library quarantined intake package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "submission_id",
+    "producer_id",
+    "retrieved_at",
+    "requested_source_uri",
+    "resolved_source_uri",
+    "source_filename",
+    "mime_type",
+    "source_sha256",
+    "source_bytes",
+    "approval_state"
+  ],
+  "properties": {
+    "submission_id": {"type": "string", "minLength": 1},
+    "producer_id": {"type": "string", "minLength": 1},
+    "retrieved_at": {"type": "string", "format": "date-time"},
+    "requested_source_uri": {"type": "string", "format": "uri", "pattern": "^https://"},
+    "resolved_source_uri": {"type": "string", "format": "uri", "pattern": "^https://"},
+    "redirect_chain": {"type": "array", "items": {"type": "string", "format": "uri"}},
+    "http_metadata": {"type": "object"},
+    "publisher_claim": {"type": "string"},
+    "source_filename": {"type": "string", "minLength": 1},
+    "mime_type": {"type": "string", "minLength": 1},
+    "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_bytes": {"type": "integer", "minimum": 1},
+    "proposed_collection": {"type": "string"},
+    "producer_notes": {"type": "string"},
+    "approval_state": {"const": "quarantined_unreviewed"}
+  }
+}
+

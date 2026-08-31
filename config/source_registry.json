@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0",
+  "settings": {
+    "user_agent": "DCSA-Library-Custodian/0.1 (+local-governance-audit)",
+    "respect_robots": true,
+    "timeout_seconds": 30,
+    "delay_seconds": 0.75,
+    "max_response_bytes": 104857600
+  },
+  "sources": [
+    {
+      "id": "dcsa-nisp-tools",
+      "enabled": true,
+      "url": "https://www.dcsa.mil/Industrial-Security/National-Industrial-Security-Program-Oversight/NISP-Tools-Resources/",
+      "allowed_domains": ["dcsa.mil"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "dcsa_official_guidance_or_tool"
+    },
+    {
+      "id": "dcsa-security-review-rating",
+      "enabled": true,
+      "url": "https://www.dcsa.mil/Industrial-Security/National-Industrial-Security-Program-Oversight/Security-Review-Rating-Process/",
+      "allowed_domains": ["dcsa.mil"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "dcsa_official_guidance_or_tool"
+    },
+    {
+      "id": "dcsa-niss-isls",
+      "enabled": true,
+      "url": "https://www.dcsa.mil/Systems-Applications/National-Industrial-Security-System-NISS/",
+      "allowed_domains": ["dcsa.mil"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "dcsa_industrial_security_letter"
+    },
+    {
+      "id": "dcsa-cui-resources",
+      "enabled": true,
+      "url": "https://www.dcsa.mil/Industrial-Security/Controlled-Unclassified-Information-CUI/Resources/",
+      "allowed_domains": ["dcsa.mil"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "dcsa_official_guidance_or_tool"
+    },
+    {
+      "id": "dcsa-cui-policy-training",
+      "enabled": true,
+      "url": "https://www.dcsa.mil/Industrial-Security/Controlled-Unclassified-Information-CUI/Policy-and-Training/",
+      "allowed_domains": ["dcsa.mil"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "dcsa_official_guidance_or_training"
+    },
+    {
+      "id": "dcsa-diss-resources",
+      "enabled": true,
+      "url": "https://www.dcsa.mil/Systems-Applications/Defense-Information-System-for-Security-DISS/DISS-Resources/",
+      "allowed_domains": ["dcsa.mil"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "dcsa_system_guidance"
+    },
+    {
+      "id": "doha-iscr-hearings",
+      "enabled": true,
+      "url": "https://doha.ogc.osd.mil/Industrial-Security-Program/Industrial-Security-Clearance-Decisions/ISCR-Hearing-Decisions/",
+      "allowed_domains": ["doha.ogc.osd.mil"],
+      "crawl_path_prefix": "/Industrial-Security-Program/Industrial-Security-Clearance-Decisions/ISCR-Hearing-Decisions/",
+      "max_depth": 1,
+      "max_pages": 80,
+      "authority_hint": "doha_case_research_not_controlling_policy"
+    },
+    {
+      "id": "doha-appeals",
+      "enabled": true,
+      "url": "https://doha.ogc.osd.mil/Industrial-Security-Program/Industrial-Security-Clearance-Decisions/DOHA-Appeal-Board/",
+      "allowed_domains": ["doha.ogc.osd.mil"],
+      "crawl_path_prefix": "/Industrial-Security-Program/Industrial-Security-Clearance-Decisions/DOHA-Appeal-Board/",
+      "max_depth": 1,
+      "max_pages": 40,
+      "authority_hint": "doha_case_research_not_controlling_policy"
+    },
+    {
+      "id": "ecfr-nispom",
+      "enabled": true,
+      "url": "https://www.ecfr.gov/current/title-32/subtitle-A/chapter-I/subchapter-D/part-117",
+      "allowed_domains": ["ecfr.gov"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "controlling_regulation"
+    },
+    {
+      "id": "ecfr-cui",
+      "enabled": true,
+      "url": "https://www.ecfr.gov/current/title-32/subtitle-B/chapter-XX/part-2002",
+      "allowed_domains": ["ecfr.gov"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "controlling_regulation"
+    },
+    {
+      "id": "nara-cui-policy",
+      "enabled": true,
+      "url": "https://www.archives.gov/cui/registry/policy-guidance",
+      "allowed_domains": ["archives.gov"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "cui_executive_agent_guidance"
+    },
+    {
+      "id": "dod-issuances",
+      "enabled": true,
+      "url": "https://www.esd.whs.mil/DD/DoD-Issuances/",
+      "allowed_domains": ["esd.whs.mil"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "dod_issuance"
+    },
+    {
+      "id": "federal-register-api",
+      "enabled": true,
+      "url": "https://www.federalregister.gov/api/v1/documents.json?per_page=100&conditions%5Bagencies%5D%5B%5D=defense-counterintelligence-and-security-agency",
+      "allowed_domains": ["federalregister.gov"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "federal_register_notice"
+    }
+  ]
+}
+
