@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "dcsa-library-custodian"
 version = "0.1.0"
-description = "Independent integrity, parity, discovery, and intake service for a governed DCSA evidence library"
+description = "Model-agnostic discovery and intake framework for a governed DCSA evidence library"
 requires-python = ">=3.11"
 dependencies = []
 
@@ -20,4 +20,3 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-

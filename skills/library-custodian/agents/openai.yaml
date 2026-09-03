@@ -1,4 +1,0 @@
-interface:
-  display_name: "DCSA Library Custodian"
-  short_description: "Audit library integrity and discover missing official documents"
-  default_prompt: "Use $library-custodian to audit the DCSA Library and check approved official sources for missing or changed documents without publishing candidates."

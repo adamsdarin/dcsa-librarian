@@ -1,0 +1,4 @@
+interface:
+  display_name: "DCSA Librarian"
+  short_description: "Discover and validate DCSA library intake"
+  default_prompt: "Use $dcsa-librarian to discover and validate official-source material as quarantined DCSA Library intake candidates."

@@ -13,7 +13,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="dcsa-custodian", description="Audit a DCSA Library and discover missing official documents without publishing them.")
+    parser = argparse.ArgumentParser(prog="dcsa-custodian", description="DCSA Librarian: audit intake integrity and discover missing official documents without publishing them.")
     commands = parser.add_subparsers(dest="command", required=True)
 
     doctor = commands.add_parser("doctor", help="Run a read-only integrity and parity audit")
