@@ -119,6 +119,24 @@
       "authority_hint": "dod_issuance"
     },
     {
+      "id": "odni-secea-personnel-vetting-policy",
+      "enabled": true,
+      "url": "https://www.dni.gov/index.php/ncsc-how-we-work/ncsc-security-executive-agent/ncsc-policy",
+      "allowed_domains": ["dni.gov"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "secea_federal_personnel_vetting_standard"
+    },
+    {
+      "id": "pac-trusted-workforce-policy",
+      "enabled": true,
+      "url": "https://www.performance.gov/trusted-workforce/",
+      "allowed_domains": ["performance.gov"],
+      "max_depth": 0,
+      "max_pages": 1,
+      "authority_hint": "secea_federal_personnel_vetting_standard"
+    },
+    {
       "id": "federal-register-api",
       "enabled": true,
       "url": "https://www.federalregister.gov/api/v1/documents.json?per_page=100&conditions%5Bagencies%5D%5B%5D=defense-counterintelligence-and-security-agency",
@@ -126,7 +144,46 @@
       "max_depth": 0,
       "max_pages": 1,
       "authority_hint": "federal_register_notice"
+    },
+    {
+      "id": "official-reference-verification",
+      "enabled": true,
+      "url": "https://www.dcsa.mil/",
+      "allowed_domains": [
+        "archives.gov",
+        "assets.performance.gov",
+        "cdse.edu",
+        "cisa.gov",
+        "congress.gov",
+        "consumer.ftc.gov",
+        "csrc.nist.gov",
+        "dcsa.mil",
+        "dhs.gov",
+        "dni.gov",
+        "dodig.mil",
+        "esd.whs.mil",
+        "fbi.gov",
+        "georgewbush-whitehouse.archives.gov",
+        "govinfo.gov",
+        "gpo.gov",
+        "media.defense.gov",
+        "nbib.opm.gov",
+        "nist.gov",
+        "nsa.gov",
+        "nvlpubs.nist.gov",
+        "obamawhitehouse.archives.gov",
+        "odni.gov",
+        "opm.gov",
+        "osha.gov",
+        "resources.sei.cmu.edu",
+        "secretservice.gov",
+        "tsa.gov",
+        "wbdg.org",
+        "whitehouse.gov"
+      ],
+      "max_depth": 0,
+      "max_pages": 0,
+      "authority_hint": "verification_only_untrusted_reference_url"
     }
   ]
 }
-
