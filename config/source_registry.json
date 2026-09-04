@@ -128,15 +128,6 @@
       "authority_hint": "secea_federal_personnel_vetting_standard"
     },
     {
-      "id": "pac-trusted-workforce-policy",
-      "enabled": true,
-      "url": "https://www.performance.gov/trusted-workforce/",
-      "allowed_domains": ["performance.gov"],
-      "max_depth": 0,
-      "max_pages": 1,
-      "authority_hint": "secea_federal_personnel_vetting_standard"
-    },
-    {
       "id": "federal-register-api",
       "enabled": true,
       "url": "https://www.federalregister.gov/api/v1/documents.json?per_page=100&conditions%5Bagencies%5D%5B%5D=defense-counterintelligence-and-security-agency",

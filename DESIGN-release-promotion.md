@@ -108,6 +108,40 @@ agency transmittal rather than public posting — it is recorded as
 `operator_attested` with the attesting person and date, never silently
 labelled as retrieved.
 
+## Decisions taken (operator, 2026-09-04)
+
+These were open questions in the first draft. They are settled, and the
+implementation should not re-litigate them.
+
+**OPM-released documents get their own collection.** PVMS is issued jointly by
+the Security Executive Agent (ODNI) and the Suitability and Credentialing
+Executive Agent (OPM), and it is not a SEAD. Filing it under the existing
+`SECURITY_EXECUTIVE_AGENT_DIRECTIVES_(SEAD)` collection would misrepresent
+what it is. Create a sibling collection for OPM-released material under
+`PERSONNEL_VETTING`, and place the PVMS family there — the Management
+Standards and its appendices together, so the appendix is never read without
+the standard it belongs to.
+
+This matters beyond filing. The library's retrieval design "physically
+separates contractor-controlling authority from Government issuances and
+guidance." PVMS binds the Federal trusted workforce by position risk and
+sensitivity; for cleared industry the controlling instruments remain 32 CFR
+117.8 and ISL 2021-02. A retrieval path that returned PVMS as controlling
+authority for a contractor would be wrong. Authority metadata must carry that
+distinction, not just the folder name.
+
+**Attestation basis: "received via appropriate pathways."** Recorded verbatim
+as the `operator_attested` basis, with the attesting person and date. The
+record states that the document was not retrieved from a public posting and
+names who vouched for it. That is the honest shape: a librarian can later see
+exactly what the claim was and who made it.
+
+**Open, and it should block promotion of Appendix C until answered:** the copy
+in hand is marked *Version 2, May 2025*. Nothing has confirmed it is current.
+A superseded standard indexed as current is worse than an absent one, because
+retrieval will serve it with confidence. Confirm the version before publish,
+or mark its lifecycle explicitly unverified.
+
 ## Then hand to the Archivist
 
 Promotion ends at placement. Retrieval is the Archivist's:
