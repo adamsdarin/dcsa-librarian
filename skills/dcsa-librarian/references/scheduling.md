@@ -12,10 +12,47 @@ does not.
 Never hand-edit a rendered adapter. Change the declaration and re-render:
 
 ```
-python custodian.py schedule --render github-actions
-python custodian.py schedule --render cron
 python custodian.py schedule --render schtasks
+python custodian.py schedule --render cron
 ```
+
+## The scan runs locally, on an ordinary desktop
+
+**DCSA blocks hosted CI runners.** A GitHub Actions workflow fails every time
+while still looking like monitoring, which is worse than no schedule at all, so
+there is deliberately no CI adapter. The scan must originate from a normal
+desktop connection.
+
+It is also model-free by construction: stdlib Python, no network service, no
+agent in the loop. A scheduled run produces a plain-text report a person reads
+directly. Nothing downstream needs an LLM to find out what happened.
+
+### Setting it up on Windows
+
+1. Edit `adapters/windows/run-scan.cmd` — set `LIBRARY` to the DCSA Library
+   path and `ALERTS` to wherever reports should land.
+2. Run `adapters/windows/install-tasks.cmd`. It renders the tasks from the
+   declaration, shows them, and asks before creating anything.
+3. Confirm them in Task Scheduler. "Last Run Result" carries the exit code.
+
+### Setting it up on Linux or macOS
+
+```
+python custodian.py schedule --render cron --command "$PWD/adapters/unix/run-scan.sh"
+```
+
+Paste the output into `crontab -e`. Set `DCSA_LIBRARY` and `DCSA_ALERTS` in the
+environment if the defaults do not match.
+
+### How you find out something changed
+
+The wrapper drops the report on the desktop when there is something to see:
+`DCSA-SCAN-FINDINGS.txt` on findings, `DCSA-SCAN-INCOMPLETE.txt` when a source
+could not be reached. Every run also writes
+`state/reports/<job>-latest.txt` and appends to `state/reports/scan-log.txt`.
+
+An incomplete scan gets its own alert on purpose. The failure mode that matters
+is a scan that quietly reaches nothing and reads as clean.
 
 ## Running a declared job
 
@@ -53,16 +90,22 @@ March polls already found. **A scan with a failed source never closes a
 window**: an incomplete run must not suppress the polls that might still
 succeed.
 
-## Cron is UTC; the declaration is not
+## Time zones
 
-`utc_offset_hours` is a fixed standard-time offset (EST, -5). Rendered crons
-are UTC, so during EDT each job fires an hour later in local terms. Three polls
-a day absorb that; the monthly sweep does not care. A conversion that would
+`schtasks` schedules in the machine's local time, so the declared times are
+emitted unconverted and **follow DST correctly**. On the local path the offset
+question does not arise.
+
+`utc_offset_hours` (EST, -5) exists for the cron adapter, whose expressions are
+UTC. There, during EDT each job fires an hour later in local terms; three polls
+a day absorb that and the monthly sweep does not care. A conversion that would
 cross midnight and silently shift a job's day-of-month is refused rather than
 emitted wrong.
 
-`schtasks` is the exception: it schedules in local time, so that adapter
-renders the declared local times unconverted.
+schtasks takes an explicit list of day numbers and does not understand ranges,
+so the renderer expands `28-31,1-3` to `28,29,30,31,1,2,3`. Days that do not
+exist in a given month simply do not fire — which is the other reason the
+window covers the first days of the following month.
 
 ## Running without the library
 
@@ -76,18 +119,16 @@ to the corpus. Manifest triage then happens where the library lives.
 
 `state/snapshots/` and `state/watch/` are tracked in git on purpose. Change
 detection compares against the previous scan; a runner that discards them
-detects nothing, ever, while still reporting success. Any hosted runner must
-commit them back. A useful side effect: `git log -p state/snapshots/` is a
-durable history of exactly what each source changed and when.
+detects nothing, ever, while still reporting success. On the local path they
+persist on disk anyway, but committing them gives a durable history:
+`git log -p state/snapshots/` shows exactly what each source changed and when.
 
-## Choosing a runner
+`state/reports/` is not tracked. Reports are local output, not baseline.
 
-The requirements are network egress to the configured sources, a durable place
-for `state/`, and optionally the library. A runner missing the first two cannot
-do this job regardless of how it is configured.
+## If a source starts failing
 
-Datacenter IPs are a live risk: DCSA sits behind a CDN that often rejects them
-and non-browser user agents, so a hosted runner may see 403s where an ordinary
-desktop succeeds. Do not respond by spoofing a user agent or disabling
-safeguards. Either move the job to a runner whose egress is accepted, or use
-the browser fallback in [discovery.md](discovery.md).
+A run that cannot reach a source has not cleared it. Do not respond by spoofing
+a user agent or disabling robots handling. If the direct crawler is rejected by
+a CDN, use the browser fallback in [discovery.md](discovery.md) — it navigates
+the public site as an ordinary user and hands the capture back to the
+deterministic importer.

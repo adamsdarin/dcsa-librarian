@@ -7,8 +7,23 @@ from datetime import datetime, timezone
 from pathlib import Path
 from unittest import mock
 
-from library_custodian.runner import EXIT_FINDINGS, EXIT_NO_FINDINGS, EXIT_SOURCE_ERROR, run_scheduled_job
-from library_custodian.schedule import Job, cron_expression, due_today, load_schedule, period_key, to_utc
+from library_custodian.runner import (
+    EXIT_FINDINGS,
+    EXIT_NO_FINDINGS,
+    EXIT_SOURCE_ERROR,
+    render_text_summary,
+    run_scheduled_job,
+)
+from library_custodian.schedule import (
+    Job,
+    cron_expression,
+    due_today,
+    expand_days,
+    load_schedule,
+    period_key,
+    render,
+    to_utc,
+)
 
 
 PAGE_URL = "https://www.dcsa.mil/resources/"
@@ -51,6 +66,63 @@ class ConversionTests(unittest.TestCase):
     def test_mixed_minutes_cannot_share_one_expression(self) -> None:
         with self.assertRaises(ValueError):
             cron_expression(job(local_times=("09:00", "09:30")), -5)
+
+
+class SchtasksRenderingTests(unittest.TestCase):
+    def test_ranges_expand_because_schtasks_cannot_read_them(self) -> None:
+        self.assertEqual(expand_days("28-31,1-3"), "28,29,30,31,1,2,3")
+
+    def test_single_day_passes_through(self) -> None:
+        self.assertEqual(expand_days("1"), "1")
+
+    def test_out_of_range_day_is_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            expand_days("30-33")
+
+    def test_rendered_tasks_carry_expanded_days(self) -> None:
+        schedule = load_schedule(Path("config/schedule.json"))
+        output = render("schtasks", schedule, "run-scan.cmd")
+        self.assertIn("/d 28,29,30,31,1,2,3", output)
+        self.assertNotIn("28-31", output)
+
+    def test_github_actions_is_not_an_available_runner(self) -> None:
+        # DCSA blocks hosted CI runners; a CI adapter would fail every run
+        # while still looking like monitoring
+        schedule = load_schedule(Path("config/schedule.json"))
+        with self.assertRaises(ValueError):
+            render("github-actions", schedule, "x")
+
+
+class TextReportTests(unittest.TestCase):
+    def _summary(self, **overrides: object) -> dict:
+        base = {
+            "job_id": "watch",
+            "period": "2026-03",
+            "ran_at": "2026-03-31T14:00:00+00:00",
+            "sources_scanned": ["dcsa-nisp-tools"],
+            "sources_errored": [],
+            "manifest_checked": True,
+            "findings": {"changed": [], "new_urls": [], "candidates": []},
+        }
+        base.update(overrides)
+        return base
+
+    def test_an_unreachable_source_is_never_reported_as_clean(self) -> None:
+        text = render_text_summary(self._summary(sources_errored=["dcsa-nisp-tools"]), EXIT_SOURCE_ERROR)
+        self.assertIn("INCOMPLETE", text)
+        self.assertIn("did NOT clear those sources", text)
+        self.assertNotIn("No changes detected", text)
+
+    def test_findings_are_listed_with_their_urls(self) -> None:
+        text = render_text_summary(
+            self._summary(findings={"changed": ["https://x/a.pdf"], "new_urls": [], "candidates": ["https://x/a.pdf"]}),
+            EXIT_FINDINGS,
+        )
+        self.assertIn("1 item(s) need review", text)
+        self.assertIn("https://x/a.pdf", text)
+
+    def test_a_clean_scan_says_so_plainly(self) -> None:
+        self.assertIn("No changes detected", render_text_summary(self._summary(), EXIT_NO_FINDINGS))
 
 
 class PeriodTests(unittest.TestCase):

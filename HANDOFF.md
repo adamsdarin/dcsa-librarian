@@ -1,6 +1,6 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-06T23:10:00Z by Claude
+Last updated: 2026-09-06T23:22:00Z by Claude
 
 ## Current State
 Integrity and discovery plane for the DCSA Library. Operates on a library passed
@@ -26,18 +26,28 @@ are the interface: 0 clean, 1 incomplete, 3 findings.
 the baseline; a runner that discards them detects nothing while still reporting
 success.
 
-**Not yet proven: whether a hosted runner can actually reach DCSA.** The
-committed GitHub Actions workflow is unexercised. This container is blocked at
-the proxy for every registry domain (dcsa.mil, ecfr.gov, federalregister.gov,
-archives.gov, doha, esd.whs.mil all 403 at CONNECT), so it could not be tested
-here. DCSA's CDN commonly rejects datacenter IPs. If the workflow 403s, the
-declaration is unchanged — point a different runner at it.
+**The scan runs locally, by design.** DCSA blocks GitHub's hosted runners —
+user-confirmed, not a hypothesis — so the CI adapter and its workflow were
+removed rather than left to fail monthly while looking like monitoring. There is
+no `github-actions` renderer; asking for one raises. The scan is model-free by
+construction: stdlib Python, no service, no agent in the loop.
+
+Wrappers live in `adapters/windows/` (run-scan.cmd, install-tasks.cmd) and
+`adapters/unix/run-scan.sh`. They pass `--library` because the corpus is local,
+copy the report to the desktop on findings or on an incomplete scan, and
+propagate the exit code so Task Scheduler's "Last Run Result" is meaningful.
+Every run writes `state/reports/<job>-latest.txt` in plain English.
+
+On the local path the DST caveat disappears: schtasks schedules in local time.
+`utc_offset_hours` now only serves the cron adapter.
 
 ## Next
-1. **Run the workflow manually and see whether GitHub's runners can reach
-   dcsa.mil.** Everything else about the hosted path depends on this one
-   empirical answer. If blocked: use the browser fallback, or a runner whose
-   egress is accepted. Do not respond by spoofing a user agent.
+1. **Install and run it once on the target machine.** Edit `LIBRARY` and
+   `ALERTS` in `adapters\windows\run-scan.cmd`, then run
+   `adapters\windows\install-tasks.cmd`. Nothing in this project has ever
+   executed a successful scan against a live source — every container is
+   egress-blocked — so the first real run is also the first proof the crawler
+   works at all.
 2. Verify `dcsa-fcl` resolves (its URL was never reachable from a container) and
    whether the VOI newsletters are visible in the NISP Tools page HTML or sit
    behind a tab that needs `browser-import`. The `voi-release-watch` job is
@@ -55,13 +65,36 @@ declaration is unchanged — point a different runner at it.
 Merge with v2 or keep separate? This one has discovery and browser-import; v2
 has enrichment and releases.
 
-Answered: a declared schedule with swappable runners, GitHub Actions first.
-Still open is whether that runner's egress is accepted by DCSA.
+Answered: a declared schedule with swappable runners, executing locally.
+Hosted CI is ruled out — DCSA blocks it.
 
 Where does manifest triage happen now that the scan can run without the
 library?
 
 ## Log
+2026-09-06T23:22:00Z Claude — User confirmed DCSA blocks GitHub Actions runners
+and directed that the scan run locally, without a model. Removed the workflow
+and the `github-actions` renderer outright rather than leaving them to fail
+monthly: a scheduled job that always fails is worse than no schedule, because it
+still reads as monitoring. A test now asserts that runner is unavailable.
+
+Added local wrappers for Windows and Unix and a plain-text report
+(`state/reports/<job>-latest.txt`), so a scheduled run is legible without an
+LLM: the verdict is stated in words, and an unreachable source is called
+INCOMPLETE rather than clean. The wrapper copies the report to the desktop on
+findings or on failure and propagates the exit code, so Task Scheduler's "Last
+Run Result" carries it.
+
+Fixed a real defect in the schtasks renderer: Task Scheduler takes an explicit
+list of day numbers and cannot parse ranges, so `28-31,1-3` was invalid and
+would have failed at registration. It now expands to `28,29,30,31,1,2,3`.
+
+Note the local path is strictly better on time: schtasks schedules in local
+time and therefore follows DST, so the fixed-offset caveat only applies to the
+cron adapter now.
+
+38 tests pass. Still nothing has run against a live source — see Next #1.
+
 2026-09-06T23:10:00Z Claude — Built the scheduling layer. User rejected a
 Windows-Task-Scheduler-shaped answer and asked for automation "built into the
 structure of the agent so it's agnostic". Told them plainly that no agent

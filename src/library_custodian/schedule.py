@@ -16,7 +16,9 @@ from pathlib import Path
 from typing import Any
 
 
-RUNNERS = ("cron", "github-actions", "schtasks")
+# GitHub Actions is deliberately absent. DCSA blocks GitHub's hosted runners,
+# so a workflow there fails every time while looking like monitoring.
+RUNNERS = ("schtasks", "cron")
 
 
 @dataclass(frozen=True)
@@ -152,33 +154,50 @@ def render_cron(schedule: Schedule, command: str) -> str:
     return "\n".join(lines) + "\n"
 
 
-def render_github_actions(schedule: Schedule) -> str:
-    lines = [
-        "# Rendered from config/schedule.json. GitHub Actions cron is UTC.",
-        "on:",
-        "  workflow_dispatch:",
-        "    inputs:",
-        "      job:",
-        "        description: Schedule job id to run",
-        "        required: false",
-        "  schedule:",
-    ]
-    for job in schedule.jobs:
-        lines.append(f"    # {job.id}: {job.description}")
-        lines.append(f"    - cron: '{cron_expression(job, schedule.utc_offset_hours)}'")
-    return "\n".join(lines) + "\n"
+def expand_days(days_of_month: str) -> str:
+    """Expand a cron-style day field into the explicit list schtasks requires.
+
+    Windows Task Scheduler takes a comma-separated list of day numbers and does
+    not understand ranges, so "28-31,1-3" has to become "28,29,30,31,1,2,3".
+    Days that do not exist in a given month simply do not fire, which is why the
+    window also covers the first days of the following month.
+    """
+    if days_of_month == "*":
+        return "*"
+    days: list[int] = []
+    for part in days_of_month.split(","):
+        part = part.strip()
+        if "-" in part:
+            start, _, end = part.partition("-")
+            days.extend(range(int(start), int(end) + 1))
+        else:
+            days.append(int(part))
+    for day in days:
+        if not 1 <= day <= 31:
+            raise ValueError(f"day of month out of range in {days_of_month!r}: {day}")
+    return ",".join(str(day) for day in days)
 
 
 def render_schtasks(schedule: Schedule, command: str) -> str:
-    """Windows Task Scheduler commands, in local time — schtasks does not use UTC."""
-    lines = [f":: Rendered from config/schedule.json. Times are local ({schedule.timezone_name}); schtasks schedules in local time."]
+    """Windows Task Scheduler commands.
+
+    schtasks schedules in the machine's local time, so the declared times are
+    emitted unconverted — and unlike the UTC crons, they track DST correctly.
+    One task per time of day: a monthly task cannot repeat within a day.
+    """
+    lines = [
+        f":: Rendered from config/schedule.json by: python custodian.py schedule --render schtasks",
+        f":: Times are local ({schedule.timezone_name}). schtasks uses local time, so these follow DST.",
+        ":: Run this from the project directory in an elevated Command Prompt.",
+    ]
     for job in schedule.jobs:
+        lines.append("")
+        lines.append(f":: {job.id}: {job.description}")
         for local_time in job.local_times:
-            name = f"dcsa-librarian-{job.id}-{local_time.replace(':', '')}"
-            lines.append(f":: {job.id}: {job.description}")
+            name = f"DCSA Librarian - {job.id} - {local_time.replace(':', '')}"
             lines.append(
                 f'schtasks /create /tn "{name}" /tr "{command} --job {job.id}" '
-                f'/sc monthly /d {job.days_of_month} /st {local_time} /f'
+                f'/sc monthly /d {expand_days(job.days_of_month)} /st {local_time} /rl limited /f'
             )
     return "\n".join(lines) + "\n"
 
@@ -186,8 +205,6 @@ def render_schtasks(schedule: Schedule, command: str) -> str:
 def render(runner: str, schedule: Schedule, command: str) -> str:
     if runner == "cron":
         return render_cron(schedule, command)
-    if runner == "github-actions":
-        return render_github_actions(schedule)
     if runner == "schtasks":
         return render_schtasks(schedule, command)
     raise ValueError(f"unknown runner {runner!r}; expected one of {', '.join(RUNNERS)}")

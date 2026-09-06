@@ -21,6 +21,86 @@ EXIT_SOURCE_ERROR = 1
 EXIT_FINDINGS = 3
 
 
+def render_text_summary(summary: dict[str, Any], code: int) -> str:
+    """Plain text a person reads directly.
+
+    Nothing downstream of a scheduled scan should need a model to find out what
+    happened, so the verdict is stated in words, not inferred from JSON.
+    """
+    lines = [
+        "DCSA Librarian - scheduled scan",
+        "=" * 46,
+        f"Job:     {summary['job_id']}",
+        f"Ran:     {summary['ran_at']} (UTC)",
+    ]
+    if summary.get("period"):
+        lines.append(f"Period:  {summary['period']}")
+
+    if summary.get("skipped"):
+        lines += [
+            "Result:  SKIPPED - this period's issue was already found by an earlier poll.",
+            "",
+            "Nothing to do. The remaining polls in this window will also skip.",
+        ]
+        return "\n".join(lines) + "\n"
+
+    findings = summary["findings"]
+    total = len(set(findings["changed"]) | set(findings["new_urls"]) | set(findings["candidates"]))
+
+    if code == EXIT_SOURCE_ERROR:
+        lines.append("Result:  INCOMPLETE - a source could not be reached.")
+    elif total:
+        lines.append(f"Result:  {total} item(s) need review.")
+    else:
+        lines.append("Result:  No changes detected.")
+
+    lines += [
+        "",
+        f"Sources scanned:  {', '.join(summary['sources_scanned']) or 'none'}",
+        f"Manifest checked: {'yes' if summary['manifest_checked'] else 'no (source-side change only)'}",
+    ]
+
+    if summary["sources_errored"]:
+        lines += [
+            "",
+            "!! SOURCES THAT FAILED: " + ", ".join(summary["sources_errored"]),
+            "!! This scan did NOT clear those sources. Absence of findings below",
+            "!! says nothing about them. The release window was left open so a",
+            "!! later poll can still succeed.",
+        ]
+
+    for heading, key in (
+        ("CHANGED SINCE LAST SCAN", "changed"),
+        ("NEW SINCE LAST SCAN", "new_urls"),
+        ("FLAGGED FOR REVIEW", "candidates"),
+    ):
+        urls = findings[key]
+        if urls:
+            lines += ["", f"{heading} ({len(urls)})"]
+            lines += [f"  {url}" for url in urls]
+
+    lines += ["", "-" * 46]
+    if code == EXIT_SOURCE_ERROR:
+        lines.append("Next: check network access to the failed source, then re-run.")
+    elif total:
+        lines.append("Next: open the URLs above and decide whether the library needs updating.")
+    else:
+        lines.append("Next: nothing.")
+    return "\n".join(lines) + "\n"
+
+
+def write_reports(state_dir: Path, summary: dict[str, Any], code: int) -> Path:
+    """Write the readable report where a person will actually find it."""
+    text = render_text_summary(summary, code)
+    reports = state_dir / "reports"
+    reports.mkdir(parents=True, exist_ok=True)
+    latest = reports / f"{summary['job_id']}-latest.txt"
+    latest.write_text(text, encoding="utf-8")
+    with (reports / "scan-log.txt").open("a", encoding="utf-8", newline="\n") as handle:
+        handle.write(text + "\n")
+    return latest
+
+
 def _findings(report: dict[str, Any]) -> dict[str, list[str]]:
     """Everything a human needs to look at, keyed by why it surfaced."""
     changed: list[str] = []
@@ -58,15 +138,14 @@ def run_scheduled_job(
     if skip_if_satisfied and period_satisfied(state_dir, job, key):
         # the issue this window was hunting has already been found; the
         # remaining polls in the period have nothing left to do
-        return (
-            {
-                "job_id": job.id,
-                "period": key,
-                "skipped": "period_already_satisfied",
-                "ran_at": moment.isoformat(),
-            },
-            EXIT_NO_FINDINGS,
-        )
+        skipped = {
+            "job_id": job.id,
+            "period": key,
+            "skipped": "period_already_satisfied",
+            "ran_at": moment.isoformat(),
+        }
+        skipped["report_path"] = str(write_reports(state_dir, skipped, EXIT_NO_FINDINGS))
+        return skipped, EXIT_NO_FINDINGS
 
     report = discover(
         library_root=library_root,
@@ -100,6 +179,6 @@ def run_scheduled_job(
         "period_marker": str(marker) if marker else None,
         "counts": report["counts"],
     }
-    if errored:
-        return summary, EXIT_SOURCE_ERROR
-    return summary, EXIT_FINDINGS if has_findings else EXIT_NO_FINDINGS
+    code = EXIT_SOURCE_ERROR if errored else (EXIT_FINDINGS if has_findings else EXIT_NO_FINDINGS)
+    summary["report_path"] = str(write_reports(state_dir, summary, code))
+    return summary, code
