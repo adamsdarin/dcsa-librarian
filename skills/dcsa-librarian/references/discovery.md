@@ -15,6 +15,36 @@ Use `config/source_registry.json` as the allowlist. A search engine may help ide
 
 The `--download` option writes only to the independent project's quarantine directory. Publication requires a separate reviewed release workflow.
 
+## Revision detection
+
+A manifest hit proves the library once held that URL. It is not evidence that
+the held copy is still what the source publishes today, so `discover` probes
+every already-known document with a HEAD request and compares `ETag`,
+`Last-Modified`, `Content-Length`, and — for anything downloaded — SHA-256
+against the previous scan's snapshot. Each document carries a `change_signal`:
+
+- `changed` — a field present in both scans holds a different value. The
+  document becomes a review candidate even though it is already in the manifest.
+- `unchanged` — compared on real evidence and identical.
+- `unverified` — no field was comparable (the server returned no validators, the
+  probe failed, or the snapshot predates this check). Never read this as clean.
+- `new_to_snapshot` — no previous record; this scan is its baseline.
+
+`baseline_established: false` on a source means there was nothing to compare
+against, so an empty change list says nothing about the source. Read
+`verification_errors` and `unverified_documents` before concluding a scan was
+clean. `--no-verify-known` skips the probes and leaves every known document
+`unverified`.
+
+Two source shapes defeat URL-only comparison, and both occur at DCSA:
+
+- **Date-stamped republication.** The FCL Orientation Handbook ships as
+  `FCL_Orientation_Handbook_<date>.pdf`, so a revision arrives as a *new URL*.
+  Only registered coverage of the hosting section catches it; hashing does not.
+- **Announcement-first change.** The Voice of Industry newsletter announces
+  guidance updates before or instead of the document moving. Monitoring the
+  document alone will lag the announcement.
+
 ## Browser fallback
 
 If the direct crawler cannot retrieve `robots.txt`, is rejected by a CDN, or cannot see links rendered by the public page, do not spoof a different client or disable safeguards. Use the available approved browser-control capability to navigate the configured public section normally, page by page.

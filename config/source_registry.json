@@ -15,7 +15,19 @@
       "allowed_domains": ["dcsa.mil"],
       "max_depth": 0,
       "max_pages": 1,
-      "authority_hint": "dcsa_official_guidance_or_tool"
+      "authority_hint": "dcsa_official_guidance_or_tool",
+      "note": "Also the published home of the Voice of Industry newsletters, but they sit behind an in-page tab. If a scan of this source reports no VOI PDFs, the tab is not in the served HTML and this source needs the browser-import fallback."
+    },
+    {
+      "id": "dcsa-fcl",
+      "enabled": true,
+      "url": "https://www.dcsa.mil/FCL/",
+      "allowed_domains": ["dcsa.mil"],
+      "crawl_path_prefix": "/FCL/",
+      "max_depth": 1,
+      "max_pages": 25,
+      "authority_hint": "dcsa_official_guidance_or_tool",
+      "note": "Facility clearance section. Home of the FCL Orientation Handbook, which DCSA republishes under a date-stamped filename, so a revision appears as a new URL rather than an in-place edit."
     },
     {
       "id": "dcsa-security-review-rating",

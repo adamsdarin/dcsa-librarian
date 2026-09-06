@@ -28,6 +28,12 @@ def build_parser() -> argparse.ArgumentParser:
     scan.add_argument("--quarantine-dir", type=Path, default=PROJECT_ROOT / "quarantine")
     scan.add_argument("--source", action="append", dest="sources")
     scan.add_argument("--download", action="store_true", help="Download missing candidates into quarantine; never publishes")
+    scan.add_argument(
+        "--verify-known",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Probe documents already in the manifest for in-place revisions (default: on)",
+    )
 
     browser_import = commands.add_parser("browser-import", help="Validate a browser page-by-page capture and create review candidates")
     browser_import.add_argument("--library", type=Path, required=True)
@@ -56,6 +62,7 @@ def main(argv: list[str] | None = None) -> int:
             quarantine_dir=args.quarantine_dir.resolve(),
             selected_sources=set(args.sources) if args.sources else None,
             download=args.download,
+            verify_known=args.verify_known,
         )
         print(json.dumps(report, indent=2))
         return 1 if any(source["status"] == "error" for source in report["sources"]) else 0

@@ -59,6 +59,86 @@ class WebItem:
     sha256: str | None = None
     bytes: int | None = None
     content_type: str | None = None
+    etag: str | None = None
+    last_modified: str | None = None
+    content_length: str | None = None
+    change_signal: str = "unverified"
+    changed_fields: list[str] | None = None
+
+
+FINGERPRINT_FIELDS = ("sha256", "etag", "last_modified", "content_length")
+
+
+def response_headers(response: Any) -> dict[str, str]:
+    return {
+        "content_type": response.headers.get_content_type(),
+        "etag": (response.headers.get("ETag") or "").strip(),
+        "last_modified": (response.headers.get("Last-Modified") or "").strip(),
+        "content_length": (response.headers.get("Content-Length") or "").strip(),
+        "final_url": canonicalize_url(response.geturl()),
+    }
+
+
+def compare_fingerprints(previous: dict[str, Any] | None, current: dict[str, Any]) -> tuple[str, list[str]]:
+    """Classify a document against its previous snapshot record.
+
+    A document is called changed only on positive evidence: a field present on
+    both sides holds a different value. Absent evidence is reported as
+    unverified, never as unchanged, so a silent gap cannot read as a clean scan.
+    """
+    if previous is None:
+        return "new_to_snapshot", []
+    before = {field: str(previous.get(field) or "") for field in FINGERPRINT_FIELDS}
+    after = {field: str(current.get(field) or "") for field in FINGERPRINT_FIELDS}
+    comparable = [field for field in FINGERPRINT_FIELDS if before[field] and after[field]]
+    if not comparable:
+        return "unverified", []
+    differing = [field for field in comparable if before[field] != after[field]]
+    return ("changed", differing) if differing else ("unchanged", [])
+
+
+def needs_review(item: "WebItem") -> bool:
+    """A document is a review candidate when it is absent from the manifest or
+    when the source's copy has changed since the last scan. A manifest hit is
+    not on its own evidence that the held copy is still current."""
+    return item.status != "known" or item.change_signal == "changed"
+
+
+def load_snapshot_documents(snapshot_path: Path) -> dict[str, dict[str, Any]] | None:
+    """Read a snapshot, or None when no usable baseline exists.
+
+    None and {} are different answers: None means nothing to compare against,
+    which is why an empty change list on a first scan must not read as "clean".
+    """
+    if not snapshot_path.is_file():
+        return None
+    try:
+        data = json.loads(snapshot_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    documents = data.get("documents")
+    if isinstance(documents, dict):
+        return {url: record for url, record in documents.items() if isinstance(record, dict)}
+    urls = data.get("document_urls")
+    if isinstance(urls, list):
+        # schema 1 snapshots recorded URLs only: a URL baseline with no fingerprints
+        return {url: {} for url in urls if isinstance(url, str)}
+    return None
+
+
+def make_run_dir(parent: Path, run_id: str) -> Path:
+    """Create a fresh run directory, disambiguating runs inside the same second.
+
+    Run ids are second-granular, so back-to-back scans would otherwise collide
+    and abort the second one.
+    """
+    candidate = parent / run_id
+    attempt = 1
+    while candidate.exists():
+        attempt += 1
+        candidate = parent / f"{run_id}-{attempt}"
+    candidate.mkdir(parents=True, exist_ok=False)
+    return candidate
 
 
 def utc_now() -> str:
@@ -133,12 +213,31 @@ class Fetcher:
             self._robots[origin] = parser
         return self._robots[origin].can_fetch(self.user_agent, url)
 
-    def get(self, url: str) -> tuple[bytes, dict[str, str]]:
-        if not self._allowed(url):
-            raise PermissionError(f"robots policy disallows {url}")
+    def _throttle(self) -> None:
         wait = self.delay_seconds - (time.monotonic() - self._last_request)
         if wait > 0:
             time.sleep(wait)
+
+    def head(self, url: str) -> dict[str, str]:
+        """Freshness probe for a document already held in the manifest.
+
+        Headers only: a revision check must not cost a full re-download of every
+        known document on every scan.
+        """
+        if not self._allowed(url):
+            raise PermissionError(f"robots policy disallows {url}")
+        self._throttle()
+        request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": self.user_agent, "Accept": "*/*"})
+        try:
+            with urllib.request.urlopen(request, timeout=self.timeout) as response:
+                return response_headers(response)
+        finally:
+            self._last_request = time.monotonic()
+
+    def get(self, url: str) -> tuple[bytes, dict[str, str]]:
+        if not self._allowed(url):
+            raise PermissionError(f"robots policy disallows {url}")
+        self._throttle()
         request = urllib.request.Request(url, headers={"User-Agent": self.user_agent, "Accept": "text/html,application/pdf,application/octet-stream;q=0.8"})
         with urllib.request.urlopen(request, timeout=self.timeout) as response:
             content_length = response.headers.get("Content-Length")
@@ -147,12 +246,7 @@ class Fetcher:
             data = response.read(self.max_bytes + 1)
             if len(data) > self.max_bytes:
                 raise ValueError(f"response exceeds {self.max_bytes} bytes")
-            metadata = {
-                "content_type": response.headers.get_content_type(),
-                "etag": response.headers.get("ETag", ""),
-                "last_modified": response.headers.get("Last-Modified", ""),
-                "final_url": canonicalize_url(response.geturl()),
-            }
+            metadata = response_headers(response)
         self._last_request = time.monotonic()
         return data, metadata
 
@@ -215,6 +309,7 @@ def discover(
     quarantine_dir: Path,
     selected_sources: set[str] | None = None,
     download: bool = False,
+    verify_known: bool = True,
 ) -> dict[str, Any]:
     registry = json.loads(registry_path.read_text(encoding="utf-8-sig"))
     settings = registry.get("settings", {})
@@ -226,9 +321,8 @@ def discover(
         respect_robots=bool(settings.get("respect_robots", True)),
     )
     known_filenames, known_urls = load_known_documents(library_root)
-    run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    run_dir = state_dir / "scans" / run_id
-    run_dir.mkdir(parents=True, exist_ok=False)
+    run_dir = make_run_dir(state_dir / "scans", datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"))
+    run_id = run_dir.name
     quarantine_run = quarantine_dir / run_id
     now = utc_now()
     items: list[WebItem] = []
@@ -241,6 +335,11 @@ def discover(
         try:
             documents, pages = _crawl_source(source, fetcher)
             source_items: list[WebItem] = []
+            snapshot_path = state_dir / "snapshots" / f"{source_id}.json"
+            previous_documents = load_snapshot_documents(snapshot_path)
+            current_documents: dict[str, dict[str, Any]] = {}
+            verification_errors: list[dict[str, str]] = []
+            changed: list[dict[str, Any]] = []
             for link in documents:
                 filename = infer_filename(link["url"], link["text"])
                 status = "known" if link["url"] in known_urls or filename.casefold() in known_filenames else "missing_from_manifest"
@@ -267,25 +366,67 @@ def discover(
                     item.sha256 = hashlib.sha256(data).hexdigest()
                     item.bytes = len(data)
                     item.content_type = metadata.get("content_type") or mimetypes.guess_type(filename)[0]
+                    item.etag = metadata.get("etag") or None
+                    item.last_modified = metadata.get("last_modified") or None
+                    item.content_length = metadata.get("content_length") or None
+                elif verify_known:
+                    # A document already in the manifest can still be revised in
+                    # place. Probe its headers so a same-URL revision is visible.
+                    try:
+                        headers = fetcher.head(item.url)
+                    except Exception as exc:
+                        verification_errors.append({"url": item.url, "error": f"{type(exc).__name__}: {exc}"})
+                    else:
+                        item.etag = headers.get("etag") or None
+                        item.last_modified = headers.get("last_modified") or None
+                        item.content_length = headers.get("content_length") or None
+                        item.content_type = item.content_type or headers.get("content_type")
+                record = {
+                    "inferred_filename": filename,
+                    "sha256": item.sha256,
+                    "etag": item.etag,
+                    "last_modified": item.last_modified,
+                    "content_length": item.content_length,
+                }
+                previous_record = previous_documents.get(item.url) if previous_documents is not None else None
+                item.change_signal, differing = compare_fingerprints(previous_record, record)
+                item.changed_fields = differing or None
+                if item.change_signal == "changed":
+                    changed.append({"url": item.url, "inferred_filename": filename, "status": status, "changed_fields": differing})
+                current_documents[item.url] = record
                 items.append(item)
                 source_items.append(item)
-            snapshot_path = state_dir / "snapshots" / f"{source_id}.json"
-            previous_urls: set[str] = set()
-            if snapshot_path.is_file():
-                try:
-                    previous_urls = set(json.loads(snapshot_path.read_text(encoding="utf-8")).get("document_urls", []))
-                except (OSError, json.JSONDecodeError):
-                    pass
+            baseline_established = previous_documents is not None
+            previous_urls = set(previous_documents) if previous_documents is not None else set()
             current_urls = {item.url for item in source_items}
             snapshot_path.parent.mkdir(parents=True, exist_ok=True)
-            snapshot_path.write_text(json.dumps({"source_id": source_id, "scanned_at": now, "document_urls": sorted(current_urls), "pages": pages}, indent=2) + "\n", encoding="utf-8")
+            snapshot_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 2,
+                        "source_id": source_id,
+                        "scanned_at": now,
+                        "documents": current_documents,
+                        "document_urls": sorted(current_urls),
+                        "pages": pages,
+                    },
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
             sources_report.append({
                 "source_id": source_id,
                 "status": "ok",
                 "pages_scanned": len(pages),
                 "documents_seen": len(source_items),
-                "new_urls_since_previous_scan": sorted(current_urls - previous_urls) if previous_urls else [],
+                "baseline_established": baseline_established,
+                "known_documents_verified": verify_known,
+                "new_urls_since_previous_scan": sorted(current_urls - previous_urls) if baseline_established else [],
                 "removed_urls_since_previous_scan": sorted(previous_urls - current_urls),
+                "changed_since_previous_scan": sorted(changed, key=lambda entry: entry["url"]),
+                "unverified_documents": sorted(item.url for item in source_items if item.change_signal == "unverified"),
+                "verification_errors": verification_errors,
             })
         except Exception as exc:  # a failed source must not abort or publish anything
             sources_report.append({"source_id": source_id, "status": "error", "error": f"{type(exc).__name__}: {exc}"})
@@ -296,20 +437,23 @@ def discover(
         "created_at": now,
         "library_root": str(library_root.resolve()),
         "download_enabled": download,
+        "verify_known_enabled": verify_known,
         "publication_performed": False,
         "sources": sources_report,
         "counts": {
             "documents_seen": len(items),
             "known": sum(item.status == "known" for item in items),
             "missing_from_manifest": sum(item.status == "missing_from_manifest" for item in items),
+            "changed_since_previous_scan": sum(item.change_signal == "changed" for item in items),
+            "unverified": sum(item.change_signal == "unverified" for item in items),
             "downloaded_to_quarantine": sum(item.downloaded_path is not None for item in items),
         },
-        "candidates": [asdict(item) for item in items if item.status != "known"],
+        "candidates": [asdict(item) for item in items if needs_review(item)],
     }
     (run_dir / "discovery-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     with (run_dir / "candidates.jsonl").open("w", encoding="utf-8", newline="\n") as handle:
         for item in items:
-            if item.status != "known":
+            if needs_review(item):
                 handle.write(json.dumps(asdict(item), separators=(",", ":")) + "\n")
     return report
 
@@ -335,9 +479,8 @@ def import_browser_capture(
     allowed_domains = source["allowed_domains"]
     known_filenames, known_urls = load_known_documents(library_root)
     now = utc_now()
-    run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ-browser")
-    run_dir = state_dir / "browser-scans" / run_id
-    run_dir.mkdir(parents=True, exist_ok=False)
+    run_dir = make_run_dir(state_dir / "browser-scans", datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ-browser"))
+    run_id = run_dir.name
     documents: dict[str, dict[str, str]] = {}
     accepted_pages: list[dict[str, Any]] = []
     rejected_pages: list[dict[str, str]] = []
@@ -393,16 +536,32 @@ def import_browser_capture(
         )
 
     snapshot_path = state_dir / "snapshots" / f"browser-{source_id}.json"
-    previous_urls: set[str] = set()
-    if snapshot_path.is_file():
-        try:
-            previous_urls = set(json.loads(snapshot_path.read_text(encoding="utf-8")).get("document_urls", []))
-        except (OSError, json.JSONDecodeError):
-            pass
+    previous_documents = load_snapshot_documents(snapshot_path)
+    baseline_established = previous_documents is not None
+    previous_urls = set(previous_documents) if previous_documents is not None else set()
+    current_documents: dict[str, dict[str, Any]] = {}
+    for item in items:
+        record = {"inferred_filename": item.inferred_filename, "sha256": None, "etag": None, "last_modified": None, "content_length": None}
+        previous_record = previous_documents.get(item.url) if previous_documents is not None else None
+        item.change_signal, differing = compare_fingerprints(previous_record, record)
+        item.changed_fields = differing or None
+        current_documents[item.url] = record
     current_urls = {item.url for item in items}
     snapshot_path.parent.mkdir(parents=True, exist_ok=True)
     snapshot_path.write_text(
-        json.dumps({"source_id": source_id, "scanned_at": now, "scan_mode": "browser", "document_urls": sorted(current_urls), "pages": accepted_pages}, indent=2) + "\n",
+        json.dumps(
+            {
+                "schema_version": 2,
+                "source_id": source_id,
+                "scanned_at": now,
+                "scan_mode": "browser",
+                "documents": current_documents,
+                "document_urls": sorted(current_urls),
+                "pages": accepted_pages,
+            },
+            indent=2,
+        )
+        + "\n",
         encoding="utf-8",
     )
 
@@ -423,14 +582,16 @@ def import_browser_capture(
             "missing_from_manifest": sum(item.status == "missing_from_manifest" for item in items),
             "links_rejected": rejected_links,
         },
-        "new_urls_since_previous_scan": sorted(current_urls - previous_urls) if previous_urls else [],
+        "baseline_established": baseline_established,
+        "known_documents_verified": False,
+        "new_urls_since_previous_scan": sorted(current_urls - previous_urls) if baseline_established else [],
         "removed_urls_since_previous_scan": sorted(previous_urls - current_urls),
         "rejected_pages": rejected_pages,
-        "candidates": [asdict(item) for item in items if item.status != "known"],
+        "candidates": [asdict(item) for item in items if needs_review(item)],
     }
     (run_dir / "browser-import-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     with (run_dir / "candidates.jsonl").open("w", encoding="utf-8", newline="\n") as handle:
         for item in items:
-            if item.status != "known":
+            if needs_review(item):
                 handle.write(json.dumps(asdict(item), separators=(",", ":")) + "\n")
     return report
