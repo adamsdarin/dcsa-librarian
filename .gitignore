@@ -2,7 +2,12 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
-state/
+# Scan state is local working data, except the snapshots and watch markers:
+# those are the baseline change detection compares against, so they must
+# survive an ephemeral runner and are tracked deliberately.
+state/*
+!state/snapshots/
+!state/watch/
 quarantine/
 reports/
 

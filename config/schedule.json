@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "timezone": "America/New_York",
+  "utc_offset_hours": -5,
+  "offset_note": "Cron targets are rendered from a fixed EST offset. During EDT each job fires one hour later in local terms. The VOI watch polls three times a day, which absorbs that; the monthly scan does not care.",
+  "jobs": [
+    {
+      "id": "monthly-scan",
+      "description": "Full sweep of every enabled source on the first of the month.",
+      "local_times": ["09:00"],
+      "days_of_month": "1",
+      "sources": [],
+      "once_per_period": null,
+      "rationale": "Runs the day after DCSA's month-end publication target, so a VOI released on the last day of the month is picked up within about a day even if the release watch missed it."
+    },
+    {
+      "id": "voi-release-watch",
+      "description": "Poll the Voice of Industry home three times a day across the month-end release window.",
+      "local_times": ["09:00", "12:00", "15:00"],
+      "days_of_month": "28-31,1-3",
+      "sources": ["dcsa-nisp-tools"],
+      "once_per_period": "month",
+      "rationale": "DCSA targets month-end but slips: observed issues are dated 260130, 260227 and 260331, and the March issue surfaced around 2 April. The exact release date is not knowable in advance, so the window is polled rather than a single date scheduled. Once the issue for a period is seen, the remaining polls in that period no-op."
+    }
+  ]
+}

@@ -100,7 +100,14 @@ def compare_fingerprints(previous: dict[str, Any] | None, current: dict[str, Any
 def needs_review(item: "WebItem") -> bool:
     """A document is a review candidate when it is absent from the manifest or
     when the source's copy has changed since the last scan. A manifest hit is
-    not on its own evidence that the held copy is still current."""
+    not on its own evidence that the held copy is still current.
+
+    With no library to check against, manifest membership is unknown for every
+    document, so only source-side movement counts. A run that merely established
+    a source's first snapshot reports nothing: a baseline is not a finding.
+    """
+    if item.status == "manifest_not_checked":
+        return item.change_signal in {"changed", "new_to_snapshot"}
     return item.status != "known" or item.change_signal == "changed"
 
 
@@ -303,7 +310,7 @@ def _crawl_source(source: dict[str, Any], fetcher: Fetcher) -> tuple[list[dict[s
 
 
 def discover(
-    library_root: Path,
+    library_root: Path | None,
     registry_path: Path,
     state_dir: Path,
     quarantine_dir: Path,
@@ -320,7 +327,9 @@ def discover(
         delay_seconds=float(settings.get("delay_seconds", 0.5)),
         respect_robots=bool(settings.get("respect_robots", True)),
     )
-    known_filenames, known_urls = load_known_documents(library_root)
+    # Without a library the scan still detects source-side movement; it just
+    # cannot say whether the corpus already holds what it finds.
+    known_filenames, known_urls = load_known_documents(library_root) if library_root is not None else (set(), set())
     run_dir = make_run_dir(state_dir / "scans", datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"))
     run_id = run_dir.name
     quarantine_run = quarantine_dir / run_id
@@ -342,7 +351,12 @@ def discover(
             changed: list[dict[str, Any]] = []
             for link in documents:
                 filename = infer_filename(link["url"], link["text"])
-                status = "known" if link["url"] in known_urls or filename.casefold() in known_filenames else "missing_from_manifest"
+                if library_root is None:
+                    status = "manifest_not_checked"
+                elif link["url"] in known_urls or filename.casefold() in known_filenames:
+                    status = "known"
+                else:
+                    status = "missing_from_manifest"
                 item = WebItem(
                     source_id=source_id,
                     url=link["url"],
@@ -388,8 +402,12 @@ def discover(
                     "last_modified": item.last_modified,
                     "content_length": item.content_length,
                 }
-                previous_record = previous_documents.get(item.url) if previous_documents is not None else None
-                item.change_signal, differing = compare_fingerprints(previous_record, record)
+                if previous_documents is None:
+                    # nothing to compare against yet; do not report the whole
+                    # source as newly discovered on its first scan
+                    item.change_signal, differing = "baseline", []
+                else:
+                    item.change_signal, differing = compare_fingerprints(previous_documents.get(item.url), record)
                 item.changed_fields = differing or None
                 if item.change_signal == "changed":
                     changed.append({"url": item.url, "inferred_filename": filename, "status": status, "changed_fields": differing})
@@ -425,6 +443,7 @@ def discover(
                 "new_urls_since_previous_scan": sorted(current_urls - previous_urls) if baseline_established else [],
                 "removed_urls_since_previous_scan": sorted(previous_urls - current_urls),
                 "changed_since_previous_scan": sorted(changed, key=lambda entry: entry["url"]),
+                "candidates_for_review": sorted(item.url for item in source_items if needs_review(item)),
                 "unverified_documents": sorted(item.url for item in source_items if item.change_signal == "unverified"),
                 "verification_errors": verification_errors,
             })
@@ -435,7 +454,8 @@ def discover(
         "schema_version": "1.0",
         "run_id": run_id,
         "created_at": now,
-        "library_root": str(library_root.resolve()),
+        "library_root": str(library_root.resolve()) if library_root is not None else None,
+        "manifest_checked": library_root is not None,
         "download_enabled": download,
         "verify_known_enabled": verify_known,
         "publication_performed": False,
@@ -444,7 +464,9 @@ def discover(
             "documents_seen": len(items),
             "known": sum(item.status == "known" for item in items),
             "missing_from_manifest": sum(item.status == "missing_from_manifest" for item in items),
+            "manifest_not_checked": sum(item.status == "manifest_not_checked" for item in items),
             "changed_since_previous_scan": sum(item.change_signal == "changed" for item in items),
+            "new_to_snapshot": sum(item.change_signal == "new_to_snapshot" for item in items),
             "unverified": sum(item.change_signal == "unverified" for item in items),
             "downloaded_to_quarantine": sum(item.downloaded_path is not None for item in items),
         },
