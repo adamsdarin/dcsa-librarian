@@ -30,3 +30,8 @@ When a public source rejects the direct HTTP crawler or requires rendered naviga
 - A missing or changed web document produces a review candidate. It is not silently added, deleted, superseded, or labeled current.
 - The Librarian may inspect human-readable artifacts for parity and extraction validation; ordinary retrieval bots may not.
 - Release promotion is intentionally not implemented in version 0.1. A broken library must first be recovered and a reviewed atomic-release design implemented.
+
+## Related projects
+
+- **DCSA Archivist** — organizes, enriches, indexes, and stages approval-gated releases from validated intake candidates.
+- **DCSA Comparison Bot** — reads this project's `candidates.jsonl` and a library manifest, and reports which existing document a new release changes and what changed. It closes the gap between "this URL is new" and "this is a newer edition of that". Staged on this branch under `staging/dcsa-comparison-bot/` pending its own repository; see `staging/STAGING-NOTE.md`.

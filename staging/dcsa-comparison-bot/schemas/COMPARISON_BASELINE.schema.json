@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dcsa-comparison-bot/comparison-baseline/1.0",
+  "title": "Comparison baseline projected from a DCSA Library manifest",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "manifest_path", "deep", "counts", "entries"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "manifest_path": {"type": "string", "minLength": 1},
+    "library_root": {"type": ["string", "null"]},
+    "deep": {"type": "boolean", "description": "true only when robot text was read for content hashes and headers"},
+    "counts": {"type": "object"},
+    "unreadable": {"type": "array", "items": {"type": "object"}},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["document_id", "title", "signals"],
+        "properties": {
+          "document_id": {"type": "string", "minLength": 1},
+          "title": {"type": "string"},
+          "robot_text_path": {"type": "string"},
+          "current_status": {"type": "string"},
+          "authority_role": {"type": "string"},
+          "normalized_text_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "exact_text_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "signals": {"$ref": "dcsa-comparison-bot/identity-signals/1.0"}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "identity_signals": {
+      "$id": "dcsa-comparison-bot/identity-signals/1.0",
+      "type": "object",
+      "required": ["title", "document_numbers", "edition_tokens", "series_key"],
+      "properties": {
+        "title": {"type": "string"},
+        "document_numbers": {"type": "array", "items": {"type": "string"}},
+        "edition_tokens": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kind", "raw", "value", "span"],
+            "properties": {
+              "kind": {"enum": ["version", "revision", "edition_date", "year"]},
+              "raw": {"type": "string"},
+              "span": {"type": "array", "items": {"type": "integer"}, "minItems": 2, "maxItems": 2}
+            },
+            "additionalProperties": true
+          }
+        },
+        "series_key": {"type": "string"}
+      },
+      "additionalProperties": true
+    }
+  }
+}
