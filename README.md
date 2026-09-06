@@ -34,4 +34,4 @@ When a public source rejects the direct HTTP crawler or requires rendered naviga
 ## Related projects
 
 - **DCSA Archivist** — organizes, enriches, indexes, and stages approval-gated releases from validated intake candidates.
-- **DCSA Comparison Bot** — reads this project's `candidates.jsonl` and a library manifest, and reports which existing document a new release changes and what changed. It closes the gap between "this URL is new" and "this is a newer edition of that". Staged on this branch under `staging/dcsa-comparison-bot/` pending its own repository; see `staging/STAGING-NOTE.md`.
+- **DCSA Comparison Bot** — reads this project's `candidates.jsonl` and a library manifest, and reports which existing document a new release changes and what changed. It closes the gap between "this URL is new" and "this is a newer edition of that". Lives in its own repository, `adamsdarin/dcsa-comparison-bot`.

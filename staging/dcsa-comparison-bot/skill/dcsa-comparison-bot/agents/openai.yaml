@@ -1,4 +1,0 @@
-interface:
-  display_name: "DCSA Comparison Bot"
-  short_description: "Compare new documents against existing DCSA library guidance"
-  default_prompt: "Use $dcsa-comparison-bot to compare newly released official documents against the DCSA Library and report which existing documents they change."
