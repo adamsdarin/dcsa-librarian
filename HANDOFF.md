@@ -1,6 +1,6 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-07T01:05:00Z by Claude
+Last updated: 2026-09-07T15:10:00Z by Claude
 
 ## Current State
 Integrity and discovery plane for the DCSA Library. Operates on a library passed
@@ -77,6 +77,26 @@ Where does manifest triage happen now that the scan can run without the
 library?
 
 ## Log
+2026-09-07T15:10:00Z Claude — First execution outside a sandbox. User ran the
+verification sequence on Windows: 54 tests OK, then both preflights failed with
+`robots policy disallows`. Investigated rather than accepting it: DCSA's actual
+robots.txt (retrieved via the user's browser) permits every path we scan and
+bans only ia_archiver, while a direct Python fetch of robots.txt from the same
+machine returned HTTP 403. So the refusal was self-inflicted —
+`RobotFileParser.read()` asks as `Python-urllib`, and its 403 handling records
+"disallow everything", which we surfaced as a policy refusal.
+
+Rewrote the robots handling: fetch under the user agent we declare for every
+other request (consistency, not evasion — we still identify honestly as
+DCSA-Library-Custodian), treat 404/410 as no published policy, and report an
+unreadable policy as "policy unknown ... not requested" rather than as a
+disallow. The two failure modes call for opposite responses and collapsing them
+hid which had occurred. DCSA's real robots.txt is now a test fixture proving our
+scanned paths are permitted.
+
+Open: whether the CDN also rejects our declared agent. If so the browser
+fallback is the route; spoofing a browser is not.
+
 2026-09-07T01:05:00Z Claude — Worked the three options the user had not
 selected. (a) Replaced the guessed `/FCL/` root: search confirmed
 `/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/` exists and

@@ -69,6 +69,13 @@ Two results matter:
 - **Unreachable.** Says nothing about whether the source changed. Check network
   access first. If the page loads in a browser but not here, the site is
   rejecting the crawler: use the browser fallback below.
+- **Policy unknown.** `could not read robots.txt (HTTP 403)` means the site
+  refused the policy file itself, so whether crawling is permitted is unknown
+  and nothing was requested. That is not a refusal by the site's policy and must
+  not be reported as one. robots.txt is fetched under the user agent this
+  project declares, not Python's default, so that a CDN rejecting scripted
+  clients cannot masquerade as a policy decision — but a site may still refuse
+  every non-browser client, and then the browser fallback is the way in.
 - **Reachable, zero documents.** The links are rendered by script and the plain
   parser cannot see them. A scheduled scan pointed at that source would report
   nothing forever and look healthy doing it. Use the browser fallback.

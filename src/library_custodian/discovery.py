@@ -5,6 +5,7 @@ import json
 import mimetypes
 import re
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import urllib.robotparser
@@ -201,24 +202,58 @@ class Fetcher:
         self.max_bytes = max_bytes
         self.delay_seconds = delay_seconds
         self.respect_robots = respect_robots
-        self._robots: dict[str, urllib.robotparser.RobotFileParser] = {}
+        self._robots: dict[str, tuple[urllib.robotparser.RobotFileParser | None, str]] = {}
         self._last_request = 0.0
 
-    def _allowed(self, url: str) -> bool:
+    def _load_robots(self, origin: str) -> tuple[urllib.robotparser.RobotFileParser | None, str]:
+        """Fetch and parse robots.txt under this crawler's own declared identity.
+
+        RobotFileParser.read() issues its own request as Python-urllib, not as
+        the user agent this crawler declares for every other request. A site
+        that rejects that default then yields 403, which the parser records as
+        "disallow everything" — a refusal indistinguishable from a real policy.
+        Asking under the identity we actually crawl with is the consistent
+        thing to do, and it keeps a transport failure from being reported as a
+        policy decision.
+        """
+        parser = urllib.robotparser.RobotFileParser()
+        url = origin + "/robots.txt"
+        parser.set_url(url)
+        request = urllib.request.Request(url, headers={"User-Agent": self.user_agent, "Accept": "text/plain,*/*"})
+        try:
+            with urllib.request.urlopen(request, timeout=self.timeout) as response:
+                text = response.read(self.max_bytes).decode("utf-8", errors="replace")
+        except urllib.error.HTTPError as exc:
+            if exc.code in (404, 410):
+                # no policy published is not the same as a policy of silence
+                parser.parse([])
+                return parser, f"no robots.txt (HTTP {exc.code})"
+            return None, f"could not read robots.txt (HTTP {exc.code})"
+        except Exception as exc:
+            return None, f"could not read robots.txt ({type(exc).__name__}: {exc})"
+        parser.parse(text.splitlines())
+        return parser, "ok"
+
+    def _check_allowed(self, url: str) -> None:
+        """Raise PermissionError unless robots policy permits this URL.
+
+        The message distinguishes a policy that forbids the path from a policy
+        that could not be retrieved. They call for different responses, and
+        collapsing them hides which one happened.
+        """
         if not self.respect_robots:
-            return True
+            return
         parts = urllib.parse.urlsplit(url)
         origin = f"{parts.scheme}://{parts.netloc}"
         if origin not in self._robots:
-            parser = urllib.robotparser.RobotFileParser(origin + "/robots.txt")
-            try:
-                parser.read()
-            except OSError:
-                parser = urllib.robotparser.RobotFileParser()
-                parser.set_url(origin + "/robots.txt")
-                parser.parse([])
-            self._robots[origin] = parser
-        return self._robots[origin].can_fetch(self.user_agent, url)
+            self._robots[origin] = self._load_robots(origin)
+        parser, status = self._robots[origin]
+        if parser is None:
+            raise PermissionError(
+                f"{status} for {origin}, so its crawling policy is unknown and {url} was not requested"
+            )
+        if not parser.can_fetch(self.user_agent, url):
+            raise PermissionError(f"robots.txt at {origin} disallows {url} for {self.user_agent}")
 
     def _throttle(self) -> None:
         wait = self.delay_seconds - (time.monotonic() - self._last_request)
@@ -231,8 +266,7 @@ class Fetcher:
         Headers only: a revision check must not cost a full re-download of every
         known document on every scan.
         """
-        if not self._allowed(url):
-            raise PermissionError(f"robots policy disallows {url}")
+        self._check_allowed(url)
         self._throttle()
         request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": self.user_agent, "Accept": "*/*"})
         try:
@@ -242,8 +276,7 @@ class Fetcher:
             self._last_request = time.monotonic()
 
     def get(self, url: str) -> tuple[bytes, dict[str, str]]:
-        if not self._allowed(url):
-            raise PermissionError(f"robots policy disallows {url}")
+        self._check_allowed(url)
         self._throttle()
         request = urllib.request.Request(url, headers={"User-Agent": self.user_agent, "Accept": "text/html,application/pdf,application/octet-stream;q=0.8"})
         with urllib.request.urlopen(request, timeout=self.timeout) as response:
