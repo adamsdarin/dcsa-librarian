@@ -45,6 +45,32 @@ Two source shapes defeat URL-only comparison, and both occur at DCSA:
   guidance updates before or instead of the document moving. Monitoring the
   document alone will lag the announcement.
 
+## Checking a source
+
+```
+python custodian.py preflight --source dcsa-nisp-tools
+python custodian.py preflight --source dcsa-nisp-tools --match voi
+```
+
+`preflight` fetches one source and prints every document link the parser can
+see. It writes nothing — no snapshot, no report, no baseline — so it never
+perturbs the state change detection depends on, and it is the correct way to
+answer "is this source working" and "can the parser see these documents".
+
+Two results matter:
+
+- **Unreachable.** Says nothing about whether the source changed. Check network
+  access first. If the page loads in a browser but not here, the site is
+  rejecting the crawler: use the browser fallback below.
+- **Reachable, zero documents.** The links are rendered by script and the plain
+  parser cannot see them. A scheduled scan pointed at that source would report
+  nothing forever and look healthy doing it. Use the browser fallback.
+
+Never diagnose a source by deleting a document from the corpus. That mutates
+the governed product to test a read-only tool, breaks `doctor` parity, and
+exercises manifest comparison rather than change detection. To test manifest
+classification, point `--library` at a copy.
+
 ## Browser fallback
 
 If the direct crawler cannot retrieve `robots.txt`, is rejected by a CDN, or cannot see links rendered by the public page, do not spoof a different client or disable safeguards. Use the available approved browser-control capability to navigate the configured public section normally, page by page.

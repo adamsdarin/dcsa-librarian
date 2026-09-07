@@ -10,6 +10,7 @@ Operate as the intake librarian for a governed evidence library. The framework i
 ## Choose the mode
 
 - **Integrity audit:** run `python custodian.py doctor --library <path>`. Read [references/governance.md](references/governance.md) before recommending or making repairs.
+- **Source check:** run `python custodian.py preflight --source <id>` to see exactly what one source serves. It writes nothing, so it is the safe first move when a source is suspected of being blocked, moved, or script-rendered. Never diagnose by deleting from the corpus.
 - **Official-source discovery:** read [references/discovery.md](references/discovery.md), then run `python custodian.py discover --library <path>`. Add `--download` only when the user authorizes downloading candidates. If an official public section blocks the direct crawler or needs rendered navigation, use the browser fallback in that reference and import its capture with `browser-import`.
 - **CDSE resource intake:** also read [references/cdse-intake.md](references/cdse-intake.md). Treat CDSE training products as operational guidance or training evidence, never as authority that independently creates contractor duties.
 - **Scheduled monitoring:** read [references/scheduling.md](references/scheduling.md), then run `python custodian.py scheduled-scan --job <id>`. Cadence is declared in `config/schedule.json`; runners are rendered adapters, never hand-edited. Treat exit code 1 as an incomplete scan, never as "no changes".

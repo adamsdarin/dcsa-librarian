@@ -480,6 +480,115 @@ def discover(
     return report
 
 
+def preflight(registry_path: Path, source_id: str, match: str | None = None) -> dict[str, Any]:
+    """Fetch one source and report what the parser can actually see.
+
+    Writes nothing — no snapshot, no report, no baseline. This exists so that
+    "is this source working" can be answered without perturbing the state that
+    change detection depends on, and without touching the library.
+    """
+    registry = json.loads(registry_path.read_text(encoding="utf-8-sig"))
+    source = next((item for item in registry.get("sources", []) if item.get("id") == source_id), None)
+    if source is None:
+        known = ", ".join(str(item.get("id")) for item in registry.get("sources", []))
+        raise KeyError(f"no source {source_id!r} in the registry. Known sources: {known}")
+
+    settings = registry.get("settings", {})
+    fetcher = Fetcher(
+        user_agent=settings.get("user_agent", "DCSA-Library-Custodian/0.1 (+local-governance-audit)"),
+        timeout=float(settings.get("timeout_seconds", 20)),
+        max_bytes=int(settings.get("max_response_bytes", 104857600)),
+        delay_seconds=float(settings.get("delay_seconds", 0.5)),
+        respect_robots=bool(settings.get("respect_robots", True)),
+    )
+
+    result: dict[str, Any] = {
+        "source_id": source_id,
+        "url": source.get("url"),
+        "enabled": bool(source.get("enabled", True)),
+        "checked_at": utc_now(),
+        "match": match,
+        "wrote_anything": False,
+    }
+    try:
+        documents, pages = _crawl_source(source, fetcher)
+    except Exception as exc:
+        result.update({"reachable": False, "error": f"{type(exc).__name__}: {exc}", "pages_read": 0, "documents": []})
+        return result
+
+    found = []
+    for link in documents:
+        filename = infer_filename(link["url"], link["text"])
+        found.append({"url": link["url"], "anchor_text": link["text"], "inferred_filename": filename})
+
+    listed = found
+    if match:
+        needle = match.casefold()
+        listed = [item for item in found if needle in (item["url"] + item["anchor_text"] + item["inferred_filename"]).casefold()]
+
+    result.update(
+        {
+            "reachable": True,
+            "pages_read": len(pages),
+            "documents_seen": len(found),
+            "documents_listed": len(listed),
+            "documents": listed,
+        }
+    )
+    return result
+
+
+def render_preflight_text(result: dict[str, Any]) -> str:
+    lines = [
+        f"Preflight - {result['source_id']}",
+        "=" * 46,
+        f"Source URL: {result['url']}",
+        f"Enabled:    {'yes' if result['enabled'] else 'no (a scan would skip it)'}",
+    ]
+
+    if not result.get("reachable"):
+        lines += [
+            "Reachable:  NO",
+            f"Error:      {result['error']}",
+            "",
+            "This tells you nothing about whether the source changed. Check network",
+            "access from this machine and re-run. If the page loads in a browser but",
+            "not here, the site is rejecting the crawler: use the browser fallback in",
+            "references/discovery.md. Do not spoof a user agent or disable robots handling.",
+            "",
+            "Nothing was written.",
+        ]
+        return "\n".join(lines) + "\n"
+
+    lines += [
+        "Reachable:  yes",
+        f"Pages read: {result['pages_read']}",
+        f"Documents:  {result['documents_seen']} found",
+    ]
+    if result["match"]:
+        lines.append(f"Filter:     {result['match']!r} -> {result['documents_listed']} shown")
+
+    if result["documents_seen"] == 0:
+        lines += [
+            "",
+            "No document links were found on that page.",
+            "If you can see documents on it in a browser, they are rendered by script",
+            "and the plain parser cannot see them. Capture the page with the browser",
+            "fallback and import it with browser-import. A scheduled scan pointed at",
+            "this source would report nothing, forever, and look healthy doing it.",
+        ]
+    elif not result["documents"]:
+        lines += ["", f"No document matched {result['match']!r}, though {result['documents_seen']} were found."]
+    else:
+        lines.append("")
+        for item in result["documents"]:
+            lines.append(f"  {item['inferred_filename']}")
+            lines.append(f"    {item['url']}")
+
+    lines += ["", "Nothing was written. No snapshot, report or baseline changed."]
+    return "\n".join(lines) + "\n"
+
+
 def import_browser_capture(
     library_root: Path,
     registry_path: Path,

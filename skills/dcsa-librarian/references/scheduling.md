@@ -27,6 +27,41 @@ It is also model-free by construction: stdlib Python, no network service, no
 agent in the loop. A scheduled run produces a plain-text report a person reads
 directly. Nothing downstream needs an LLM to find out what happened.
 
+### Prove it works before trusting the schedule
+
+Nothing here is worth scheduling until a scan has succeeded once by hand. Run
+these in order; none of them touches the library.
+
+```
+python custodian.py selftest
+python custodian.py preflight --source dcsa-nisp-tools
+python custodian.py preflight --source dcsa-fcl
+```
+
+`selftest` confirms the install. The two `preflight` runs confirm the machine
+can reach DCSA and that the parser can see documents on those pages — including
+whether the Voice of Industry newsletters are visible or hidden behind a
+script-rendered tab.
+
+Then prove change detection itself, using scratch state so the real baseline is
+untouched:
+
+```
+python custodian.py discover --source dcsa-nisp-tools --state-dir %TEMP%\dcsa-probe --quarantine-dir %TEMP%\dcsa-probe\q
+python custodian.py discover --source dcsa-nisp-tools --state-dir %TEMP%\dcsa-probe --quarantine-dir %TEMP%\dcsa-probe\q
+```
+
+The first run establishes a baseline; the second should report everything
+`unchanged` with no candidates. Spurious `changed` results here mean the CDN
+varies its validators, and the noise has to be understood before the schedule is
+believable. Now edit `%TEMP%\dcsa-probe\snapshots\dcsa-nisp-tools.json`, set
+any document's `etag` to a bogus value, and run the command a third time: that
+document must come back under `changed_since_previous_scan`. Delete the scratch
+directory afterwards.
+
+Perturb the snapshot, never the corpus. The snapshot exists to be a comparison
+baseline and is disposable; the library is the product.
+
 ### Setting it up on Windows
 
 1. Edit `adapters/windows/run-scan.cmd` — set `LIBRARY` to the DCSA Library

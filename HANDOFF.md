@@ -1,6 +1,6 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-06T23:22:00Z by Claude
+Last updated: 2026-09-07T00:05:00Z by Claude
 
 ## Current State
 Integrity and discovery plane for the DCSA Library. Operates on a library passed
@@ -42,7 +42,12 @@ On the local path the DST caveat disappears: schtasks schedules in local time.
 `utc_offset_hours` now only serves the cron adapter.
 
 ## Next
-1. **Install and run it once on the target machine.** Edit `LIBRARY` and
+1. **Run the verification sequence on the target machine** (see
+   `references/scheduling.md`): `selftest`, then `preflight --source
+   dcsa-nisp-tools` and `--source dcsa-fcl`, then the two scratch-state
+   `discover` runs plus the snapshot-perturbation check. Nothing in this project
+   has ever completed a scan against a live source, so this is the first real
+   proof any of it works. **Install and run it once on the target machine.** Edit `LIBRARY` and
    `ALERTS` in `adapters\windows\run-scan.cmd`, then run
    `adapters\windows\install-tasks.cmd`. Nothing in this project has ever
    executed a successful scan against a live source — every container is
@@ -72,6 +77,29 @@ Where does manifest triage happen now that the scan can run without the
 library?
 
 ## Log
+2026-09-07T00:05:00Z Claude — User proposed deleting the August VOI from the
+corpus and re-scanning as a test. Pushed back and it was accepted: that test
+exercises manifest comparison, which was never broken, while the mechanism
+actually at issue is change detection; and it is a destructive write to the
+governed product to test a read-only tool, which breaks `doctor` parity and
+loses an official document for nothing if the source turns out to be
+script-rendered. The right object to perturb is the snapshot — disposable
+comparison state — not the library.
+
+Built the two commands that make diagnosis possible without touching anything.
+`preflight --source <id>` fetches one source and prints every document link the
+parser can see, writing no snapshot, report or baseline; a test asserts it
+writes nothing and that it never probes documents. Its most valuable output is
+the reachable-but-zero-documents case, which names the script-rendered-tab
+problem explicitly — the failure that would leave `voi-release-watch` reporting
+nothing forever while looking healthy. `selftest` runs the suite, so confirming
+an install is one command rather than a unittest incantation.
+
+Documented the safe verification sequence in scheduling.md and the
+never-diagnose-by-deleting rule in discovery.md and SKILL.md.
+
+44 tests pass. Still nothing has run against a live source — see Next #1.
+
 2026-09-06T23:22:00Z Claude — User confirmed DCSA blocks GitHub Actions runners
 and directed that the scan run locally, without a model. Removed the workflow
 and the `github-actions` renderer outright rather than leaving them to fail
