@@ -153,13 +153,27 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
+# Characters that may stand unescaped in a path or query. "%" is listed safe so
+# an already-encoded URL is left alone rather than double-encoded: "%20" must
+# stay "%20" and not become "%2520".
+URL_SAFE = "/%:@&=+$,;~-._!*'()"
+
+
 def canonicalize_url(url: str) -> str:
     parts = urllib.parse.urlsplit(url)
     scheme = parts.scheme.casefold()
     hostname = (parts.hostname or "").casefold()
     port = f":{parts.port}" if parts.port and parts.port not in {80, 443} else ""
     path = re.sub(r"/{2,}", "/", parts.path or "/")
-    return urllib.parse.urlunsplit((scheme, hostname + port, path, parts.query, ""))
+    # DCSA publishes filenames containing spaces, and urllib refuses to request
+    # a URL with a raw space. Unencoded, such a document could be discovered but
+    # never probed for revision and never downloaded — the failure would land on
+    # exactly the documents that matter, including every VOI newsletter.
+    # Encoding here also collapses the encoded and unencoded spellings of one
+    # document into a single identity.
+    path = urllib.parse.quote(path, safe=URL_SAFE)
+    query = urllib.parse.quote(parts.query, safe=URL_SAFE + "?")
+    return urllib.parse.urlunsplit((scheme, hostname + port, path, query, ""))
 
 
 def domain_allowed(url: str, allowed_domains: list[str]) -> bool:

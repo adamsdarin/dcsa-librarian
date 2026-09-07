@@ -1,6 +1,6 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-07T22:30:00Z by Claude
+Last updated: 2026-09-08T00:05:00Z by Claude
 
 ## Current State
 
@@ -9,8 +9,13 @@ Last updated: 2026-09-07T22:30:00Z by Claude
 2026-09-07 under `/Portals/128/Documents/CTP/FC/`. The last publicly indexed
 edition was 9 March 2021, and the March 2026 VOI had announced the update as
 forthcoming. Nothing in this project detected it, which is what prompted all of
-this work. Whether the library already holds it is still unchecked: that needs a
-`discover --library` run.
+this work. **The library does not hold it.** Confirmed 2026-09-07 by `discover --source
+dcsa-fcl --library`: the handbook is `missing_from_manifest`, and so are 13
+other FCL documents — the whole Job Aid set (SF328, DD441, KMP Authorities,
+Exclusion Resolutions, FCL Package RFI, Common Errors, Business Structure,
+Organizational Charts, PKI/ECA/NCAISS, Common Acronyms) plus the Quick Start
+Guide. Only 1 of 15 was known. The FCL section was effectively absent from the
+corpus. Intake of these is a separate decision and has not been done.
 
 Note it is a fifth naming convention for this document (`_10OCT18`,
 `_05_MAR_20`, `_9_March_2021`, now `DCSA FCL_Orientation_Handbook_YYYYMMDD`),
@@ -92,6 +97,33 @@ Where does manifest triage happen now that the scan can run without the
 library?
 
 ## Log
+2026-09-08T00:05:00Z Claude — First `discover` against the live source with the
+real library. Answered the question that started this: the revised handbook is
+`missing_from_manifest`, along with 13 of the other 14 FCL documents.
+
+That run also exposed the most serious defect yet. 13 of 15 HEAD probes failed
+with `InvalidURL: URL can't contain control characters (found at least ' ')`.
+`canonicalize_url` never percent-encoded, and urllib refuses a URL with a raw
+space, so any document whose filename contains a space could be discovered but
+never probed for revision and never downloaded. The one document that succeeded
+was the only pre-encoded URL on the page. This hit the handbook itself and would
+have hit every VOI newsletter, since all are named like
+`260831 VOI Newsletter.pdf` — change detection would have silently failed on
+precisely the documents the project exists to watch. `preflight` had not caught
+it because it deliberately does not probe documents.
+
+Fixed by encoding path and query in `canonicalize_url`, with `%` listed safe so
+already-encoded URLs are not double-encoded. `infer_filename` already unquotes,
+so manifest matching by human filename is unaffected — verified against the live
+data. A side benefit: the encoded and unencoded spellings of one document now
+collapse to a single identity.
+
+Four defects found so far, all invisible to a green suite, all surfaced by
+running against the real site: robots identity, VOI naming expectation,
+cross-page duplication, and now URL encoding. The pattern is consistent enough
+to be worth stating: this project's tests encode assumptions about DCSA, and
+only DCSA falsifies them.
+
 2026-09-07T22:30:00Z Claude — Found the revised handbook:
 `DCSA FCL_Orientation_Handbook_20260828.pdf`, dated 2026-08-28, reachable from
 the `dcsa-fcl` source. Both registered FCL URLs resolved, so the evidence-based

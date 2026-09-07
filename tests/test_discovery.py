@@ -22,6 +22,43 @@ class DiscoveryTests(unittest.TestCase):
         self.assertEqual(canonicalize_url("HTTPS://WWW.DCSA.MIL//a///b#top"), "https://www.dcsa.mil/a/b")
 
 
+class UrlEncodingTests(unittest.TestCase):
+    """DCSA publishes filenames with spaces; urllib refuses raw spaces.
+
+    Observed live on 2026-09-07: 13 of 15 documents in the FCL section failed
+    their HEAD probe with "URL can't contain control characters", including the
+    FCL Orientation Handbook. Every VOI newsletter has the same shape. The
+    documents were discoverable but could never be verified or downloaded.
+    """
+
+    HANDBOOK = "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/DCSA FCL_Orientation_Handbook_20260828.pdf"
+    ENCODED = "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/DCSA%20FCL_Orientation_Handbook_20260828.pdf"
+
+    def test_a_space_is_encoded_so_the_document_can_be_requested(self) -> None:
+        self.assertEqual(canonicalize_url(self.HANDBOOK), self.ENCODED)
+
+    def test_an_already_encoded_url_is_not_encoded_twice(self) -> None:
+        self.assertEqual(canonicalize_url(self.ENCODED), self.ENCODED)
+        self.assertNotIn("%2520", canonicalize_url(self.ENCODED))
+
+    def test_both_spellings_are_one_document(self) -> None:
+        self.assertEqual(canonicalize_url(self.HANDBOOK), canonicalize_url(self.ENCODED))
+
+    def test_the_filename_still_decodes_for_manifest_matching(self) -> None:
+        # the manifest records human filenames, spaces and all
+        self.assertEqual(
+            infer_filename(canonicalize_url(self.HANDBOOK), ""),
+            "DCSA FCL_Orientation_Handbook_20260828.pdf",
+        )
+
+    def test_a_query_string_survives_intact(self) -> None:
+        url = (
+            "https://www.federalregister.gov/api/v1/documents.json?per_page=100"
+            "&conditions%5Bagencies%5D%5B%5D=defense-counterintelligence-and-security-agency"
+        )
+        self.assertEqual(canonicalize_url(url), url)
+
+
 class CrossPageDeduplicationTests(unittest.TestCase):
     """A document linked from several pages is one document, not several.
 
