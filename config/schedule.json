@@ -34,8 +34,8 @@
       "days_of_month": "28-31,1-3",
       "sources": ["dcsa-nisp-tools"],
       "once_per_period": "month",
-      "expect": "voi newsletter",
-      "rationale": "DCSA targets month-end but slips: observed issues are dated 260130, 260227 and 260331, and the March issue surfaced around 2 April. The exact release date is not knowable in advance, so the window is polled rather than a single date scheduled. The window closes only on a finding matching `expect` - an unrelated document posted mid-window must not end the polling before the awaited issue is published."
+      "expect": "voi",
+      "rationale": "DCSA targets month-end but slips: observed issues are dated 260130, 260227 and 260331, and the March issue surfaced around 2 April. The exact release date is not knowable in advance, so the window is polled rather than a single date scheduled. The window closes only on a finding matching `expect` - an unrelated document posted mid-window must not end the polling before the awaited issue is published. `expect` is `voi` rather than `voi newsletter` because DCSA has renamed this publication repeatedly: observed live on 2026-09-07 are `VOI_January_2016.pdf`, `Voice-of-Industry_June2023.pdf`, `260831 VOI Newsletter.pdf` and `251031 VOI Bulletin.pdf`. The substring `voi` matches all four (`Voice` begins with it) and matched 129 of the 166 documents on that page, all of them genuine issues."
     }
   ]
 }

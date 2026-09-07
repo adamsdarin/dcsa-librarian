@@ -1,6 +1,6 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-07T15:10:00Z by Claude
+Last updated: 2026-09-07T22:05:00Z by Claude
 
 ## Current State
 Integrity and discovery plane for the DCSA Library. Operates on a library passed
@@ -77,6 +77,26 @@ Where does manifest triage happen now that the scan can run without the
 library?
 
 ## Log
+2026-09-07T22:05:00Z Claude — First successful live crawl. The robots fix
+worked: `preflight --source dcsa-nisp-tools` returned Reachable: yes, 166
+documents, 129 VOI issues. Two open questions closed at once — DCSA's CDN
+accepts our declared user agent, and the VOI newsletters are ordinary HTML
+links rather than a script-rendered tab.
+
+The live data then falsified a design decision I had made on a guess. I had set
+the release watch to expect "voi newsletter"; DCSA has renamed this publication
+at least four times (`VOI_January_2016.pdf`, `Voice-of-Industry_June2023.pdf`,
+`260831 VOI Newsletter.pdf`, `251031 VOI Bulletin.pdf`) and one issue is a
+Bulletin, not a Newsletter. Widened `expect` to "voi", which matches all four
+(`Voice` begins with it) and matched 129 of 166 documents on the page, all
+genuine. A regression test pins every observed convention and asserts the
+handbook is still excluded. Had October's issue been the awaited one, the old
+expectation would have left the window open.
+
+Note the failure mode was mild by construction — findings are reported
+regardless of `expect`, which only governs window closing — but the expectation
+was still wrong, and only real data showed it.
+
 2026-09-07T15:10:00Z Claude — First execution outside a sandbox. User ran the
 verification sequence on Windows: 54 tests OK, then both preflights failed with
 `robots policy disallows`. Investigated rather than accepting it: DCSA's actual

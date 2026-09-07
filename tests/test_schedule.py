@@ -185,6 +185,26 @@ class ExpectationTests(unittest.TestCase):
     def test_no_expectation_means_any_finding_satisfies(self) -> None:
         self.assertTrue(satisfies_expectation("https://x/anything.pdf", None))
 
+    def test_every_naming_convention_dcsa_has_used_is_matched(self) -> None:
+        # observed live on the NISP Tools page, 2026-09-07: this publication has
+        # been renamed at least four times, and one issue is a Bulletin rather
+        # than a Newsletter. An expectation of "voi newsletter" would have missed
+        # it and left the release window open.
+        declared = load_schedule(Path("config/schedule.json")).job("voi-release-watch").expect
+        for name in (
+            "VOI_January_2016.pdf",
+            "Voice-of-Industry_June2023.pdf",
+            "260831%20VOI%20Newsletter.pdf",
+            "251031%20VOI%20Bulletin.pdf",
+            "VOI_Special_Bulletin_11Sept23.pdf",
+        ):
+            with self.subTest(name=name):
+                self.assertTrue(satisfies_expectation(f"https://www.dcsa.mil/Portals/128/Documents/CTP/tools/{name}", declared))
+
+    def test_the_expectation_still_excludes_unrelated_documents(self) -> None:
+        declared = load_schedule(Path("config/schedule.json")).job("voi-release-watch").expect
+        self.assertFalse(satisfies_expectation("https://www.dcsa.mil/Portals/128/x/FCL_Orientation_Handbook.pdf", declared))
+
 
 class StubFetcher:
     links: list[str] = ["/docs/known.pdf"]
