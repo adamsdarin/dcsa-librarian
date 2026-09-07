@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from .audit import audit_library
 from .discovery import discover
 from .schedule import (
     Job,
@@ -27,6 +28,7 @@ from .schedule import (
 EXIT_NO_FINDINGS = 0
 EXIT_SOURCE_ERROR = 1
 EXIT_FINDINGS = 3
+EXIT_LIBRARY_PROBLEM = 4
 
 
 def render_text_summary(summary: dict[str, Any], code: int) -> str:
@@ -105,9 +107,49 @@ def render_text_summary(summary: dict[str, Any], code: int) -> str:
     return "\n".join(lines) + "\n"
 
 
+def render_doctor_text(summary: dict[str, Any], code: int) -> str:
+    lines = [
+        "DCSA Librarian - library integrity check",
+        "=" * 46,
+        f"Job:     {summary['job_id']}",
+        f"Ran:     {summary['ran_at']} (UTC)",
+        f"Library: {summary.get('library_root') or '(none given)'}",
+    ]
+
+    if summary.get("error"):
+        lines += [
+            "Result:  COULD NOT RUN",
+            f"Reason:  {summary['error']}",
+            "",
+            "This is not a clean bill of health. The library was not examined.",
+        ]
+        return "\n".join(lines) + "\n"
+
+    lines.append("Result:  " + ("library is intact." if summary["library_ready"] else "PROBLEMS FOUND in the library."))
+
+    counters = summary.get("counters") or {}
+    if counters:
+        lines += ["", "Counts"] + [f"  {name}: {value}" for name, value in sorted(counters.items())]
+
+    totals = summary.get("finding_totals") or {}
+    if totals:
+        lines += ["", "Findings by kind"] + [f"  {code_}: {count}" for code_, count in sorted(totals.items())]
+
+    for finding in summary.get("sample_findings", []):
+        lines.append(f"  [{finding['severity']}] {finding['code']}: {finding['message']}")
+
+    lines += ["", "-" * 46]
+    lines.append(
+        "Next: repair the library before trusting a scan against it."
+        if not summary["library_ready"]
+        else "Next: nothing."
+    )
+    return "\n".join(lines) + "\n"
+
+
 def write_reports(state_dir: Path, summary: dict[str, Any], code: int) -> Path:
     """Write the readable report where a person will actually find it."""
-    text = render_text_summary(summary, code)
+    text = render_doctor_text(summary, code) if summary.get("action") == "doctor" else render_text_summary(summary, code)
     reports = state_dir / "reports"
     reports.mkdir(parents=True, exist_ok=True)
     latest = reports / f"{summary['job_id']}-latest.txt"
@@ -133,6 +175,50 @@ def _findings(report: dict[str, Any]) -> dict[str, list[str]]:
         "new_urls": sorted(set(new_urls)),
         "candidates": sorted(set(candidates)),
     }
+
+
+def _run_doctor(
+    job: Job,
+    key: str | None,
+    moment: datetime,
+    library_root: Path | None,
+    state_dir: Path,
+) -> tuple[dict[str, Any], int]:
+    """Audit the library itself.
+
+    The scan watches sources; without this nothing watches the corpus, so
+    parity breaks and hash drift would sit unnoticed between manual runs.
+    """
+    summary: dict[str, Any] = {
+        "job_id": job.id,
+        "action": "doctor",
+        "period": key,
+        "ran_at": moment.isoformat(),
+        "library_root": str(library_root) if library_root else None,
+    }
+    if library_root is None:
+        # not a clean result: nothing was examined
+        summary["error"] = "this job audits the library, but no --library was given"
+        summary["report_path"] = str(write_reports(state_dir, summary, EXIT_SOURCE_ERROR))
+        return summary, EXIT_SOURCE_ERROR
+
+    report = audit_library(library_root)
+    payload = report.to_dict()
+    summary.update(
+        {
+            "library_ready": report.ready,
+            "counters": payload.get("counters", {}),
+            "finding_totals": payload.get("finding_totals", {}),
+            "severity_summary": payload.get("summary", {}),
+            "sample_findings": [
+                {"severity": f["severity"], "code": f["code"], "message": f["message"], "path": f["path"]}
+                for f in payload.get("findings", [])[:20]
+            ],
+        }
+    )
+    code = EXIT_NO_FINDINGS if report.ready else EXIT_LIBRARY_PROBLEM
+    summary["report_path"] = str(write_reports(state_dir, summary, code))
+    return summary, code
 
 
 def run_scheduled_job(
@@ -162,6 +248,9 @@ def run_scheduled_job(
         }
         skipped["report_path"] = str(write_reports(state_dir, skipped, EXIT_NO_FINDINGS))
         return skipped, EXIT_NO_FINDINGS
+
+    if job.action == "doctor":
+        return _run_doctor(job, key, moment, library_root, state_dir)
 
     report = discover(
         library_root=library_root,

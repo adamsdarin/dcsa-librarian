@@ -22,10 +22,14 @@ from typing import Any
 RUNNERS = ("schtasks", "cron")
 
 
+ACTIONS = ("discover", "doctor")
+
+
 @dataclass(frozen=True)
 class Job:
     id: str
     description: str
+    action: str
     local_times: tuple[str, ...]
     days_of_month: str
     sources: tuple[str, ...]
@@ -58,10 +62,14 @@ def load_schedule(path: Path) -> Schedule:
         period = raw.get("once_per_period")
         if period not in (None, "month"):
             raise ValueError(f"job {raw.get('id')!r} has unsupported once_per_period {period!r}")
+        action = str(raw.get("action", "discover"))
+        if action not in ACTIONS:
+            raise ValueError(f"job {raw.get('id')!r} has unsupported action {action!r}; expected one of {', '.join(ACTIONS)}")
         jobs.append(
             Job(
                 id=str(raw["id"]),
                 description=str(raw.get("description", "")),
+                action=action,
                 local_times=times,
                 days_of_month=str(raw.get("days_of_month", "*")),
                 sources=tuple(str(value) for value in raw.get("sources", [])),

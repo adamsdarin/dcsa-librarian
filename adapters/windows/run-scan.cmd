@@ -27,8 +27,10 @@ popd
 set "REPORT=%PROJECT%\state\reports\%~1-latest.txt"
 
 :: Put the report somewhere it cannot be missed. Task Scheduler also shows the
-:: exit code as "Last Run Result": 0 clean, 1 incomplete, 3 findings.
+:: exit code as "Last Run Result": 0 clean, 1 incomplete, 3 findings,
+:: 4 library integrity problem.
 if "%CODE%"=="3" copy /y "%REPORT%" "%ALERTS%\DCSA-SCAN-FINDINGS.txt" >nul
 if "%CODE%"=="1" copy /y "%REPORT%" "%ALERTS%\DCSA-SCAN-INCOMPLETE.txt" >nul
+if "%CODE%"=="4" copy /y "%REPORT%" "%ALERTS%\DCSA-LIBRARY-PROBLEM.txt" >nul
 
 exit /b %CODE%

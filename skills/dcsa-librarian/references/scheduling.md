@@ -103,14 +103,25 @@ Exit codes are the runner's interface:
 | Code | Meaning |
 | --- | --- |
 | 0 | Ran clean, nothing to review — or the period was already satisfied |
-| 1 | A source failed. The scan is incomplete; do not read it as "no changes" |
+| 1 | Incomplete. A source failed, or an audit could not run. Never read as "no changes" |
 | 3 | Findings to triage |
+| 4 | The library itself has integrity problems |
 
 ## The declared jobs
 
-- **`monthly-scan`** — every enabled source, the 1st at 09:00 America/New_York.
-- **`voi-release-watch`** — the VOI home at 09:00, 12:00 and 15:00 across the
-  month-end window (days 28-31 and 1-3).
+Each job declares an `action`: `discover` scans sources, `doctor` audits the
+library.
+
+- **`monthly-scan`** (`discover`) — every enabled source, the 1st at 09:00
+  America/New_York.
+- **`monthly-integrity`** (`doctor`) — the library itself, the 1st at 09:30.
+  The scans watch sources; without this nothing watches the corpus, and parity
+  breaks, hash drift and index rot would sit unnoticed between manual runs. It
+  runs half an hour after the sweep so the two do not contend for the same
+  minute. A `doctor` job with no `--library` reports that it could not run — an
+  audit that examined nothing is never a clean result.
+- **`voi-release-watch`** (`discover`) — the VOI home at 09:00, 12:00 and 15:00
+  across the month-end window (days 28-31 and 1-3).
 
 The window exists because the release date is not knowable in advance. Observed
 issues are dated `260130`, `260227`, `260331` — DCSA targets month-end and

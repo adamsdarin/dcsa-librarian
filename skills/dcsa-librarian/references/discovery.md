@@ -30,6 +30,13 @@ against the previous scan's snapshot. Each document carries a `change_signal`:
   probe failed, or the snapshot predates this check). Never read this as clean.
 - `new_to_snapshot` — no previous record; this scan is its baseline.
 
+A source can opt out with `"verify_known": false` in the registry. That is for
+sources whose records are immutable once published — the DOHA decision
+collections — where probing each document every scan is cost with no possible
+finding. New decisions still surface as new URLs. The command-line flag can
+only narrow this further, never widen it: a source that opted out is never
+probed.
+
 `baseline_established: false` on a source means there was nothing to compare
 against, so an empty change list says nothing about the source. Read
 `verification_errors` and `unverified_documents` before concluding a scan was

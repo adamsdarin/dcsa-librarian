@@ -19,15 +19,26 @@
       "note": "Also the published home of the Voice of Industry newsletters, but they sit behind an in-page tab. If a scan of this source reports no VOI PDFs, the tab is not in the served HTML and this source needs the browser-import fallback."
     },
     {
-      "id": "dcsa-fcl",
+      "id": "dcsa-entity-vetting-fcl",
       "enabled": true,
-      "url": "https://www.dcsa.mil/FCL/",
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/",
       "allowed_domains": ["dcsa.mil"],
-      "crawl_path_prefix": "/FCL/",
+      "crawl_path_prefix": "/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/",
       "max_depth": 1,
       "max_pages": 25,
       "authority_hint": "dcsa_official_guidance_or_tool",
-      "note": "Facility clearance section. Home of the FCL Orientation Handbook, which DCSA republishes under a date-stamped filename, so a revision appears as a new URL rather than an in-place edit."
+      "note": "Facility clearance and FOCI section. Follows the same /Industrial-Security/ path pattern as every other DCSA source here, so it is the higher-confidence entry point of the two FCL sources."
+    },
+    {
+      "id": "dcsa-fcl",
+      "enabled": true,
+      "url": "https://www.dcsa.mil/FCL/Maintaining-Personnel-Security-Clearances/",
+      "allowed_domains": ["dcsa.mil"],
+      "crawl_path_prefix": "/FCL/",
+      "max_depth": 2,
+      "max_pages": 25,
+      "authority_hint": "dcsa_official_guidance_or_tool",
+      "note": "The /FCL/ microsite. Entry is a page confirmed to exist rather than the section root, which was never verified; depth 2 with the /FCL/ prefix reaches its siblings through the page navigation. Home of the FCL Orientation Handbook, which DCSA republishes under a date-stamped filename, so a revision appears as a new URL rather than an in-place edit."
     },
     {
       "id": "dcsa-security-review-rating",
@@ -76,6 +87,8 @@
     },
     {
       "id": "doha-iscr-hearings",
+      "verify_known": false,
+      "verify_known_note": "Published case decisions are immutable, so probing each one for in-place revision every scan is pure cost. New decisions still surface as new URLs.",
       "enabled": true,
       "url": "https://doha.ogc.osd.mil/Industrial-Security-Program/Industrial-Security-Clearance-Decisions/ISCR-Hearing-Decisions/",
       "allowed_domains": ["doha.ogc.osd.mil"],
@@ -86,6 +99,8 @@
     },
     {
       "id": "doha-appeals",
+      "verify_known": false,
+      "verify_known_note": "Published case decisions are immutable, so probing each one for in-place revision every scan is pure cost. New decisions still surface as new URLs.",
       "enabled": true,
       "url": "https://doha.ogc.osd.mil/Industrial-Security-Program/Industrial-Security-Clearance-Decisions/DOHA-Appeal-Board/",
       "allowed_domains": ["doha.ogc.osd.mil"],

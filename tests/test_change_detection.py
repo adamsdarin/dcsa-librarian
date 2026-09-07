@@ -175,5 +175,46 @@ class RevisionInPlaceTests(unittest.TestCase):
             self.assertEqual(report["candidates"], [])
 
 
+class ImmutableSourceTests(unittest.TestCase):
+    """A source whose records never change should never be probed for changes."""
+
+    class RefusingFetcher(StubFetcher):
+        def head(self, url: str) -> dict[str, str]:
+            raise AssertionError("a source opted out of verification must not be probed")
+
+    def _registry(self, root: Path, verify_known: bool) -> Path:
+        path = root / "registry.json"
+        source = {
+            "id": "doha-test",
+            "enabled": True,
+            "url": PAGE_URL,
+            "allowed_domains": ["dcsa.mil"],
+            "max_depth": 0,
+            "max_pages": 1,
+        }
+        if not verify_known:
+            source["verify_known"] = False
+        path.write_text(json.dumps({"settings": {"delay_seconds": 0}, "sources": [source]}), encoding="utf-8")
+        return path
+
+    def test_a_source_can_opt_out_of_verification(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            library, _ = build_library(root)
+            registry = self._registry(root, verify_known=False)
+            with mock.patch("library_custodian.discovery.Fetcher", self.RefusingFetcher):
+                report = discover(library, registry, root / "state", root / "q")
+            self.assertFalse(report["sources"][0]["known_documents_verified"])
+
+    def test_the_global_flag_can_only_narrow_a_source_that_opted_in(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            library, _ = build_library(root)
+            registry = self._registry(root, verify_known=True)
+            with mock.patch("library_custodian.discovery.Fetcher", self.RefusingFetcher):
+                report = discover(library, registry, root / "state", root / "q", verify_known=False)
+            self.assertFalse(report["sources"][0]["known_documents_verified"])
+
+
 if __name__ == "__main__":
     unittest.main()

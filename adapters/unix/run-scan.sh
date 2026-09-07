@@ -23,10 +23,11 @@ python3 custodian.py scheduled-scan --job "$job" --library "$LIBRARY"
 code=$?
 
 report="$PROJECT/state/reports/$job-latest.txt"
-# 0 clean, 1 incomplete, 3 findings
+# 0 clean, 1 incomplete, 3 findings, 4 library integrity problem
 case "$code" in
   3) [ -f "$report" ] && cp "$report" "$ALERTS/DCSA-SCAN-FINDINGS.txt" ;;
   1) [ -f "$report" ] && cp "$report" "$ALERTS/DCSA-SCAN-INCOMPLETE.txt" ;;
+  4) [ -f "$report" ] && cp "$report" "$ALERTS/DCSA-LIBRARY-PROBLEM.txt" ;;
 esac
 
 exit $code

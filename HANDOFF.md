@@ -1,6 +1,6 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-07T00:30:00Z by Claude
+Last updated: 2026-09-07T01:05:00Z by Claude
 
 ## Current State
 Integrity and discovery plane for the DCSA Library. Operates on a library passed
@@ -53,10 +53,10 @@ On the local path the DST caveat disappears: schtasks schedules in local time.
    executed a successful scan against a live source — every container is
    egress-blocked — so the first real run is also the first proof the crawler
    works at all.
-2. Verify `dcsa-fcl` resolves (its URL was never reachable from a container) and
-   whether the VOI newsletters are visible in the NISP Tools page HTML or sit
-   behind a tab that needs `browser-import`. The `voi-release-watch` job is
-   pointed at `dcsa-nisp-tools` and is worthless if that tab is invisible.
+2. Verify both FCL sources resolve, and whether the VOI newsletters are visible
+   in the NISP Tools page HTML or sit behind a tab that needs `browser-import`.
+   The `voi-release-watch` job is pointed at `dcsa-nisp-tools` and is worthless
+   if that tab is invisible.
 3. Confirm whether the revised FCL Orientation Handbook has actually posted. The
    March 2026 VOI announced it as forthcoming; only 2018/2020/2021 editions were
    findable.
@@ -77,6 +77,27 @@ Where does manifest triage happen now that the scan can run without the
 library?
 
 ## Log
+2026-09-07T01:05:00Z Claude — Worked the three options the user had not
+selected. (a) Replaced the guessed `/FCL/` root: search confirmed
+`/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/` exists and
+follows the same path pattern as every other DCSA source, so it is registered as
+`dcsa-entity-vetting-fcl`; `dcsa-fcl` now enters at
+`/FCL/Maintaining-Personnel-Security-Clearances/`, a page search confirms
+exists, and reaches its siblings via `crawl_path_prefix` at depth 2. Entering at
+a confirmed page rather than an assumed root removes the most likely first-run
+failure. (b) `verify_known` is now per-source and off for the two DOHA
+collections: published decisions are immutable, so probing each one every scan
+was cost with no possible finding, and those two sources carry `max_pages` 80
+and 40. The global flag can only narrow a source further, never widen it.
+(c) Jobs now declare an `action`, and a new `monthly-integrity` job runs
+`doctor` at 09:30 on the 1st — nothing was watching the corpus itself, so parity
+breaks and hash drift would have sat unnoticed. Library problems get their own
+exit code (4) and their own desktop alert, because the remediation is nothing
+like a source finding; a doctor job with no library reports that it could not
+run rather than passing.
+
+54 tests pass. Still nothing has run against a live source — see Next #1.
+
 2026-09-07T00:30:00Z Claude — Found and fixed a defect in my own scheduling
 work. `once_per_period` closed the release window on *any* finding, so an
 unrelated document posted mid-window would have satisfied the period and the

@@ -343,6 +343,10 @@ def discover(
             continue
         try:
             documents, pages = _crawl_source(source, fetcher)
+            # Some sources publish immutable records. Probing those for in-place
+            # revision is cost with no possible finding, so the registry can opt
+            # a source out; the global flag can only ever narrow it further.
+            source_verify = verify_known and bool(source.get("verify_known", True))
             source_items: list[WebItem] = []
             snapshot_path = state_dir / "snapshots" / f"{source_id}.json"
             previous_documents = load_snapshot_documents(snapshot_path)
@@ -383,7 +387,7 @@ def discover(
                     item.etag = metadata.get("etag") or None
                     item.last_modified = metadata.get("last_modified") or None
                     item.content_length = metadata.get("content_length") or None
-                elif verify_known:
+                elif source_verify:
                     # A document already in the manifest can still be revised in
                     # place. Probe its headers so a same-URL revision is visible.
                     try:
@@ -439,7 +443,7 @@ def discover(
                 "pages_scanned": len(pages),
                 "documents_seen": len(source_items),
                 "baseline_established": baseline_established,
-                "known_documents_verified": verify_known,
+                "known_documents_verified": source_verify,
                 "new_urls_since_previous_scan": sorted(current_urls - previous_urls) if baseline_established else [],
                 "removed_urls_since_previous_scan": sorted(previous_urls - current_urls),
                 "changed_since_previous_scan": sorted(changed, key=lambda entry: entry["url"]),

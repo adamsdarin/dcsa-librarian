@@ -7,6 +7,7 @@
     {
       "id": "monthly-scan",
       "description": "Full sweep of every enabled source on the first of the month.",
+      "action": "discover",
       "local_times": ["09:00"],
       "days_of_month": "1",
       "sources": [],
@@ -15,8 +16,20 @@
       "rationale": "Runs the day after DCSA's month-end publication target, so a VOI released on the last day of the month is picked up within about a day even if the release watch missed it."
     },
     {
+      "id": "monthly-integrity",
+      "description": "Audit the library itself on the first of the month.",
+      "action": "doctor",
+      "local_times": ["09:30"],
+      "days_of_month": "1",
+      "sources": [],
+      "once_per_period": null,
+      "expect": null,
+      "rationale": "The scans watch sources; without this nothing watches the corpus. Parity breaks, hash drift and index rot would otherwise sit unnoticed between manual runs. Half an hour after the sweep so the two do not contend for the same minute."
+    },
+    {
       "id": "voi-release-watch",
       "description": "Poll the Voice of Industry home three times a day across the month-end release window.",
+      "action": "discover",
       "local_times": ["09:00", "12:00", "15:00"],
       "days_of_month": "28-31,1-3",
       "sources": ["dcsa-nisp-tools"],

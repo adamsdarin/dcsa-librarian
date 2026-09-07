@@ -9,6 +9,7 @@ from unittest import mock
 
 from library_custodian.runner import (
     EXIT_FINDINGS,
+    EXIT_LIBRARY_PROBLEM,
     EXIT_NO_FINDINGS,
     EXIT_SOURCE_ERROR,
     render_text_summary,
@@ -34,6 +35,7 @@ def job(**overrides: object) -> Job:
     base = {
         "id": "j",
         "description": "",
+        "action": "discover",
         "local_times": ("09:00",),
         "days_of_month": "1",
         "sources": (),
@@ -58,7 +60,24 @@ class ConversionTests(unittest.TestCase):
         schedule = load_schedule(Path("config/schedule.json"))
         rendered = {j.id: cron_expression(j, schedule.utc_offset_hours) for j in schedule.jobs}
         self.assertEqual(rendered["monthly-scan"], "0 14 1 * *")
+        self.assertEqual(rendered["monthly-integrity"], "30 14 1 * *")
         self.assertEqual(rendered["voi-release-watch"], "0 14,17,20 28-31,1-3 * *")
+
+    def test_the_integrity_job_audits_rather_than_scans(self) -> None:
+        schedule = load_schedule(Path("config/schedule.json"))
+        self.assertEqual(schedule.job("monthly-integrity").action, "doctor")
+        self.assertEqual(schedule.job("monthly-scan").action, "discover")
+
+    def test_an_unknown_action_is_refused(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "s.json"
+            path.write_text(
+                json.dumps({"jobs": [{"id": "j", "action": "delete-everything", "local_times": ["09:00"]}]}),
+                encoding="utf-8",
+            )
+            with self.assertRaises(ValueError) as caught:
+                load_schedule(path)
+        self.assertIn("unsupported action", str(caught.exception))
 
     def test_day_crossing_conversion_is_refused_not_silently_wrong(self) -> None:
         with self.assertRaises(ValueError) as caught:
@@ -298,6 +317,54 @@ class ScheduledRunTests(unittest.TestCase):
             self.assertEqual(summary["sources_errored"], ["dcsa-test"])
             # an incomplete scan must not suppress the remaining polls
             self.assertIsNone(summary["period_marker"])
+
+
+class DoctorJobTests(unittest.TestCase):
+    def _schedule(self, root: Path) -> Path:
+        path = root / "schedule.json"
+        path.write_text(
+            json.dumps(
+                {
+                    "utc_offset_hours": -5,
+                    "jobs": [{"id": "integrity", "action": "doctor", "local_times": ["09:30"], "days_of_month": "1"}],
+                }
+            ),
+            encoding="utf-8",
+        )
+        return path
+
+    def test_a_broken_library_is_reported_with_its_own_exit_code(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            library = root / "library"
+            library.mkdir()  # no entry point: the audit must fail
+            summary, code = run_scheduled_job(
+                job_id="integrity",
+                schedule_path=self._schedule(root),
+                library_root=library,
+                registry_path=root / "unused.json",
+                state_dir=root / "state",
+                quarantine_dir=root / "q",
+            )
+            self.assertEqual(code, EXIT_LIBRARY_PROBLEM)
+            self.assertFalse(summary["library_ready"])
+            self.assertIn("PROBLEMS FOUND", Path(summary["report_path"]).read_text(encoding="utf-8"))
+
+    def test_a_doctor_job_without_a_library_is_not_a_clean_result(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            summary, code = run_scheduled_job(
+                job_id="integrity",
+                schedule_path=self._schedule(root),
+                library_root=None,
+                registry_path=root / "unused.json",
+                state_dir=root / "state",
+                quarantine_dir=root / "q",
+            )
+            self.assertEqual(code, EXIT_SOURCE_ERROR)
+            text = Path(summary["report_path"]).read_text(encoding="utf-8")
+            self.assertIn("COULD NOT RUN", text)
+            self.assertIn("not a clean bill of health", text)
 
 
 if __name__ == "__main__":
