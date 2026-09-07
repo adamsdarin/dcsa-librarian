@@ -1,8 +1,23 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-07T22:05:00Z by Claude
+Last updated: 2026-09-07T22:30:00Z by Claude
 
 ## Current State
+
+**The original question is answered.** DCSA published
+`DCSA FCL_Orientation_Handbook_20260828.pdf` on 2026-08-28 — found live on
+2026-09-07 under `/Portals/128/Documents/CTP/FC/`. The last publicly indexed
+edition was 9 March 2021, and the March 2026 VOI had announced the update as
+forthcoming. Nothing in this project detected it, which is what prompted all of
+this work. Whether the library already holds it is still unchecked: that needs a
+`discover --library` run.
+
+Note it is a fifth naming convention for this document (`_10OCT18`,
+`_05_MAR_20`, `_9_March_2021`, now `DCSA FCL_Orientation_Handbook_YYYYMMDD`),
+and it is served from both `/CTP/FC/` and `/CTP/fc/` — genuinely distinct URLs
+to the crawler, same inferred filename, so manifest matching by filename still
+resolves both.
+
 Integrity and discovery plane for the DCSA Library. Operates on a library passed
 via `--library`; deliberately not part of the corpus.
 
@@ -77,6 +92,28 @@ Where does manifest triage happen now that the scan can run without the
 library?
 
 ## Log
+2026-09-07T22:30:00Z Claude — Found the revised handbook:
+`DCSA FCL_Orientation_Handbook_20260828.pdf`, dated 2026-08-28, reachable from
+the `dcsa-fcl` source. Both registered FCL URLs resolved, so the evidence-based
+entry points were right.
+
+That run exposed another defect the unit tests could not: the handbook was
+reported four times from a two-page crawl. `_crawl_source` deduplicated links
+within a page but not across the crawl, so a document linked from several pages
+of a section was recorded once per page — inflating counts, probing it
+repeatedly with HEAD, and listing it more than once for review. Fixed with a
+crawl-wide seen set; regression test reproduces the two-page case.
+
+The `/CTP/FC/` and `/CTP/fc/` variants are left as distinct URLs deliberately.
+Path case is server-dependent and lowercasing it globally would risk false
+manifest matches on case-sensitive sources; both variants share an inferred
+filename, so filename matching resolves them anyway.
+
+Pattern worth noting for whoever picks this up: three defects so far (robots
+identity, VOI naming expectation, cross-page duplication) were all invisible to
+a green test suite and all surfaced within minutes of running against the real
+site. The tests encode my assumptions; only the live source falsifies them.
+
 2026-09-07T22:05:00Z Claude — First successful live crawl. The robots fix
 worked: `preflight --source dcsa-nisp-tools` returned Reachable: yes, 166
 documents, 129 VOI issues. Two open questions closed at once — DCSA's CDN

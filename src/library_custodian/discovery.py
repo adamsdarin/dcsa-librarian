@@ -317,6 +317,11 @@ def _crawl_source(source: dict[str, Any], fetcher: Fetcher) -> tuple[list[dict[s
     queue: deque[tuple[str, int]] = deque([(start, 0)])
     visited: set[str] = set()
     documents: list[dict[str, str]] = []
+    # Links are deduplicated within a page by extract_links, but a document
+    # linked from several pages of the same section would otherwise be recorded
+    # once per page: inflating counts, probing it repeatedly, and listing it
+    # more than once for review.
+    seen_documents: set[str] = set()
     pages: list[dict[str, str]] = []
 
     while queue and len(visited) < max_pages:
@@ -334,7 +339,9 @@ def _crawl_source(source: dict[str, Any], fetcher: Fetcher) -> tuple[list[dict[s
             if urllib.parse.urlsplit(url).scheme != "https" or not domain_allowed(url, allowed_domains):
                 continue
             if is_document_link(url, link["text"]):
-                documents.append(link)
+                if url not in seen_documents:
+                    seen_documents.add(url)
+                    documents.append(link)
                 continue
             path = urllib.parse.urlsplit(url).path
             if depth < max_depth and (not prefix or path.casefold().startswith(str(prefix).casefold())):
