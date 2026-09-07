@@ -11,6 +11,7 @@
       "days_of_month": "1",
       "sources": [],
       "once_per_period": null,
+      "expect": null,
       "rationale": "Runs the day after DCSA's month-end publication target, so a VOI released on the last day of the month is picked up within about a day even if the release watch missed it."
     },
     {
@@ -20,7 +21,8 @@
       "days_of_month": "28-31,1-3",
       "sources": ["dcsa-nisp-tools"],
       "once_per_period": "month",
-      "rationale": "DCSA targets month-end but slips: observed issues are dated 260130, 260227 and 260331, and the March issue surfaced around 2 April. The exact release date is not knowable in advance, so the window is polled rather than a single date scheduled. Once the issue for a period is seen, the remaining polls in that period no-op."
+      "expect": "voi newsletter",
+      "rationale": "DCSA targets month-end but slips: observed issues are dated 260130, 260227 and 260331, and the March issue surfaced around 2 April. The exact release date is not knowable in advance, so the window is polled rather than a single date scheduled. The window closes only on a finding matching `expect` - an unrelated document posted mid-window must not end the polling before the awaited issue is published."
     }
   ]
 }

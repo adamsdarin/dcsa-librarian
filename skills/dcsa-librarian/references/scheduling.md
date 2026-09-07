@@ -117,8 +117,19 @@ issues are dated `260130`, `260227`, `260331` — DCSA targets month-end and
 slips; the March 2026 issue surfaced around 2 April. Polling a window and
 stopping on success is the only schedule that actually catches it.
 
-`once_per_period` closes the window: when a poll finds something, it writes
-`state/watch/<job>/<period>.json` and the remaining polls in that period no-op.
+`once_per_period` closes the window, but only on the finding the job is waiting
+for. `expect` declares that: a case-insensitive substring matched against the
+percent-decoded URL, so `"voi newsletter"` matches
+`.../260331%20VOI%20Newsletter.pdf`. When a matching document appears the job
+writes `state/watch/<job>/<period>.json` and the remaining polls in that period
+no-op.
+
+Reporting and satisfying are separate. Every finding is reported; only a
+matching one closes the window. Without that split, an unrelated job aid posted
+on the 29th would end the March polling before the issue was ever published —
+the exact miss the watch exists to prevent. A job with no `expect` is satisfied
+by any finding, which suits a job merely looking for movement and not one
+waiting on a specific publication.
 A period spans the boundary — 28-31 March and 1-3 April both belong to
 `2026-03` — so the early-April polls do not re-arm and re-report the issue the
 March polls already found. **A scan with a failed source never closes a

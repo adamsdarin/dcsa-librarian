@@ -10,6 +10,7 @@ swapping the ticker never means rewriting the schedule.
 from __future__ import annotations
 
 import json
+import urllib.parse
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -29,6 +30,7 @@ class Job:
     days_of_month: str
     sources: tuple[str, ...]
     once_per_period: str | None
+    expect: str | None
     rationale: str
 
 
@@ -64,6 +66,7 @@ def load_schedule(path: Path) -> Schedule:
                 days_of_month=str(raw.get("days_of_month", "*")),
                 sources=tuple(str(value) for value in raw.get("sources", [])),
                 once_per_period=period,
+                expect=(str(raw["expect"]) if raw.get("expect") else None),
                 rationale=str(raw.get("rationale", "")),
             )
         )
@@ -124,6 +127,23 @@ def period_key(job: Job, moment: datetime) -> str | None:
     if moment.day <= 3:
         year, month = (year - 1, 12) if month == 1 else (year, month - 1)
     return f"{year:04d}-{month:02d}"
+
+
+def satisfies_expectation(url: str, expect: str | None) -> bool:
+    """Whether a finding is the thing this job was waiting for.
+
+    Case-insensitive substring match against the percent-decoded URL, so a
+    declaration can say "voi newsletter" and still match
+    ".../260331%20VOI%20Newsletter.pdf".
+
+    A job with no expectation is satisfied by any finding. That is the right
+    default for a job that is simply looking for movement, and the wrong one for
+    a job waiting on a specific publication — which is why the release watch
+    declares what it is waiting for.
+    """
+    if not expect:
+        return True
+    return expect.casefold() in urllib.parse.unquote(url).casefold()
 
 
 def marker_path(state_dir: Path, job: Job, key: str) -> Path:

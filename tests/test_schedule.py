@@ -22,6 +22,7 @@ from library_custodian.schedule import (
     load_schedule,
     period_key,
     render,
+    satisfies_expectation,
     to_utc,
 )
 
@@ -37,6 +38,7 @@ def job(**overrides: object) -> Job:
         "days_of_month": "1",
         "sources": (),
         "once_per_period": None,
+        "expect": None,
         "rationale": "",
     }
     base.update(overrides)
@@ -152,6 +154,19 @@ class DueTodayTests(unittest.TestCase):
         self.assertFalse(due_today(watch, datetime(2026, 4, 15).date()))
 
 
+class ExpectationTests(unittest.TestCase):
+    def test_percent_encoding_does_not_defeat_the_match(self) -> None:
+        self.assertTrue(
+            satisfies_expectation("https://x/Portals/128/260331%20VOI%20Newsletter.pdf", "voi newsletter")
+        )
+
+    def test_an_unrelated_document_does_not_satisfy(self) -> None:
+        self.assertFalse(satisfies_expectation("https://x/docs/new-job-aid.pdf", "voi newsletter"))
+
+    def test_no_expectation_means_any_finding_satisfies(self) -> None:
+        self.assertTrue(satisfies_expectation("https://x/anything.pdf", None))
+
+
 class StubFetcher:
     links: list[str] = ["/docs/known.pdf"]
     fail = False
@@ -170,7 +185,7 @@ class StubFetcher:
 
 
 class ScheduledRunTests(unittest.TestCase):
-    def _fixture(self, root: Path) -> tuple[Path, Path]:
+    def _fixture(self, root: Path, expect: str | None = None) -> tuple[Path, Path]:
         registry = root / "registry.json"
         registry.write_text(
             json.dumps(
@@ -195,6 +210,7 @@ class ScheduledRunTests(unittest.TestCase):
                             "days_of_month": "28-31,1-3",
                             "sources": ["dcsa-test"],
                             "once_per_period": "month",
+                            "expect": expect,
                         }
                     ],
                 }
@@ -245,6 +261,29 @@ class ScheduledRunTests(unittest.TestCase):
                 fourth, code = self._run(root, registry, schedule, "2026-04-29T14:00:00")
                 self.assertNotIn("skipped", fourth)
                 self.assertEqual(fourth["period"], "2026-04")
+
+    def test_an_unrelated_document_does_not_close_the_window(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            registry, schedule = self._fixture(root, expect="voi newsletter")
+            with mock.patch("library_custodian.discovery.Fetcher", StubFetcher):
+                StubFetcher.fail = False
+                StubFetcher.links = ["/docs/known.pdf"]
+                self._run(root, registry, schedule, "2026-03-29T14:00:00")
+
+                # DCSA posts something unrelated mid-window
+                StubFetcher.links = ["/docs/known.pdf", "/docs/new-job-aid.pdf"]
+                unrelated, code = self._run(root, registry, schedule, "2026-03-30T14:00:00")
+                self.assertEqual(code, EXIT_FINDINGS)
+                self.assertEqual(unrelated["satisfying_findings"], [])
+                self.assertIsNone(unrelated["period_marker"], "an unrelated document must not end the polling")
+
+                # the awaited issue lands on the 31st and is still caught
+                StubFetcher.links = ["/docs/known.pdf", "/docs/new-job-aid.pdf", "/docs/260331%20VOI%20Newsletter.pdf"]
+                awaited, code = self._run(root, registry, schedule, "2026-03-31T14:00:00")
+                self.assertEqual(code, EXIT_FINDINGS)
+                self.assertEqual(len(awaited["satisfying_findings"]), 1)
+                self.assertIsNotNone(awaited["period_marker"])
 
     def test_a_failed_source_leaves_the_window_open(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

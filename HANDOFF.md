@@ -1,6 +1,6 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-07T00:05:00Z by Claude
+Last updated: 2026-09-07T00:30:00Z by Claude
 
 ## Current State
 Integrity and discovery plane for the DCSA Library. Operates on a library passed
@@ -77,6 +77,17 @@ Where does manifest triage happen now that the scan can run without the
 library?
 
 ## Log
+2026-09-07T00:30:00Z Claude — Found and fixed a defect in my own scheduling
+work. `once_per_period` closed the release window on *any* finding, so an
+unrelated document posted mid-window would have satisfied the period and the
+awaited VOI would never have been polled for — precisely the miss the watch was
+built to prevent. Jobs now declare `expect` (a case-insensitive substring
+matched against the percent-decoded URL; the watch declares "voi newsletter"),
+and reporting is separated from satisfying: every finding is still reported,
+only a matching one closes the window. Regression test covers the sequence —
+unrelated document on the 30th leaves the window open, awaited issue on the 31st
+closes it. 48 tests pass.
+
 2026-09-07T00:05:00Z Claude — User proposed deleting the August VOI from the
 corpus and re-scanning as a test. Pushed back and it was accepted: that test
 exercises manifest comparison, which was never broken, while the mechanism

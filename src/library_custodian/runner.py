@@ -13,7 +13,15 @@ from pathlib import Path
 from typing import Any
 
 from .discovery import discover
-from .schedule import Job, Schedule, load_schedule, period_key, period_satisfied, record_period_satisfied
+from .schedule import (
+    Job,
+    Schedule,
+    load_schedule,
+    period_key,
+    period_satisfied,
+    record_period_satisfied,
+    satisfies_expectation,
+)
 
 
 EXIT_NO_FINDINGS = 0
@@ -78,6 +86,14 @@ def render_text_summary(summary: dict[str, Any], code: int) -> str:
         if urls:
             lines += ["", f"{heading} ({len(urls)})"]
             lines += [f"  {url}" for url in urls]
+
+    if summary.get("expected") and total and not summary.get("satisfying_findings"):
+        lines += [
+            "",
+            f"Nothing matched {summary['expected']!r}, so this window stays open and the",
+            "remaining polls will still run. The findings above are real; they are just",
+            "not the publication this job is waiting for.",
+        ]
 
     lines += ["", "-" * 46]
     if code == EXIT_SOURCE_ERROR:
@@ -161,11 +177,20 @@ def run_scheduled_job(
     errored = [source["source_id"] for source in report["sources"] if source.get("status") != "ok"]
     has_findings = any(findings.values())
 
+    # Reporting and satisfying are different questions. Every finding is
+    # reported; only a finding that is the thing this job was waiting for closes
+    # the window. Otherwise an unrelated document posted mid-window would end the
+    # polling before the awaited issue was ever published.
+    seen = sorted({url for urls in findings.values() for url in urls})
+    satisfying = [url for url in seen if satisfies_expectation(url, job.expect)]
+
     marker = None
-    if has_findings and not errored:
-        # only close the window on a clean scan; a partial scan that happened to
-        # find something must not suppress the remaining polls
-        marker = record_period_satisfied(state_dir, job, key, {"run_id": report["run_id"], **findings})
+    if satisfying and not errored:
+        # a partial scan that happened to find something must not suppress the
+        # remaining polls either
+        marker = record_period_satisfied(
+            state_dir, job, key, {"run_id": report["run_id"], "satisfied_by": satisfying, **findings}
+        )
 
     summary = {
         "job_id": job.id,
@@ -176,6 +201,8 @@ def run_scheduled_job(
         "sources_errored": errored,
         "manifest_checked": report["manifest_checked"],
         "findings": findings,
+        "expected": job.expect,
+        "satisfying_findings": satisfying,
         "period_marker": str(marker) if marker else None,
         "counts": report["counts"],
     }
