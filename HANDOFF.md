@@ -1,6 +1,6 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-08T00:05:00Z by Claude
+Last updated: 2026-09-11T00:00:00Z by Claude
 
 ## Current State
 
@@ -97,6 +97,24 @@ Where does manifest triage happen now that the scan can run without the
 library?
 
 ## Log
+2026-09-11T00:00:00Z Claude — Verified the URL-encoding fix as far as is
+possible without network access. Every container available to this session is
+still egress-blocked from dcsa.mil (403 at CONNECT), so the live re-run remains
+the user's to do. Instead, ran the 13 URLs that actually failed on their machine
+through `http.client._validate_path` — the exact function that raised
+InvalidURL: all 13 rejected as written, all 13 accepted after
+`canonicalize_url`, and the one pre-encoded URL unchanged and not
+double-encoded.
+
+Pinned that set as a regression test, asserting the invariant (no character in
+[\x00-\x20\x7f] survives canonicalisation) rather than calling a private
+stdlib method, so it stays stable across Python versions. 70 tests pass.
+
+This verifies the mechanism, not the outcome: it proves urllib will now accept
+these URLs, not that DCSA returns 200 for them. Only a run from the user's
+machine can establish that, and it is the last unproven link before the
+scheduled tasks should be installed.
+
 2026-09-08T00:05:00Z Claude — First `discover` against the live source with the
 real library. Answered the question that started this: the revised handbook is
 `missing_from_manifest`, along with 13 of the other 14 FCL documents.

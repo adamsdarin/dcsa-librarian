@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import unittest
 
 from library_custodian.discovery import canonicalize_url, domain_allowed, extract_links, infer_filename, is_document_link
@@ -57,6 +58,50 @@ class UrlEncodingTests(unittest.TestCase):
             "&conditions%5Bagencies%5D%5B%5D=defense-counterintelligence-and-security-agency"
         )
         self.assertEqual(canonicalize_url(url), url)
+
+
+class LiveFailureRegressionTests(unittest.TestCase):
+    """The exact URLs that failed on a real machine, 2026-09-07.
+
+    All 13 raised InvalidURL from http.client, which refuses any path holding a
+    character in [\\x00-\\x20\\x7f]. Asserting the invariant rather than calling
+    http.client's private validator keeps this stable across versions.
+    """
+
+    DISALLOWED = re.compile(r"[\x00-\x20\x7f]")
+
+    FAILED_ON_2026_09_07 = [
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/DCSA FCL_Orientation_Handbook_20260828.pdf",
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/DCSA FCL_Orientation_Handbook_20260828.pdf",
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job Aid - Organizational Charts By Business Structure.pdf",
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job Aid - DD441.pdf",
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Quick Start Guide for the FCL Process.pdf",
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job Aid - KMP Authorities By Position.pdf",
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job Aid - FCL Pages Common Errors.pdf",
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job Aid - PKI, ECA, and Access to NCAISS.pdf",
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job Aid - Exclusion Resolutions.pdf",
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job Aid - FCL Package RFI and Discontinue Process.pdf",
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job Aid - Business Structure Slick Sheets.pdf",
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job Aid - SF328.pdf",
+        "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job Aid - Common Acronyms.pdf",
+    ]
+
+    SUCCEEDED_ON_2026_09_07 = (
+        "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf"
+    )
+
+    def test_every_url_that_failed_is_now_requestable(self) -> None:
+        for url in self.FAILED_ON_2026_09_07:
+            with self.subTest(url=url):
+                # the fixture must really be the problematic shape
+                self.assertRegex(url, self.DISALLOWED)
+                self.assertNotRegex(canonicalize_url(url), self.DISALLOWED)
+
+    def test_the_one_that_worked_is_not_broken_by_the_fix(self) -> None:
+        canonical = canonicalize_url(self.SUCCEEDED_ON_2026_09_07)
+        self.assertNotRegex(canonical, self.DISALLOWED)
+        self.assertNotIn("%2520", canonical)
+        self.assertEqual(canonical, self.SUCCEEDED_ON_2026_09_07)
 
 
 class CrossPageDeduplicationTests(unittest.TestCase):
