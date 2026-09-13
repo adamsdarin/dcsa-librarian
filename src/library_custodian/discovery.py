@@ -65,6 +65,8 @@ class WebItem:
     content_length: str | None = None
     change_signal: str = "unverified"
     changed_fields: list[str] | None = None
+    resolved_url: str | None = None
+    exclusion_reason: str | None = None
 
 
 FINGERPRINT_FIELDS = ("sha256", "etag", "last_modified", "content_length")
@@ -98,6 +100,85 @@ def compare_fingerprints(previous: dict[str, Any] | None, current: dict[str, Any
     return ("changed", differing) if differing else ("unchanged", [])
 
 
+INTAKE_REQUIRED = (
+    "submission_id",
+    "producer_id",
+    "retrieved_at",
+    "requested_source_uri",
+    "resolved_source_uri",
+    "source_filename",
+    "mime_type",
+    "source_sha256",
+    "source_bytes",
+    "approval_state",
+)
+
+
+def build_intake_package(item: "WebItem", source: dict[str, Any], producer_id: str) -> dict[str, Any]:
+    """Describe one quarantined download for handoff to the Archivist.
+
+    Shaped to schemas/intake-package.schema.json. The submission id is derived
+    from the resolved URL and the content hash, so re-downloading identical
+    bytes from the same URL yields the same id and the Archivist can recognise
+    a resubmission rather than treating it as a new document.
+
+    `approval_state` is fixed: nothing this role produces is approved, and the
+    package must not be able to claim otherwise.
+    """
+    resolved = item.resolved_url or item.url
+    package = {
+        "submission_id": hashlib.sha256(f"{resolved}\n{item.sha256}".encode()).hexdigest()[:32],
+        "producer_id": producer_id,
+        "retrieved_at": item.discovered_at,
+        "requested_source_uri": item.url,
+        "resolved_source_uri": resolved,
+        "source_filename": item.inferred_filename,
+        "mime_type": item.content_type or "application/octet-stream",
+        "source_sha256": item.sha256,
+        "source_bytes": item.bytes,
+        "approval_state": "quarantined_unreviewed",
+        "publisher_claim": item.anchor_text,
+        "http_metadata": {
+            "etag": item.etag,
+            "last_modified": item.last_modified,
+            "content_length": item.content_length,
+            "content_type": item.content_type,
+        },
+        "producer_notes": (
+            f"Discovered by source {item.source_id!r} with authority hint "
+            f"{item.authority_hint!r}. Lifecycle and applicability are unverified: this package "
+            "carries no evidence of currency, and the hint is a source property, not a finding."
+        ),
+    }
+    proposed = source.get("proposed_collection")
+    if proposed:
+        package["proposed_collection"] = str(proposed)
+
+    missing = [field for field in INTAKE_REQUIRED if not package.get(field)]
+    if missing:
+        # better to fail here than to hand the Archivist an invalid package
+        raise ValueError(f"intake package for {item.url} is missing required fields: {', '.join(missing)}")
+    return package
+
+
+def load_exclusions(path: Path | None) -> dict[str, dict[str, Any]]:
+    """Documents deliberately kept out of the corpus, keyed by canonical URL.
+
+    An exclusion is a recorded decision, not a filter: excluded documents are
+    still seen, still snapshotted and still reported. Hiding them would make a
+    scan look cleaner than the evidence warrants.
+    """
+    if path is None or not path.is_file():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8-sig"))
+    excluded: dict[str, dict[str, Any]] = {}
+    for entry in data.get("exclusions", []):
+        url = entry.get("url")
+        if isinstance(url, str) and url:
+            excluded[canonicalize_url(url)] = entry
+    return excluded
+
+
 def needs_review(item: "WebItem") -> bool:
     """A document is a review candidate when it is absent from the manifest or
     when the source's copy has changed since the last scan. A manifest hit is
@@ -107,6 +188,8 @@ def needs_review(item: "WebItem") -> bool:
     document, so only source-side movement counts. A run that merely established
     a source's first snapshot reports nothing: a baseline is not a finding.
     """
+    if item.status == "excluded_from_scope":
+        return False
     if item.status == "manifest_not_checked":
         return item.change_signal in {"changed", "new_to_snapshot"}
     return item.status != "known" or item.change_signal == "changed"
@@ -371,6 +454,7 @@ def discover(
     selected_sources: set[str] | None = None,
     download: bool = False,
     verify_known: bool = True,
+    exclusions_path: Path | None = None,
 ) -> dict[str, Any]:
     registry = json.loads(registry_path.read_text(encoding="utf-8-sig"))
     settings = registry.get("settings", {})
@@ -384,6 +468,7 @@ def discover(
     # Without a library the scan still detects source-side movement; it just
     # cannot say whether the corpus already holds what it finds.
     known_filenames, known_urls = load_known_documents(library_root) if library_root is not None else (set(), set())
+    exclusions = load_exclusions(exclusions_path)
     run_dir = make_run_dir(state_dir / "scans", datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"))
     run_id = run_dir.name
     quarantine_run = quarantine_dir / run_id
@@ -407,9 +492,13 @@ def discover(
             current_documents: dict[str, dict[str, Any]] = {}
             verification_errors: list[dict[str, str]] = []
             changed: list[dict[str, Any]] = []
+            intake_packages: list[str] = []
             for link in documents:
                 filename = infer_filename(link["url"], link["text"])
-                if library_root is None:
+                exclusion = exclusions.get(link["url"])
+                if exclusion is not None:
+                    status = "excluded_from_scope"
+                elif library_root is None:
                     status = "manifest_not_checked"
                 elif link["url"] in known_urls or filename.casefold() in known_filenames:
                     status = "known"
@@ -424,8 +513,12 @@ def discover(
                     discovered_at=now,
                     authority_hint=source.get("authority_hint", "unreviewed_official_source"),
                     lifecycle_hint="unverified",
+                    exclusion_reason=(exclusion or {}).get("reason"),
                 )
-                if download and status == "missing_from_manifest":
+                if status == "excluded_from_scope":
+                    # a recorded decision needs no probing and no download
+                    pass
+                elif download and status == "missing_from_manifest":
                     data, metadata = fetcher.get(item.url)
                     source_folder = quarantine_run / source_id
                     source_folder.mkdir(parents=True, exist_ok=True)
@@ -441,6 +534,12 @@ def discover(
                     item.etag = metadata.get("etag") or None
                     item.last_modified = metadata.get("last_modified") or None
                     item.content_length = metadata.get("content_length") or None
+                    item.resolved_url = metadata.get("final_url") or item.url
+                    package = build_intake_package(item, source, fetcher.user_agent)
+                    (source_folder / f"{safe_name}.intake.json").write_text(
+                        json.dumps(package, indent=2) + "\n", encoding="utf-8"
+                    )
+                    intake_packages.append(package["submission_id"])
                 elif source_verify:
                     # A document already in the manifest can still be revised in
                     # place. Probe its headers so a same-URL revision is visible.
@@ -502,6 +601,12 @@ def discover(
                 "removed_urls_since_previous_scan": sorted(previous_urls - current_urls),
                 "changed_since_previous_scan": sorted(changed, key=lambda entry: entry["url"]),
                 "candidates_for_review": sorted(item.url for item in source_items if needs_review(item)),
+                "excluded": [
+                    {"url": item.url, "reason": item.exclusion_reason}
+                    for item in source_items
+                    if item.status == "excluded_from_scope"
+                ],
+                "intake_packages": intake_packages,
                 "unverified_documents": sorted(item.url for item in source_items if item.change_signal == "unverified"),
                 "verification_errors": verification_errors,
             })
@@ -523,6 +628,7 @@ def discover(
             "known": sum(item.status == "known" for item in items),
             "missing_from_manifest": sum(item.status == "missing_from_manifest" for item in items),
             "manifest_not_checked": sum(item.status == "manifest_not_checked" for item in items),
+            "excluded_from_scope": sum(item.status == "excluded_from_scope" for item in items),
             "changed_since_previous_scan": sum(item.change_signal == "changed" for item in items),
             "new_to_snapshot": sum(item.change_signal == "new_to_snapshot" for item in items),
             "unverified": sum(item.change_signal == "unverified" for item in items),

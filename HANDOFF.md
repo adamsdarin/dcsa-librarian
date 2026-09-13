@@ -1,6 +1,6 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-11T00:00:00Z by Claude
+Last updated: 2026-09-13T00:00:00Z by Claude
 
 ## Current State
 
@@ -97,6 +97,34 @@ Where does manifest triage happen now that the scan can run without the
 library?
 
 ## Log
+2026-09-13T00:00:00Z Claude — Started intake of the FCL findings. Triage: 13
+unique documents, not 14 — the handbook appears at both /CTP/FC/ and /CTP/fc/.
+Twelve admitted as in scope (the 2026-08-28 handbook, ten FCL job aids, the
+Quick Start Guide). One excluded: `DCSA Strategic Execution Plan.pdf`, agency
+strategy rather than FSO practice material, reached only because document links
+are collected from anywhere on an allowed domain rather than under the source's
+`crawl_path_prefix`. Owner chose catalog-metadata treatment over changing that
+crawler behaviour, which would have dropped legitimately linked PDFs stored
+elsewhere in /Portals/.
+
+Built two things. `config/catalog_exclusions.json` records scope decisions with
+a reason and a date; excluded documents are still crawled, counted, snapshotted
+and listed under `excluded` in every report, just never re-offered for review or
+downloaded. Deliberately a record, not a filter — hiding them would make a scan
+look cleaner than the evidence warrants. And `--download` now writes an intake
+package beside each staged file, shaped to the existing
+`intake-package.schema.json`, with `approval_state` fixed at
+`quarantined_unreviewed` and `submission_id` derived from resolved URL plus
+content hash so a resubmission is recognisable. A package missing its evidence
+raises rather than reaching the Archivist invalid. 76 tests pass, including
+validation against the real schema file.
+
+Still open and needed from the owner before acquisition: `doctor` on the
+library (their own rule is audit-before-intake), and what editions of the
+handbook the manifest already holds — that decides whether 2026-08-28 is new or
+supersedes an existing record. Supersession marks the old record, never deletes
+it.
+
 2026-09-11T00:00:00Z Claude — Verified the URL-encoding fix as far as is
 possible without network access. Every container available to this session is
 still egress-blocked from dcsa.mil (403 at CONNECT), so the live re-run remains

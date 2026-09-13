@@ -26,6 +26,7 @@ def build_parser() -> argparse.ArgumentParser:
     scan = commands.add_parser("discover", help="Scan allowlisted official sources and create review candidates")
     scan.add_argument("--library", type=Path, help="Classify findings against this library's manifest; omit to detect source-side change only")
     scan.add_argument("--registry", type=Path, default=PROJECT_ROOT / "config" / "source_registry.json")
+    scan.add_argument("--exclusions", type=Path, default=PROJECT_ROOT / "config" / "catalog_exclusions.json")
     scan.add_argument("--state-dir", type=Path, default=PROJECT_ROOT / "state")
     scan.add_argument("--quarantine-dir", type=Path, default=PROJECT_ROOT / "quarantine")
     scan.add_argument("--source", action="append", dest="sources")
@@ -50,6 +51,7 @@ def build_parser() -> argparse.ArgumentParser:
     scheduled.add_argument("--schedule", type=Path, default=PROJECT_ROOT / "config" / "schedule.json")
     scheduled.add_argument("--library", type=Path, help="Optional; omit when the runner has no access to the library")
     scheduled.add_argument("--registry", type=Path, default=PROJECT_ROOT / "config" / "source_registry.json")
+    scheduled.add_argument("--exclusions", type=Path, default=PROJECT_ROOT / "config" / "catalog_exclusions.json")
     scheduled.add_argument("--state-dir", type=Path, default=PROJECT_ROOT / "state")
     scheduled.add_argument("--quarantine-dir", type=Path, default=PROJECT_ROOT / "quarantine")
     scheduled.add_argument("--download", action="store_true")
@@ -98,6 +100,7 @@ def main(argv: list[str] | None = None) -> int:
             selected_sources=set(args.sources) if args.sources else None,
             download=args.download,
             verify_known=args.verify_known,
+            exclusions_path=args.exclusions.resolve() if args.exclusions else None,
         )
         print(json.dumps(report, indent=2))
         return 1 if any(source["status"] == "error" for source in report["sources"]) else 0
@@ -132,6 +135,7 @@ def main(argv: list[str] | None = None) -> int:
             quarantine_dir=args.quarantine_dir.resolve(),
             download=args.download,
             skip_if_satisfied=args.skip_if_satisfied,
+            exclusions_path=args.exclusions.resolve() if args.exclusions else None,
         )
         print(json.dumps(summary, indent=2))
         return code

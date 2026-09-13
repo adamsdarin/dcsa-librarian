@@ -167,8 +167,9 @@ def _findings(report: dict[str, Any]) -> dict[str, list[str]]:
     for source in report["sources"]:
         if source.get("status") != "ok":
             continue
-        changed.extend(entry["url"] for entry in source.get("changed_since_previous_scan", []))
-        new_urls.extend(source.get("new_urls_since_previous_scan", []))
+        excluded = {entry["url"] for entry in source.get("excluded", [])}
+        changed.extend(entry["url"] for entry in source.get("changed_since_previous_scan", []) if entry["url"] not in excluded)
+        new_urls.extend(url for url in source.get("new_urls_since_previous_scan", []) if url not in excluded)
         candidates.extend(source.get("candidates_for_review", []))
     return {
         "changed": sorted(set(changed)),
@@ -230,6 +231,7 @@ def run_scheduled_job(
     quarantine_dir: Path,
     download: bool = False,
     skip_if_satisfied: bool = True,
+    exclusions_path: Path | None = None,
     now: datetime | None = None,
 ) -> tuple[dict[str, Any], int]:
     schedule: Schedule = load_schedule(schedule_path)
@@ -260,6 +262,7 @@ def run_scheduled_job(
         selected_sources=set(job.sources) if job.sources else None,
         download=download,
         verify_known=True,
+        exclusions_path=exclusions_path,
     )
 
     findings = _findings(report)

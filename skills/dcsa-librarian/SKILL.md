@@ -14,7 +14,7 @@ Operate as the intake librarian for a governed evidence library. The framework i
 - **Official-source discovery:** read [references/discovery.md](references/discovery.md), then run `python custodian.py discover --library <path>`. Add `--download` only when the user authorizes downloading candidates. If an official public section blocks the direct crawler or needs rendered navigation, use the browser fallback in that reference and import its capture with `browser-import`.
 - **CDSE resource intake:** also read [references/cdse-intake.md](references/cdse-intake.md). Treat CDSE training products as operational guidance or training evidence, never as authority that independently creates contractor duties.
 - **Scheduled monitoring:** read [references/scheduling.md](references/scheduling.md), then run `python custodian.py scheduled-scan --job <id>`. Cadence is declared in `config/schedule.json`; runners are rendered adapters, never hand-edited. Treat exit code 1 as an incomplete scan, never as "no changes".
-- **Intake handoff:** deliver validated quarantine candidates to the DCSA Archivist. Do not organize the production corpus or prepare releases in this role.
+- **Intake handoff:** read [references/intake-handoff.md](references/intake-handoff.md). Deliver validated quarantine candidates to the DCSA Archivist. Do not organize the production corpus or prepare releases in this role.
 
 ## Invariants
 

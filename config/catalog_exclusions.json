@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "note": "Documents deliberately kept out of the corpus but recorded so they are not re-triaged on every scan. An exclusion is a decision with evidence and a date, not a filter that hides things: excluded documents are still counted, still snapshotted, and still listed in each report under `excluded`. Remove an entry to put the document back in scope.",
+  "exclusions": [
+    {
+      "url": "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf",
+      "reason": "Agency strategy document, not FSO practice material. Reached from the FCL section only because document links are collected from anywhere on an allowed domain, not just under the source's crawl_path_prefix. Kept as catalog metadata under the same rule that keeps course launchers and third-party links out of the corpus.",
+      "decided_at": "2026-09-13",
+      "decided_by": "library owner"
+    }
+  ]
+}
