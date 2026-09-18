@@ -1,289 +1,45 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-07T22:30:00Z by Claude
+Last updated: 2026-09-15 by Codex
 
 ## Current State
+Expected-publication polling now requires confirm-period evidence after actual
+source review; filename matches and legacy markers cannot end the VOI window.
+Shared public-source requests route through ../EVIDENCE-REQUESTS.md. 72 tests pass; issue periods now use the configured local date at UTC boundaries.
+Structured scheduled-run records and scan-status freshness checks are implemented.
+Supervisor now distinguishes source freshness from library readiness, including
+registry/source coverage, library identity and timezone-aware due times. Live
+status is unknown for all three jobs because earlier runs lack structured receipts;
+no source success was backfilled. Windows tzdata installed under ignored .runtime.
+Both month-end VOI and first-of-month maintenance were explicitly approved and
+enabled September 14; older approval-pending notes were stale. See workspace
+AUTOMATION-UPDATE-PROPOSAL.md. No live scan was run in this checkpoint.
+Discovery/integrity plane. Scheduled wrappers now download quarantined sources and accept the rendered --job syntax. New/changed downloads emit Archivist intake packages; no-library discovery can acquire bootstrap inputs. GET redirect provenance is captured and allowlist checked. 65 offline tests pass. No live acquisition or scheduler installation was performed; no DCSA/FSO/Custodian-named Windows tasks were found on inspection.
 
-**The original question is answered.** DCSA published
-`DCSA FCL_Orientation_Handbook_20260828.pdf` on 2026-08-28 — found live on
-2026-09-07 under `/Portals/128/Documents/CTP/FC/`. The last publicly indexed
-edition was 9 March 2021, and the March 2026 VOI had announced the update as
-forthcoming. Nothing in this project detected it, which is what prompted all of
-this work. Whether the library already holds it is still unchecked: that needs a
-`discover --library` run.
-
-Note it is a fifth naming convention for this document (`_10OCT18`,
-`_05_MAR_20`, `_9_March_2021`, now `DCSA FCL_Orientation_Handbook_YYYYMMDD`),
-and it is served from both `/CTP/FC/` and `/CTP/fc/` — genuinely distinct URLs
-to the crawler, same inferred filename, so manifest matching by filename still
-resolves both.
-
-Integrity and discovery plane for the DCSA Library. Operates on a library passed
-via `--library`; deliberately not part of the corpus.
-
-`discover` detects revisions to documents already in the manifest (HEAD probe,
-compared against the previous snapshot on ETag/Last-Modified/Content-Length/
-sha256). A `changed` document becomes a review candidate.
-
-**`--library` is now optional.** Without it every document is
-`manifest_not_checked` and only source-side movement counts as a finding. This
-is what lets the scan run somewhere with network access but no access to the
-corpus — the change that makes hosted scheduling possible at all.
-
-**Cadence is declared, runners are adapters.** `config/schedule.json` is the
-single source of truth; `custodian.py schedule --render <runner>` emits cron,
-GitHub Actions or schtasks from it. Two jobs: `monthly-scan` (1st, 09:00 ET) and
-`voi-release-watch` (09:00/12:00/15:00 ET across days 28-31 and 1-3).
-`scheduled-scan --job <id>` is the one entrypoint every runner calls. Exit codes
-are the interface: 0 clean, 1 incomplete, 3 findings.
-
-`state/snapshots/` and `state/watch/` are tracked in git deliberately. They are
-the baseline; a runner that discards them detects nothing while still reporting
-success.
-
-**The scan runs locally, by design.** DCSA blocks GitHub's hosted runners —
-user-confirmed, not a hypothesis — so the CI adapter and its workflow were
-removed rather than left to fail monthly while looking like monitoring. There is
-no `github-actions` renderer; asking for one raises. The scan is model-free by
-construction: stdlib Python, no service, no agent in the loop.
-
-Wrappers live in `adapters/windows/` (run-scan.cmd, install-tasks.cmd) and
-`adapters/unix/run-scan.sh`. They pass `--library` because the corpus is local,
-copy the report to the desktop on findings or on an incomplete scan, and
-propagate the exit code so Task Scheduler's "Last Run Result" is meaningful.
-Every run writes `state/reports/<job>-latest.txt` in plain English.
-
-On the local path the DST caveat disappears: schtasks schedules in local time.
-`utc_offset_hours` now only serves the cron adapter.
+Live Git state: run `python ../workspace_health.py status`; prior details are in `HANDOFF-archive.md`.
 
 ## Next
-1. **Run the verification sequence on the target machine** (see
-   `references/scheduling.md`): `selftest`, then `preflight --source
-   dcsa-nisp-tools` and `--source dcsa-fcl`, then the two scratch-state
-   `discover` runs plus the snapshot-perturbation check. Nothing in this project
-   has ever completed a scan against a live source, so this is the first real
-   proof any of it works. **Install and run it once on the target machine.** Edit `LIBRARY` and
-   `ALERTS` in `adapters\windows\run-scan.cmd`, then run
-   `adapters\windows\install-tasks.cmd`. Nothing in this project has ever
-   executed a successful scan against a live source — every container is
-   egress-blocked — so the first real run is also the first proof the crawler
-   works at all.
-2. Verify both FCL sources resolve, and whether the VOI newsletters are visible
-   in the NISP Tools page HTML or sit behind a tab that needs `browser-import`.
-   The `voi-release-watch` job is pointed at `dcsa-nisp-tools` and is worthless
-   if that tab is invisible.
-3. Confirm whether the revised FCL Orientation Handbook has actually posted. The
-   March 2026 VOI announced it as forthcoming; only 2018/2020/2021 editions were
-   findable.
-4. Decide how manifest triage happens: the hosted scan runs without `--library`,
-   so someone still has to reconcile findings against the corpus.
-5. Still open: merge with `src\dcsa-library-custodian-v2`, keep both with
-   distinct responsibilities, or retire one. Absorb the `OPERATIONS/` scripts
-   still inside the corpus (waiting on the user).
+1. Deploy and verify the local scheduler and agent-host cycle; config alone is not evidence of recurring operation.
+2. Use ../dcsa-archivist/agents/conductor.md for package review and gated intake; do not use historical intake_voi.py as the general publication path.
+3. Preserve existing untracked scripts/snapshots; see ../PROCESS-MAP.md for scope and bootstrap recommendations.
 
 ## Open Questions
-Merge with v2 or keep separate? This one has discovery and browser-import; v2
-has enrichment and releases.
-
-Answered: a declared schedule with swappable runners, executing locally.
-Hosted CI is ruled out — DCSA blocks it.
-
-Where does manifest triage happen now that the scan can run without the
-library?
+No new decision needed for the authorized implementation. Prior source-acquisition
+and migration questions remain scoped separately as noted above.
 
 ## Log
-2026-09-07T22:30:00Z Claude — Found the revised handbook:
-`DCSA FCL_Orientation_Handbook_20260828.pdf`, dated 2026-08-28, reachable from
-the `dcsa-fcl` source. Both registered FCL URLs resolved, so the evidence-based
-entry points were right.
-
-That run exposed another defect the unit tests could not: the handbook was
-reported four times from a two-page crawl. `_crawl_source` deduplicated links
-within a page but not across the crawl, so a document linked from several pages
-of a section was recorded once per page — inflating counts, probing it
-repeatedly with HEAD, and listing it more than once for review. Fixed with a
-crawl-wide seen set; regression test reproduces the two-page case.
-
-The `/CTP/FC/` and `/CTP/fc/` variants are left as distinct URLs deliberately.
-Path case is server-dependent and lowercasing it globally would risk false
-manifest matches on case-sensitive sources; both variants share an inferred
-filename, so filename matching resolves them anyway.
-
-Pattern worth noting for whoever picks this up: three defects so far (robots
-identity, VOI naming expectation, cross-page duplication) were all invisible to
-a green test suite and all surfaced within minutes of running against the real
-site. The tests encode my assumptions; only the live source falsifies them.
-
-2026-09-07T22:05:00Z Claude — First successful live crawl. The robots fix
-worked: `preflight --source dcsa-nisp-tools` returned Reachable: yes, 166
-documents, 129 VOI issues. Two open questions closed at once — DCSA's CDN
-accepts our declared user agent, and the VOI newsletters are ordinary HTML
-links rather than a script-rendered tab.
-
-The live data then falsified a design decision I had made on a guess. I had set
-the release watch to expect "voi newsletter"; DCSA has renamed this publication
-at least four times (`VOI_January_2016.pdf`, `Voice-of-Industry_June2023.pdf`,
-`260831 VOI Newsletter.pdf`, `251031 VOI Bulletin.pdf`) and one issue is a
-Bulletin, not a Newsletter. Widened `expect` to "voi", which matches all four
-(`Voice` begins with it) and matched 129 of 166 documents on the page, all
-genuine. A regression test pins every observed convention and asserts the
-handbook is still excluded. Had October's issue been the awaited one, the old
-expectation would have left the window open.
-
-Note the failure mode was mild by construction — findings are reported
-regardless of `expect`, which only governs window closing — but the expectation
-was still wrong, and only real data showed it.
-
-2026-09-07T15:10:00Z Claude — First execution outside a sandbox. User ran the
-verification sequence on Windows: 54 tests OK, then both preflights failed with
-`robots policy disallows`. Investigated rather than accepting it: DCSA's actual
-robots.txt (retrieved via the user's browser) permits every path we scan and
-bans only ia_archiver, while a direct Python fetch of robots.txt from the same
-machine returned HTTP 403. So the refusal was self-inflicted —
-`RobotFileParser.read()` asks as `Python-urllib`, and its 403 handling records
-"disallow everything", which we surfaced as a policy refusal.
-
-Rewrote the robots handling: fetch under the user agent we declare for every
-other request (consistency, not evasion — we still identify honestly as
-DCSA-Library-Custodian), treat 404/410 as no published policy, and report an
-unreadable policy as "policy unknown ... not requested" rather than as a
-disallow. The two failure modes call for opposite responses and collapsing them
-hid which had occurred. DCSA's real robots.txt is now a test fixture proving our
-scanned paths are permitted.
-
-Open: whether the CDN also rejects our declared agent. If so the browser
-fallback is the route; spoofing a browser is not.
-
-2026-09-07T01:05:00Z Claude — Worked the three options the user had not
-selected. (a) Replaced the guessed `/FCL/` root: search confirmed
-`/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/` exists and
-follows the same path pattern as every other DCSA source, so it is registered as
-`dcsa-entity-vetting-fcl`; `dcsa-fcl` now enters at
-`/FCL/Maintaining-Personnel-Security-Clearances/`, a page search confirms
-exists, and reaches its siblings via `crawl_path_prefix` at depth 2. Entering at
-a confirmed page rather than an assumed root removes the most likely first-run
-failure. (b) `verify_known` is now per-source and off for the two DOHA
-collections: published decisions are immutable, so probing each one every scan
-was cost with no possible finding, and those two sources carry `max_pages` 80
-and 40. The global flag can only narrow a source further, never widen it.
-(c) Jobs now declare an `action`, and a new `monthly-integrity` job runs
-`doctor` at 09:30 on the 1st — nothing was watching the corpus itself, so parity
-breaks and hash drift would have sat unnoticed. Library problems get their own
-exit code (4) and their own desktop alert, because the remediation is nothing
-like a source finding; a doctor job with no library reports that it could not
-run rather than passing.
-
-54 tests pass. Still nothing has run against a live source — see Next #1.
-
-2026-09-07T00:30:00Z Claude — Found and fixed a defect in my own scheduling
-work. `once_per_period` closed the release window on *any* finding, so an
-unrelated document posted mid-window would have satisfied the period and the
-awaited VOI would never have been polled for — precisely the miss the watch was
-built to prevent. Jobs now declare `expect` (a case-insensitive substring
-matched against the percent-decoded URL; the watch declares "voi newsletter"),
-and reporting is separated from satisfying: every finding is still reported,
-only a matching one closes the window. Regression test covers the sequence —
-unrelated document on the 30th leaves the window open, awaited issue on the 31st
-closes it. 48 tests pass.
-
-2026-09-07T00:05:00Z Claude — User proposed deleting the August VOI from the
-corpus and re-scanning as a test. Pushed back and it was accepted: that test
-exercises manifest comparison, which was never broken, while the mechanism
-actually at issue is change detection; and it is a destructive write to the
-governed product to test a read-only tool, which breaks `doctor` parity and
-loses an official document for nothing if the source turns out to be
-script-rendered. The right object to perturb is the snapshot — disposable
-comparison state — not the library.
-
-Built the two commands that make diagnosis possible without touching anything.
-`preflight --source <id>` fetches one source and prints every document link the
-parser can see, writing no snapshot, report or baseline; a test asserts it
-writes nothing and that it never probes documents. Its most valuable output is
-the reachable-but-zero-documents case, which names the script-rendered-tab
-problem explicitly — the failure that would leave `voi-release-watch` reporting
-nothing forever while looking healthy. `selftest` runs the suite, so confirming
-an install is one command rather than a unittest incantation.
-
-Documented the safe verification sequence in scheduling.md and the
-never-diagnose-by-deleting rule in discovery.md and SKILL.md.
-
-44 tests pass. Still nothing has run against a live source — see Next #1.
-
-2026-09-06T23:22:00Z Claude — User confirmed DCSA blocks GitHub Actions runners
-and directed that the scan run locally, without a model. Removed the workflow
-and the `github-actions` renderer outright rather than leaving them to fail
-monthly: a scheduled job that always fails is worse than no schedule, because it
-still reads as monitoring. A test now asserts that runner is unavailable.
-
-Added local wrappers for Windows and Unix and a plain-text report
-(`state/reports/<job>-latest.txt`), so a scheduled run is legible without an
-LLM: the verdict is stated in words, and an unreachable source is called
-INCOMPLETE rather than clean. The wrapper copies the report to the desktop on
-findings or on failure and propagates the exit code, so Task Scheduler's "Last
-Run Result" carries it.
-
-Fixed a real defect in the schtasks renderer: Task Scheduler takes an explicit
-list of day numbers and cannot parse ranges, so `28-31,1-3` was invalid and
-would have failed at registration. It now expands to `28,29,30,31,1,2,3`.
-
-Note the local path is strictly better on time: schtasks schedules in local
-time and therefore follows DST, so the fixed-offset caveat only applies to the
-cron adapter now.
-
-38 tests pass. Still nothing has run against a live source — see Next #1.
-
-2026-09-06T23:10:00Z Claude — Built the scheduling layer. User rejected a
-Windows-Task-Scheduler-shaped answer and asked for automation "built into the
-structure of the agent so it's agnostic". Told them plainly that no agent
-framework schedules itself — something outside it must tick — and that the
-achievable version is a declared cadence with rendered adapters. Built that:
-`config/schedule.json` as the single declaration, `schedule --render` for
-cron/GitHub Actions/schtasks, `scheduled-scan --job` as the one entrypoint,
-exit codes as the runner interface.
-
-Made `--library` optional, which is the load-bearing change: it decouples the
-scan from the machine holding the corpus. Without a library the scan reports
-`manifest_not_checked` rather than falsely flagging the whole corpus as missing.
-Also split `baseline` from `new_to_snapshot` — a source's first-ever scan is not
-a discovery, and conflating them would have dumped every document as a finding
-on first run.
-
-User asked for VOI polling "at 9:00, noon and 3:00 on the date of release".
-Pushed back: the release date is not knowable in advance (observed 260130,
-260227, 260331; March issue surfaced ~2 April). Implemented a polled window
-(days 28-31 and 1-3) that closes on success via a period marker. The period
-spans the month boundary so early-April polls do not re-arm on the March issue.
-A scan with a failed source never closes a window — an incomplete run must not
-suppress polls that might still succeed.
-
-Snapshots and watch markers left `.gitignore`; they are the baseline and must
-survive an ephemeral runner. Caught two of my own defects while wiring the CLI:
-a leftover debug line, and `--command` colliding with the subparser's
-`dest="command"`, which would have broken dispatch entirely.
-
-30 tests pass. The hosted runner remains unproven — see Next #1.
-
-2026-08-31T16:47:01Z Claude — Committed the first baseline — the repo had been
-initialised with zero commits.
-
-2026-09-06T22:25:00Z Claude — User asked why a DCSA documentation change was not
-detected. Nothing had changed in the repo since the previous watermark (three
-commits total, all baseline; no Codex session files present). Diagnosis: three
-independent gaps, ranked. (1) No scheduler — `discover` only runs when a human
-runs it. (2) No FCL source in the registry, so the handbook's section was never
-crawled; DCSA date-stamps the filename, so revisions surface as new URLs, and
-the VOI newsletter — DCSA's own change-announcement channel — sits behind a tab
-the plain HTML parser likely cannot see. (3) No content-change detection.
-
-Implemented (3) and part of (2): HEAD-based revision probing, evidence-based
-change signals, schema 2 snapshots with backward compatibility, and the
-`dcsa-fcl` source. Design choice: a document is called `changed` only on
-positive evidence, and absent evidence reports `unverified` rather than
-`unchanged` — a governance tool must not let a gap read as a clean scan.
-`verify_known` defaults on, since a detector nobody opts into repeats the
-original failure; cost is one HEAD per known document per scan, escapable with
-`--no-verify-known`. Also fixed a latent bug: second-granular run ids with
-`mkdir(exist_ok=False)` crashed two scans in the same second.
-
-(1) is deliberately left undone — it is a decision about cadence and hosting,
-not a code change, and it is the gap that actually caused the miss.
+2026-09-16 Codex — Fixed local-calendar period selection; boundary regression and
+all 72 Librarian tests pass. No acquisition or publication run.
+2026-09-15 Codex — Closed filename-based period suppression; added retained,
+hash-bound issue-period review and source-request handoff instructions. No live
+issue confirmed, source downloaded or library publication performed.
+2026-09-15 Codex — Added structured scan receipts, read-only freshness CLI and
+supervisor integration; corrected stale scheduler approval state. Unknown prior
+runs remain unknown. 70 Librarian tests pass. Period satisfaction and source
+requests need further audit; no source acquisition or publication was run.
+2026-09-14 Codex — Verified monthly maintenance coverage gap; recorded concrete
+first-of-month schedule addition. No acquisition or library writes performed.
+2026-09-11 Codex — Completed cross-system role/handoff implementation and process map. Tests: 65 Librarian, 52 Archivist; three cross-system acceptance cases and shared-policy checks pass. No live publication, acquisition, scheduling, or guidance product changes. Portable regenerator assessed as a proposed recipe-driven CLI, not implemented.
+2026-09-11 Codex — Cross-system workflow audit in progress. User selected Librarian -> Archivist -> approved release -> comparison and Guidance Watch. Implementing staged source intake, published navigation graph, and durable release packets with completion receipts. Existing dirty files preserved. No live library changes; installed Windows task inspection found no DCSA/FSO/Custodian-named tasks.
+2026-09-10 Codex — Completed authorized implementation. Offline discovery/quarantine is exercised by the cross-system acceptance suite. Shared-policy check passes. Pre-existing untracked files remain untouched; no live source scan or scheduler change was made. Changes remain uncommitted, including preserved prior edits.
+2026-09-10 Codex — Implementing the five authorized workspace improvements and accepted-answer wiki. Preserved the entire prior handoff in the archive, including pre-existing edits. Validation is in progress; do not interpret implementation as a live library release.

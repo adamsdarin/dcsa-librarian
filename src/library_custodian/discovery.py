@@ -65,9 +65,27 @@ class WebItem:
     content_length: str | None = None
     change_signal: str = "unverified"
     changed_fields: list[str] | None = None
+    intake_package_path: str | None = None
 
 
 FINGERPRINT_FIELDS = ("sha256", "etag", "last_modified", "content_length")
+
+
+def write_intake_package(destination: Path, item: WebItem, metadata: dict, run_id: str) -> str:
+    package = {
+        "submission_id": f"{run_id}-{hashlib.sha256(item.url.encode()).hexdigest()[:16]}",
+        "producer_id": "dcsa-librarian", "retrieved_at": item.discovered_at,
+        "requested_source_uri": item.url, "resolved_source_uri": metadata.get("final_url") or item.url,
+        "source_filename": destination.name, "mime_type": item.content_type or "application/octet-stream",
+        "source_sha256": item.sha256, "source_bytes": item.bytes,
+        "http_metadata": metadata, "approval_state": "quarantined_unreviewed",
+        "producer_notes": "Review official identity, taxonomy, lifecycle and extraction before Archivist intake.",
+    }
+    if "redirect_chain" in metadata:
+        package["redirect_chain"] = metadata["redirect_chain"]
+    path = destination.with_name(destination.name + ".intake.json")
+    path.write_text(json.dumps(package, indent=2) + "\n", encoding="utf-8")
+    return str(path.resolve())
 
 
 def response_headers(response: Any) -> dict[str, str]:
@@ -279,7 +297,16 @@ class Fetcher:
         self._check_allowed(url)
         self._throttle()
         request = urllib.request.Request(url, headers={"User-Agent": self.user_agent, "Accept": "text/html,application/pdf,application/octet-stream;q=0.8"})
-        with urllib.request.urlopen(request, timeout=self.timeout) as response:
+        redirect_chain = []
+        fetcher = self
+        class CaptureRedirect(urllib.request.HTTPRedirectHandler):
+            def redirect_request(self, req, fp, code, msg, headers, newurl):
+                if not domain_allowed(newurl, getattr(fetcher, "allowed_domains", [urllib.parse.urlsplit(url).hostname])):
+                    raise PermissionError(f"redirect outside official-source allowlist: {newurl}")
+                fetcher._check_allowed(newurl)
+                redirect_chain.append(newurl)
+                return super().redirect_request(req, fp, code, msg, headers, newurl)
+        with urllib.request.build_opener(CaptureRedirect()).open(request, timeout=self.timeout) as response:
             content_length = response.headers.get("Content-Length")
             if content_length and int(content_length) > self.max_bytes:
                 raise ValueError(f"response exceeds {self.max_bytes} bytes")
@@ -287,6 +314,7 @@ class Fetcher:
             if len(data) > self.max_bytes:
                 raise ValueError(f"response exceeds {self.max_bytes} bytes")
             metadata = response_headers(response)
+            metadata["redirect_chain"] = redirect_chain
         self._last_request = time.monotonic()
         return data, metadata
 
@@ -301,7 +329,7 @@ def load_known_documents(library_root: Path) -> tuple[set[str], set[str]]:
             value = record.get(field)
             if isinstance(value, str) and value:
                 filenames.add(Path(value).name.casefold())
-        for field in ("canonical_source_uri", "source_url", "source_uri"):
+        for field in ("canonical_source_uri", "canonical_source_url", "source_url", "source_uri"):
             value = record.get(field)
             if isinstance(value, str) and value.startswith("http"):
                 urls.add(canonicalize_url(value))
@@ -382,6 +410,7 @@ def discover(
         if not source.get("enabled", True) or (selected_sources and source_id not in selected_sources):
             continue
         try:
+            fetcher.allowed_domains = source.get("allowed_domains", [urllib.parse.urlsplit(source["url"]).hostname])
             documents, pages = _crawl_source(source, fetcher)
             # Some sources publish immutable records. Probing those for in-place
             # revision is cost with no possible finding, so the registry can opt
@@ -411,7 +440,9 @@ def discover(
                     authority_hint=source.get("authority_hint", "unreviewed_official_source"),
                     lifecycle_hint="unverified",
                 )
-                if download and status == "missing_from_manifest":
+                # With no corpus (portable bootstrap), all discovered material is
+                # quarantine intake. Known items remain cheap HEAD probes below.
+                if download and status in {"missing_from_manifest", "manifest_not_checked"}:
                     data, metadata = fetcher.get(item.url)
                     source_folder = quarantine_run / source_id
                     source_folder.mkdir(parents=True, exist_ok=True)
@@ -427,6 +458,7 @@ def discover(
                     item.etag = metadata.get("etag") or None
                     item.last_modified = metadata.get("last_modified") or None
                     item.content_length = metadata.get("content_length") or None
+                    item.intake_package_path = write_intake_package(destination, item, metadata, run_id)
                 elif source_verify:
                     # A document already in the manifest can still be revised in
                     # place. Probe its headers so a same-URL revision is visible.
@@ -455,6 +487,18 @@ def discover(
                 item.changed_fields = differing or None
                 if item.change_signal == "changed":
                     changed.append({"url": item.url, "inferred_filename": filename, "status": status, "changed_fields": differing})
+                    if download and not item.downloaded_path:
+                        data, metadata = fetcher.get(item.url)
+                        source_folder = quarantine_run / source_id
+                        source_folder.mkdir(parents=True, exist_ok=True)
+                        safe_name = re.sub(r"[^A-Za-z0-9._-]+", "_", filename).strip("._") or "document"
+                        destination = source_folder / f"{hashlib.sha256(item.url.encode()).hexdigest()[:12]}-{safe_name}"
+                        destination.write_bytes(data)
+                        item.downloaded_path = str(destination.resolve())
+                        item.sha256, item.bytes = hashlib.sha256(data).hexdigest(), len(data)
+                        item.content_type = metadata.get("content_type") or mimetypes.guess_type(filename)[0]
+                        item.intake_package_path = write_intake_package(destination, item, metadata, run_id)
+                        record["sha256"] = item.sha256
                 current_documents[item.url] = record
                 items.append(item)
                 source_items.append(item)

@@ -10,7 +10,12 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 from typing import Any
+import hashlib
+import json
+import os
+import tempfile
 
 from .audit import audit_library
 from .discovery import discover
@@ -58,7 +63,7 @@ def render_text_summary(summary: dict[str, Any], code: int) -> str:
     total = len(set(findings["changed"]) | set(findings["new_urls"]) | set(findings["candidates"]))
 
     if code == EXIT_SOURCE_ERROR:
-        lines.append("Result:  INCOMPLETE - a source could not be reached.")
+        lines.append("Result:  INCOMPLETE - a source was unavailable or could not be fully verified.")
     elif total:
         lines.append(f"Result:  {total} item(s) need review.")
     else:
@@ -154,6 +159,11 @@ def write_reports(state_dir: Path, summary: dict[str, Any], code: int) -> Path:
     reports.mkdir(parents=True, exist_ok=True)
     latest = reports / f"{summary['job_id']}-latest.txt"
     latest.write_text(text, encoding="utf-8")
+    record = {**summary, 'exit_code': code, 'schema_version': '1.0'}
+    with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', dir=reports, delete=False) as handle:
+        json.dump(record, handle, indent=2)
+        staged = handle.name
+    os.replace(staged, reports / f"{summary['job_id']}-latest.json")
     with (reports / "scan-log.txt").open("a", encoding="utf-8", newline="\n") as handle:
         handle.write(text + "\n")
     return latest
@@ -235,9 +245,11 @@ def run_scheduled_job(
     schedule: Schedule = load_schedule(schedule_path)
     job: Job = schedule.job(job_id)
     moment = now or datetime.now(timezone.utc)
-    key = period_key(job, moment)
+    if moment.tzinfo is None:
+        raise ValueError('Scheduled run time requires a timezone')
+    key = period_key(job, moment.astimezone(ZoneInfo(schedule.timezone_name)))
 
-    if skip_if_satisfied and period_satisfied(state_dir, job, key):
+    if skip_if_satisfied and period_satisfied(state_dir, job, key, library_root, registry_path):
         # the issue this window was hunting has already been found; the
         # remaining polls in the period have nothing left to do
         skipped = {
@@ -245,6 +257,7 @@ def run_scheduled_job(
             "period": key,
             "skipped": "period_already_satisfied",
             "ran_at": moment.isoformat(),
+            "library_root": str(library_root.resolve()) if library_root else None,
         }
         skipped["report_path"] = str(write_reports(state_dir, skipped, EXIT_NO_FINDINGS))
         return skipped, EXIT_NO_FINDINGS
@@ -263,7 +276,9 @@ def run_scheduled_job(
     )
 
     findings = _findings(report)
-    errored = [source["source_id"] for source in report["sources"] if source.get("status") != "ok"]
+    errored = [source["source_id"] for source in report["sources"] if source.get("status") != "ok"
+               or source.get('verification_errors') or source.get('unverified_documents')
+               or not source.get('pages_scanned') or not source.get('documents_seen')]
     has_findings = any(findings.values())
 
     # Reporting and satisfying are different questions. Every finding is
@@ -274,7 +289,7 @@ def run_scheduled_job(
     satisfying = [url for url in seen if satisfies_expectation(url, job.expect)]
 
     marker = None
-    if satisfying and not errored:
+    if satisfying and not errored and not job.expect:
         # a partial scan that happened to find something must not suppress the
         # remaining polls either
         marker = record_period_satisfied(
@@ -294,6 +309,9 @@ def run_scheduled_job(
         "satisfying_findings": satisfying,
         "period_marker": str(marker) if marker else None,
         "counts": report["counts"],
+        "library_root": str(library_root.resolve()) if library_root else None,
+        "registry_sha256": hashlib.sha256(registry_path.read_bytes()).hexdigest(),
+        "download_requested": download,
     }
     code = EXIT_SOURCE_ERROR if errored else (EXIT_FINDINGS if has_findings else EXIT_NO_FINDINGS)
     summary["report_path"] = str(write_reports(state_dir, summary, code))

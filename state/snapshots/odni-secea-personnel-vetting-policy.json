@@ -1,0 +1,30 @@
+{
+  "source_id": "odni-secea-personnel-vetting-policy",
+  "scanned_at": "2026-09-04T16:24:01Z",
+  "document_urls": [
+    "https://archive.dni.gov/files/NCSC/documents/Regulations/06-02-22_ODNI_Document_SEAD-9_22-00284_U_SIGNED-FINAL.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/Regulations/07-30-24_NCSC_SecEA_Policy_System_Memo_SSD.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/Regulations/12-21-21_Memo_SecEA_Clarifying_Guidance_re_Marijuana_21-01529_U_SIGNED-FINAL.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/Regulations/2018-2022-NCSC-Strategic-Plan.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/Regulations/SEAD-3-Reporting-U.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/Regulations/SEAD-4-Adjudicative-Guidelines-U.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/Regulations/SEAD-6-continuous%20evaluation-U.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/Regulations/SEAD-7_BI_ReciprocityU.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/Regulations/SEAD-8_Temporary_Eligibility_U.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/Regulations/SEAD_1.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/Regulations/SEAD_5.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/Regulations/Security-Executive-Agent-Directive-2-20201005.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/features/NCSC_CI_Strategy-pages-20240730.pdf",
+    "https://archive.dni.gov/files/NCSC/documents/products/National_Insider_Threat_Task_Force_Fact_Sheet.pdf"
+  ],
+  "pages": [
+    {
+      "url": "https://www.dni.gov/index.php/ncsc-how-we-work/ncsc-security-executive-agent/ncsc-policy",
+      "content_type": "text/html",
+      "etag": "\"346e7fe16834aeab594729f2f9b0bad7:1785176925.033191\"",
+      "last_modified": "Mon, 27 Jul 2026 18:28:45 GMT",
+      "final_url": "https://archive.dni.gov/index.php/ncsc-how-we-work/ncsc-security-executive-agent/ncsc-policy",
+      "sha256": "36c478e85a5a335b2fe981e139d8f02c455ff7a9a79efd4bd718b6da7075d3b1"
+    }
+  ]
+}

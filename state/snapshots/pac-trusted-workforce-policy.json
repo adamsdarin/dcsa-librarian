@@ -1,0 +1,23 @@
+{
+  "source_id": "pac-trusted-workforce-policy",
+  "scanned_at": "2026-09-04T16:19:37Z",
+  "document_urls": [
+    "https://assets.performance.gov/files/FY26_Q1_Personnel_Vetting_QPR.pdf",
+    "https://assets.performance.gov/files/FY26_Q1_Personnel_Vetting_QPR_(Legacy_Metrics).pdf",
+    "https://assets.performance.gov/files/FY26_Q2_Personnel_Vetting_QPR.pdf",
+    "https://assets.performance.gov/files/PV_Basics_Fact_Sheet.pdf",
+    "https://assets.performance.gov/files/Personnel_Vetting_QPR_(FY26-Q3).pdf",
+    "https://assets.performance.gov/files/QPR_Legacy_Metrics_(FY26-Q2).pdf",
+    "https://assets.performance.gov/files/QPR_Legacy_Metrics_(FY26-Q3).pdf"
+  ],
+  "pages": [
+    {
+      "url": "https://www.performance.gov/trusted-workforce/",
+      "content_type": "text/html",
+      "etag": "W/\"2523ace922325a73037b60522963a3a8\"",
+      "last_modified": "Mon, 31 Aug 2026 19:32:02 GMT",
+      "final_url": "https://www.performance.gov/trusted-workforce/",
+      "sha256": "701efeb7484bb19757c321b17a55022e3a5fe43632ac15739ac0e69dd257e1cd"
+    }
+  ]
+}

@@ -12,6 +12,8 @@ setlocal enabledelayedexpansion
 set "PROJECT=%~dp0..\.."
 set "LIBRARY=%USERPROFILE%\Documents\DCSA Library"
 set "ALERTS=%USERPROFILE%\Desktop"
+:: Schedule renderer supplies --job; direct invocation also accepts a bare id.
+if "%~1"=="--job" shift
 
 if "%~1"=="" (
   echo Usage: run-scan.cmd ^<job-id^>
@@ -20,7 +22,7 @@ if "%~1"=="" (
 )
 
 pushd "%PROJECT%"
-python custodian.py scheduled-scan --job %~1 --library "%LIBRARY%"
+python custodian.py scheduled-scan --job %~1 --library "%LIBRARY%" --download
 set "CODE=%ERRORLEVEL%"
 popd
 

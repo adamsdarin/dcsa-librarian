@@ -10,6 +10,8 @@ swapping the ticker never means rewriting the schedule.
 from __future__ import annotations
 
 import json
+import hashlib
+import re
 import urllib.parse
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
@@ -158,8 +160,59 @@ def marker_path(state_dir: Path, job: Job, key: str) -> Path:
     return state_dir / "watch" / job.id / f"{key}.json"
 
 
-def period_satisfied(state_dir: Path, job: Job, key: str | None) -> bool:
-    return key is not None and marker_path(state_dir, job, key).is_file()
+def period_satisfied(state_dir: Path, job: Job, key: str | None, library_root=None, registry_path=None) -> bool:
+    if key is None:
+        return False
+    try:
+        marker = json.loads(marker_path(state_dir, job, key).read_text(encoding='utf-8-sig'))
+        if marker.get('job_id') != job.id or marker.get('period') != key:
+            return False
+        if not job.expect:
+            return True
+        evidence = marker.get('evidence', {})
+        if evidence.get('issue_period_verified') is not True or evidence.get('source_period') != key:
+            return False
+        if not evidence.get('reviewed_by') or not evidence.get('issue_locator') or not satisfies_expectation(evidence.get('source_uri', ''), job.expect):
+            return False
+        binding = hashlib.sha256(str(library_root.resolve()).encode()).hexdigest() if library_root else None
+        if evidence.get('library_binding') != binding or registry_path is None or evidence.get('registry_sha256') != hashlib.sha256(registry_path.read_bytes()).hexdigest():
+            return False
+        artifact = (state_dir / evidence['retained_artifact']).resolve()
+        if not artifact.is_relative_to((state_dir / 'period-evidence').resolve()):
+            return False
+        return hashlib.sha256(artifact.read_bytes()).hexdigest() == evidence['source_sha256']
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        return False
+
+
+def confirm_period(state_dir, job, key, receipt_path, registry_path, library_root):
+    """Record actual issue-period review; discovering a matching filename is insufficient."""
+    if not re.fullmatch(r'\d{4}-(0[1-9]|1[0-2])', key) or not job.expect:
+        raise ValueError('Confirmation requires a YYYY-MM period and an expected-publication job')
+    receipt = json.loads(receipt_path.read_text(encoding='utf-8-sig'))
+    required = ('source_uri', 'source_artifact', 'source_sha256', 'reviewed_by', 'reviewed_utc', 'issue_locator', 'review_basis')
+    if any(not isinstance(receipt.get(k), str) or not receipt[k].strip() for k in required):
+        raise ValueError('Issue confirmation requires source bytes, pinpoint and attributable review')
+    if receipt.get('issue_period_verified') is not True or receipt.get('source_period') != key:
+        raise ValueError('Reviewed source period must match the watched period')
+    if not receipt['source_uri'].startswith('https://') or not satisfies_expectation(receipt['source_uri'], job.expect):
+        raise ValueError('Source does not match the expected official publication')
+    artifact = (receipt_path.parent / receipt['source_artifact']).resolve()
+    if not artifact.is_relative_to(receipt_path.parent.resolve()):
+        raise ValueError('Source artifact must be contained beside the review receipt')
+    payload = artifact.read_bytes()
+    digest = hashlib.sha256(payload).hexdigest()
+    if not payload or digest != receipt['source_sha256']:
+        raise ValueError('Reviewed source hash mismatch')
+    retained = state_dir / 'period-evidence' / f'{digest}.bin'
+    retained.parent.mkdir(parents=True, exist_ok=True)
+    retained.write_bytes(payload)
+    evidence = {k: receipt[k] for k in required if k != 'source_artifact'}
+    evidence.update(issue_period_verified=True, source_period=key,
+        retained_artifact=retained.relative_to(state_dir).as_posix(),
+        registry_sha256=hashlib.sha256(registry_path.read_bytes()).hexdigest(),
+        library_binding=hashlib.sha256(str(library_root.resolve()).encode()).hexdigest() if library_root else None)
+    return record_period_satisfied(state_dir, job, key, evidence)
 
 
 def record_period_satisfied(state_dir: Path, job: Job, key: str | None, evidence: dict[str, Any]) -> Path | None:

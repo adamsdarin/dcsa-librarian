@@ -1,0 +1,21 @@
+{
+  "source_id": "nara-cui-policy",
+  "scanned_at": "2026-08-30T23:34:35Z",
+  "document_urls": [
+    "https://www.archives.gov/files/cui/documents/2010-overview-for-depts-and-agencies-from-ea.pdf",
+    "https://www.archives.gov/files/cui/documents/2011-overview-for-compliance-plans.pdf",
+    "https://www.archives.gov/files/cui/documents/cui-notice-2023.10.03-annual-reporting-requirements.pdf.pdf",
+    "https://www.archives.gov/files/cui/registry/policy-guidance/registry-documents/2018-cui-advisory-council-charter.pdf",
+    "https://www.archives.gov/files/cui/registry/policy-guidance/registry-documents/cui-registry-committee-charter.pdf"
+  ],
+  "pages": [
+    {
+      "url": "https://www.archives.gov/cui/registry/policy-guidance",
+      "content_type": "text/html",
+      "etag": "W/\"1788116400-0-gzip\"",
+      "last_modified": "Sun, 30 Aug 2026 19:00:00 GMT",
+      "final_url": "https://www.archives.gov/cui/registry/policy-guidance",
+      "sha256": "bfe61b47095113fb17a178d5477780af1efd041d08bf6c5ed8cdadaeb0da155a"
+    }
+  ]
+}

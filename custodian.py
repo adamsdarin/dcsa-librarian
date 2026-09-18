@@ -6,10 +6,11 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
+if (PROJECT_ROOT / '.runtime').is_dir():
+    sys.path.insert(0, str(PROJECT_ROOT / '.runtime'))
 
 from library_custodian.cli import main  # noqa: E402
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

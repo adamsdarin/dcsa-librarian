@@ -30,3 +30,30 @@ When a public source rejects the direct HTTP crawler or requires rendered naviga
 - A missing or changed web document produces a review candidate. It is not silently added, deleted, superseded, or labeled current.
 - The Librarian may inspect human-readable artifacts for parity and extraction validation; ordinary retrieval bots may not.
 - Release promotion is intentionally not implemented in version 0.1. A broken library must first be recovered and a reviewed atomic-release design implemented.
+
+## Scheduled acquisition and handoff
+
+For watches with an expected publication, URL matching only identifies a lead.
+Use `confirm-period --job <job> --period YYYY-MM --library <root> --receipt <review.json>`
+after actual source review. Receipt fields: source_uri, source_artifact (relative
+to the receipt directory), source_sha256, reviewed_by, reviewed_utc, issue_locator,
+review_basis, issue_period_verified (true), and source_period (YYYY-MM). It retains
+source evidence locally and binds the marker to that library and registry. An old
+matching filename or legacy marker cannot suppress future polls. No source is
+published by this confirmation.
+
+In the shared workspace, EVIDENCE-REQUESTS.md and workflow_requests.py own the
+public-source inbox. Missing sources route here; do not treat a request as approval
+to bypass registry controls. Acquisition does not close the request: approved
+release availability must be verified after Archivist review/publication.
+
+`python custodian.py scan-status --library <root>` reads acquisition freshness
+without network access. Scheduled jobs now write structured latest-run JSON beside
+their readable reports, binding discovery to the library and source registry.
+Missing records are unknown; partial coverage, verification failures, zero-document
+results, changed registries and overdue runs are not clean checks. Skipped polls
+require review of the original period evidence. Windows installs require tzdata
+for daylight-saving-aware due times (declared in pyproject.toml); a repository-local
+installation under ignored .runtime is supported by custodian.py.
+
+The Windows/Unix wrappers download new or positively changed sources into quarantine and emit `.intake.json` packages. They accept both a bare job ID and `--job <id>`. `config/schedule.json` declares cadence; it does not install tasks. Archivist reviews packages and uses `build-candidate --intake-plan` before gated publication. See `../dcsa-archivist/agents/conductor.md` for the complete agent cycle. The historical `scripts/intake_voi.py` helper is not the general intake path.

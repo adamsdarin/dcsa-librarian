@@ -10,6 +10,7 @@ set -u
 PROJECT="$(cd "$(dirname "$0")/../.." && pwd)"
 LIBRARY="${DCSA_LIBRARY:-$HOME/Documents/DCSA Library}"
 ALERTS="${DCSA_ALERTS:-$HOME/Desktop}"
+if [ "${1:-}" = "--job" ]; then shift; fi
 
 if [ $# -lt 1 ]; then
   echo "Usage: run-scan.sh <job-id>" >&2
@@ -19,7 +20,7 @@ fi
 
 job="$1"
 cd "$PROJECT" || exit 1
-python3 custodian.py scheduled-scan --job "$job" --library "$LIBRARY"
+python3 custodian.py scheduled-scan --job "$job" --library "$LIBRARY" --download
 code=$?
 
 report="$PROJECT/state/reports/$job-latest.txt"

@@ -269,6 +269,18 @@ class ScheduledRunTests(unittest.TestCase):
             now=datetime.fromisoformat(when).replace(tzinfo=timezone.utc),
         )
 
+    def test_issue_period_uses_declared_local_date_at_utc_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            registry, schedule = self._fixture(root, expect="voi")
+            with mock.patch("library_custodian.discovery.Fetcher", StubFetcher):
+                StubFetcher.links = ["/docs/known.pdf"]
+                StubFetcher.fail = False
+                before, _ = self._run(root, registry, schedule, "2026-04-04T02:00:00")
+                after, _ = self._run(root, registry, schedule, "2026-04-04T05:00:00")
+            self.assertEqual(before["period"], "2026-03")
+            self.assertEqual(after["period"], "2026-04")
+
     def test_window_closes_once_the_issue_is_found_and_reopens_next_period(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -322,7 +334,7 @@ class ScheduledRunTests(unittest.TestCase):
                 awaited, code = self._run(root, registry, schedule, "2026-03-31T14:00:00")
                 self.assertEqual(code, EXIT_FINDINGS)
                 self.assertEqual(len(awaited["satisfying_findings"]), 1)
-                self.assertIsNotNone(awaited["period_marker"])
+                self.assertIsNone(awaited["period_marker"], 'Filename match requires actual issue-period review before polling may stop')
 
     def test_a_failed_source_leaves_the_window_open(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

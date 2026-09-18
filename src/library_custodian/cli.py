@@ -17,6 +17,19 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="dcsa-custodian", description="DCSA Librarian: audit intake integrity and discover missing official documents without publishing them.")
     commands = parser.add_subparsers(dest="command", required=True)
+    confirm = commands.add_parser('confirm-period', help='Record reviewed issue-period evidence before ending publication polling')
+    confirm.add_argument('--job', required=True)
+    confirm.add_argument('--period', required=True)
+    confirm.add_argument('--receipt', type=Path, required=True)
+    confirm.add_argument('--library', type=Path, required=True)
+    confirm.add_argument('--schedule', type=Path, default=PROJECT_ROOT / 'config/schedule.json')
+    confirm.add_argument('--registry', type=Path, default=PROJECT_ROOT / 'config/source_registry.json')
+    confirm.add_argument('--state-dir', type=Path, default=PROJECT_ROOT / 'state')
+    status = commands.add_parser('scan-status', help='Read scheduled acquisition freshness without network access')
+    status.add_argument('--library', type=Path, required=True)
+    status.add_argument('--schedule', type=Path, default=PROJECT_ROOT / 'config/schedule.json')
+    status.add_argument('--registry', type=Path, default=PROJECT_ROOT / 'config/source_registry.json')
+    status.add_argument('--state-dir', type=Path, default=PROJECT_ROOT / 'state')
 
     doctor = commands.add_parser("doctor", help="Run a read-only integrity and parity audit")
     doctor.add_argument("--library", type=Path, required=True)
@@ -80,6 +93,16 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.command == 'confirm-period':
+        from .schedule import confirm_period
+        path = confirm_period(args.state_dir, load_schedule(args.schedule).job(args.job), args.period,
+                              args.receipt, args.registry, args.library)
+        print(json.dumps({'marker': str(path), 'period': args.period, 'status': 'reviewed_issue_confirmed'}))
+        return 0
+    if args.command == 'scan-status':
+        from .status import scan_status
+        print(json.dumps(scan_status(args.schedule, args.registry, args.state_dir, args.library), indent=2))
+        return 0
     if args.command == "doctor":
         report = audit_library(args.library, strict_hashes=args.strict_hashes)
         payload = report.to_dict()
