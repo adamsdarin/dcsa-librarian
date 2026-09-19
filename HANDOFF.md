@@ -1,8 +1,14 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-15 by Codex
+Last updated: 2026-09-18 by Claude
 
 ## Current State
+2026-09-18: Back on main (the feature branch, three cloud-session commits and two
+unpushed local-main commits were merged and pushed). Scans with --download now close
+provenance gaps: a document the library holds without an official URL is fetched and,
+only on an exact byte match, written to state/provenance/provenance.jsonl for the
+Archivist's import-provenance. 88 tests pass (run with PYTHONPATH=src;.runtime).
+
 Expected-publication polling now requires confirm-period evidence after actual
 source review; filename matches and legacy markers cannot end the VOI window.
 Shared public-source requests route through ../EVIDENCE-REQUESTS.md. 72 tests pass; issue periods now use the configured local date at UTC boundaries.
@@ -28,6 +34,9 @@ No new decision needed for the authorized implementation. Prior source-acquisiti
 and migration questions remain scoped separately as noted above.
 
 ## Log
+2026-09-18 Claude — Added byte-verified provenance to discovery. A name match alone is
+never provenance; bytes_differ rows go to the Evidence Reviewer. This is how the
+Rebuilder's 749 retained-bytes-only records can gain official URLs over time.
 2026-09-18 Claude — Merged three cloud-session commits (Sept 7-13, pushed only to the
 feature branch) into the local line: URL percent-encoding, pinned failing URLs, and
 config/catalog_exclusions.json scope decisions (excluded documents are still crawled

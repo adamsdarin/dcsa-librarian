@@ -435,6 +435,48 @@ def load_known_documents(library_root: Path) -> tuple[set[str], set[str]]:
     return filenames, urls
 
 
+URL_FIELDS = ("canonical_source_uri", "canonical_source_url", "source_url", "source_uri")
+
+
+def load_unsourced_documents(library_root: Path) -> dict[str, list[dict[str, str]]]:
+    """Library records with retained bytes but no official URL, keyed by filename.
+
+    These cannot be rebuilt from an official source. A scan that meets a
+    document of the same name can close that gap, but only by an exact byte
+    match against the retained file; a matching name alone proves nothing.
+    """
+    entry = json.loads((library_root / "START_HERE_FOR_ROBOTS.json").read_text(encoding="utf-8-sig"))
+    unsourced: dict[str, list[dict[str, str]]] = {}
+    for _, record in iter_jsonl(library_root / entry["documents"]):
+        if any(isinstance(record.get(f), str) and record[f].startswith("http") for f in URL_FIELDS):
+            continue
+        path = record.get("human_source_path")
+        if isinstance(path, str) and path and (library_root / path).is_file():
+            unsourced.setdefault(Path(path).name.casefold(), []).append(
+                {"document_id": str(record["document_id"]), "human_source_path": path})
+    return unsourced
+
+
+def verify_provenance(library_root: Path, candidates: list[dict[str, str]], item: "WebItem",
+                      data: bytes, metadata: dict[str, Any]) -> list[dict[str, Any]]:
+    """Compare downloaded bytes with each same-named retained file."""
+    digest = hashlib.sha256(data).hexdigest()
+    rows = []
+    for candidate in candidates:
+        retained = hashlib.sha256((library_root / candidate["human_source_path"]).read_bytes()).hexdigest()
+        rows.append({
+            "document_id": candidate["document_id"],
+            "source_id": item.source_id,
+            "requested_url": item.url,
+            "resolved_url": metadata.get("final_url") or item.url,
+            "source_sha256": digest,
+            "retained_sha256": retained,
+            "status": "verified" if digest == retained else "bytes_differ",
+            "checked_utc": utc_now(),
+        })
+    return rows
+
+
 def _crawl_source(source: dict[str, Any], fetcher: Fetcher) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     start = canonicalize_url(source["url"])
     allowed_domains = source["allowed_domains"]
@@ -498,6 +540,8 @@ def discover(
     # Without a library the scan still detects source-side movement; it just
     # cannot say whether the corpus already holds what it finds.
     known_filenames, known_urls = load_known_documents(library_root) if library_root is not None else (set(), set())
+    unsourced = load_unsourced_documents(library_root) if library_root is not None and download else {}
+    provenance: list[dict[str, Any]] = []
     exclusions = load_exclusions(exclusions_path)
     run_dir = make_run_dir(state_dir / "scans", datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"))
     run_id = run_dir.name
@@ -549,6 +593,19 @@ def discover(
                 if status == "excluded_from_scope":
                     # a recorded decision needs no probing and no download
                     pass
+                elif status == "known" and link["url"] not in known_urls and filename.casefold() in unsourced:
+                    # Known by name only: the library holds these bytes with no URL on
+                    # record. Fetch once and keep the URL only on an exact byte match.
+                    try:
+                        data, metadata = fetcher.get(item.url)
+                    except Exception as exc:
+                        verification_errors.append({"url": item.url, "error": f"{type(exc).__name__}: {exc}"})
+                    else:
+                        item.sha256, item.bytes = hashlib.sha256(data).hexdigest(), len(data)
+                        item.etag = metadata.get("etag") or None
+                        item.last_modified = metadata.get("last_modified") or None
+                        item.content_length = metadata.get("content_length") or None
+                        provenance.extend(verify_provenance(library_root, unsourced[filename.casefold()], item, data, metadata))
                 # With no corpus (portable bootstrap), all discovered material is
                 # quarantine intake. Known items remain cheap HEAD probes below.
                 elif download and status in {"missing_from_manifest", "manifest_not_checked"}:
@@ -673,10 +730,22 @@ def discover(
             "new_to_snapshot": sum(item.change_signal == "new_to_snapshot" for item in items),
             "unverified": sum(item.change_signal == "unverified" for item in items),
             "downloaded_to_quarantine": sum(item.downloaded_path is not None for item in items),
+            "provenance_verified": sum(row["status"] == "verified" for row in provenance),
+            "provenance_bytes_differ": sum(row["status"] == "bytes_differ" for row in provenance),
         },
         "candidates": [asdict(item) for item in items if needs_review(item)],
+        "provenance": provenance,
     }
     (run_dir / "discovery-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    if provenance:
+        # Durable across runs: the Archivist's Evidence Reviewer turns verified rows
+        # into reviewed provenance decisions. bytes_differ rows mean the source moved on
+        # (or is a different document) and need review, never an automatic URL.
+        ledger = state_dir / "provenance" / "provenance.jsonl"
+        ledger.parent.mkdir(parents=True, exist_ok=True)
+        with ledger.open("a", encoding="utf-8", newline="\n") as handle:
+            for row in provenance:
+                handle.write(json.dumps({**row, "run_id": run_id}, separators=(",", ":")) + "\n")
     with (run_dir / "candidates.jsonl").open("w", encoding="utf-8", newline="\n") as handle:
         for item in items:
             if needs_review(item):
