@@ -1,8 +1,27 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-18 by Claude
+Last updated: 2026-09-22 by Claude
 
 ## Current State
+2026-09-22: New `doha-provenance` command records official DOHA source URLs for
+library decisions from captured listing pages. The August crawl had stopped at
+page 30 on CDP timeouts, leaving exact URLs for 2,735 files and only 322 library
+decisions. DOHA's CDN refuses this project's crawler outright (403 even for
+robots.txt), so the documented browser fallback was used: all 40 reachable
+listing pages read in the browser pane, robots.txt confirmed to allow the
+Industrial-Security-Program paths. Every page and link is re-checked against the
+registry allowlist by the importer, which downloads nothing and never writes to
+the library. Match is by the case number and decision level DOHA prints, PDF
+labels only: 10,658 of 10,658 decisions matched. 317 are byte-verified
+(`legacy_download_bytes_identical`, retained bytes equal the legacy download of
+that URL); the rest carry `official_listing_label`, which is explicitly weaker
+than a byte match. 334 decisions are posted twice under different FileIds; both
+URLs are kept. The ledger is state/provenance/doha_source_urls.jsonl and was
+handed to the Archivist, which published it on 2026-09-22. 94 tests pass
+(PYTHONPATH=src;.runtime). One DOHA page is down at the source
+("2016 and Prior ISCR Hearing Decisions - 2" returns the site's own error), so
+its decisions carry URLs only where another listing also holds them.
+
 2026-09-18: Back on main (the feature branch, three cloud-session commits and two
 unpushed local-main commits were merged and pushed). Scans with --download now close
 provenance gaps: a document the library holds without an official URL is fetched and,
@@ -25,7 +44,11 @@ Discovery/integrity plane. Scheduled wrappers now download quarantined sources a
 Live Git state: run `python ../workspace_health.py status`; prior details are in `HANDOFF-archive.md`.
 
 ## Next
-1. Deploy and verify the local scheduler and agent-host cycle; config alone is not evidence of recurring operation.
+1. Re-run `doha-provenance` when the down archive page returns, and when new
+   decisions arrive; the ledger is rebuilt whole, not appended.
+2. The browser capture is a manual step: the CDN blocks the crawler, so a
+   scheduled job cannot refresh DOHA provenance unattended today.
+3. Deploy and verify the local scheduler and agent-host cycle; config alone is not evidence of recurring operation.
 2. Use ../dcsa-archivist/agents/conductor.md for package review and gated intake; do not use historical intake_voi.py as the general publication path.
 3. Preserve existing untracked scripts/snapshots; see ../PROCESS-MAP.md for scope and bootstrap recommendations.
 
@@ -34,6 +57,12 @@ No new decision needed for the authorized implementation. Prior source-acquisiti
 and migration questions remain scoped separately as noted above.
 
 ## Log
+2026-09-22 Claude — Added doha-provenance. DOHA addresses decisions by opaque
+FileId, so a URL can only come from the listing that names the file; a case number
+can never produce one. The basis is recorded per row because a listing label is
+weaker evidence than matching bytes, and a decision posted on two listings keeps
+both URLs and withholds the year, which the Archivist reads as a date bound. No
+document was downloaded and the library was not written.
 2026-09-18 Claude — Added byte-verified provenance to discovery. A name match alone is
 never provenance; bytes_differ rows go to the Evidence Reviewer. This is how the
 Rebuilder's 749 retained-bytes-only records can gain official URLs over time.
