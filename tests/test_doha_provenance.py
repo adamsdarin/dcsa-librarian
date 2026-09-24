@@ -48,7 +48,12 @@ class DohaProvenanceTests(unittest.TestCase):
         return {"u": url, "t": title, "at": at, "rows": rows}
 
     def build(self, capture: Path, hashes: dict | None = None):
-        return build_ledger(self.library, [capture], self.registry, hashes or {})
+        rows, _, report = build_ledger(self.library, [capture], self.registry, hashes or {})
+        return rows, report
+
+    def missing(self, capture: Path):
+        _, missing, report = build_ledger(self.library, [capture], self.registry, {})
+        return missing, report
 
     def test_case_key_normalizes_what_doha_prints(self) -> None:
         self.assertEqual(case_key("18.02204.h1.pdf", LABEL), "18-02204.h1")
@@ -124,6 +129,56 @@ class DohaProvenanceTests(unittest.TestCase):
         self.assertEqual(len(report["pages_rejected"]), 2)
         self.assertEqual(report["links_rejected"], 2)
         self.assertEqual(report["unmatched_count"], 1)
+
+    def test_listed_decisions_the_library_lacks_are_reported(self) -> None:
+        self.decisions("19-02096.a1_denied_f")
+        capture = self.capture(
+            self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                      [["19-02096.a1.pdf", "219192", 1], ["19-02100.h1.pdf", "219200", 1],
+                       ["19-02101.a1.pdf", "219201", 1]]),
+            self.page(f"{ARCHIVE}2016-and-Prior-ISCR-Hearing-Decisions-1/", "2016 and Prior ISCR Hearing Decisions - 1",
+                      [["19-02100.h1.pdf", "126000", 1]]))
+        missing, report = self.missing(capture)
+        self.assertEqual([item["case_key"] for item in missing], ["19-02100.h1", "19-02101.a1"])
+        self.assertEqual(missing[0]["decision_level"], "hearing")
+        self.assertEqual(missing[1]["decision_level"], "appeal")
+        # One decision on two listings is one missing decision with both URLs.
+        self.assertEqual(len(missing[0]["source_urls"]), 2)
+        self.assertEqual(report["listed_decisions"], 3)
+        self.assertEqual(report["not_in_library_count"], 2)
+        self.assertEqual(report["not_in_library_by_level"], {"hearing": 1, "appeal": 1})
+
+    def test_the_same_decision_at_another_level_is_still_missing(self) -> None:
+        self.decisions("19-02096.h1_denied_f")
+        capture = self.capture(self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                                         [["19-02096.h1.pdf", "1", 1], ["19-02096.a1.pdf", "2", 1]]))
+        missing, _ = self.missing(capture)
+        self.assertEqual([item["case_key"] for item in missing], ["19-02096.a1"])
+
+    def test_a_non_pdf_posting_counts_as_listed_but_never_as_a_source_url(self) -> None:
+        self.decisions()
+        capture = self.capture(self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                                         [["19-02097.h1.html", "3", 1]]))
+        rows, missing, report = build_ledger(self.library, [capture], self.registry, {})
+        self.assertEqual(rows, [])
+        self.assertEqual(missing[0]["formats"], ["html"])
+        self.assertEqual(report["links_rejected"], 1)
+
+    def test_links_outside_the_allowlist_never_count_as_missing(self) -> None:
+        self.decisions()
+        capture = self.capture(self.page("https://doha-mirror.example.com/decisions/", "Mirror",
+                                         [["19-02096.a1.pdf", "1", 1]]))
+        missing, report = self.missing(capture)
+        self.assertEqual(missing, [])
+        self.assertEqual(report["listed_decisions"], 0)
+
+    def test_unparseable_library_stems_are_counted_so_missing_can_be_doubted(self) -> None:
+        self.decisions("ISCR Case No 08-07664", "19-02096.a1_denied_f")
+        capture = self.capture(self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                                         [["19-02096.a1.pdf", "1", 1]]))
+        _, report = self.missing(capture)
+        self.assertEqual(report["library_records_unkeyed"], 1)
+        self.assertEqual(report["not_in_library_count"], 0)
 
 
 if __name__ == "__main__":

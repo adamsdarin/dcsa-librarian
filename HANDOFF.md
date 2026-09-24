@@ -1,8 +1,17 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-22 by Claude
+Last updated: 2026-09-24 by Claude
 
 ## Current State
+2026-09-24: `doha-provenance` now also reports the reverse direction: decisions a
+captured DOHA listing publishes that the library does not hold. It writes
+state/provenance/doha_not_in_library.jsonl (case key, hearing/appeal, all listing
+URLs and titles, formats) and adds not_in_library_count / _by_level, listed_decisions
+and library_records_unkeyed to the report. The 09-22 "10,658 of 10,658 matched" figure
+only ever proved library -> listing; it said nothing about missing rulings. The
+check has NOT been run against real data yet: the cloud session has neither the
+library nor the 09-22 capture, and DOHA is unreachable from it. 99 tests pass.
+
 2026-09-22: New `doha-provenance` command records official DOHA source URLs for
 library decisions from captured listing pages. The August crawl had stopped at
 page 30 on CDP timeouts, leaving exact URLs for 2,735 files and only 322 library
@@ -44,6 +53,10 @@ Discovery/integrity plane. Scheduled wrappers now download quarantined sources a
 Live Git state: run `python ../workspace_health.py status`; prior details are in `HANDOFF-archive.md`.
 
 ## Next
+0. Run `doha-provenance` locally against the existing 09-22 capture and review
+   doha_not_in_library.jsonl. If library_records_unkeyed is nonzero, check those
+   records before treating any listed decision as missing. Anything only on the down
+   archive page cannot appear.
 1. Re-run `doha-provenance` when the down archive page returns, and when new
    decisions arrive; the ledger is rebuilt whole, not appended.
 2. The browser capture is a manual step: the CDN blocks the crawler, so a
@@ -57,6 +70,11 @@ No new decision needed for the authorized implementation. Prior source-acquisiti
 and migration questions remain scoped separately as noted above.
 
 ## Log
+2026-09-24 Claude — Added the listing -> library direction to doha-provenance so
+missing rulings can be found offline from the existing capture. Non-PDF postings with
+a valid case number count as listed (a decision posted only as HTML is still missing)
+but never become source URLs. Library records whose case stem does not parse are
+counted, because they can make a held decision look missing. Not yet run on real data.
 2026-09-22 Claude — Added doha-provenance. DOHA addresses decisions by opaque
 FileId, so a URL can only come from the listing that names the file; a case number
 can never produce one. The basis is recorded per row because a listing label is

@@ -13,6 +13,10 @@ Two bases are recorded, and the weaker one says so:
 - ``official_listing_label``: the official listing publishes that case number
   and level under this URL. Identity is the listing's, not a byte match.
 
+The reverse direction is reported too: every decision a captured listing
+publishes that the library does not hold. It is only as complete as the capture;
+a listing page that was down or not captured cannot show what is missing from it.
+
 Nothing here downloads a document or writes into the library.
 """
 from __future__ import annotations
@@ -102,14 +106,19 @@ def _legacy_downloads(library_root: Path, human_hashes: dict[str, str]) -> dict[
 
 
 def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: Path,
-                 human_hashes: dict[str, str] | None = None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    """Match captured listing links to library decisions. Writes nothing."""
+                 human_hashes: dict[str, str] | None = None
+                 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+    """Match captured listing links to library decisions, and list the listed
+    decisions the library lacks. Writes nothing."""
     registry = json.loads(registry_path.read_text(encoding="utf-8-sig"))
     allowed = _allowed_pages(registry)
     pages = read_captures(capture_paths)
     rejected_pages: list[dict[str, str]] = []
     rejected_links = 0
     by_key: dict[str, list[dict[str, Any]]] = {}
+    # Every decision a listing publishes, in any format: an HTML-only posting is
+    # still a decision the library may lack, though it cannot be a PDF source URL.
+    listed: dict[str, list[dict[str, Any]]] = {}
     for page in pages:
         page_url = canonicalize_url(page["u"])
         if not _page_allowed(page_url, allowed):
@@ -125,8 +134,13 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
             url = f"{page_url}FileId/{file_id}/"
             parsed = LABEL.match(label)
             key = case_key(label, LABEL)
-            if (not FILE_LINK.match(url) or not _page_allowed(url, allowed) or not key
-                    or (parsed.group("extension") or "pdf").lower() != "pdf"):
+            if not FILE_LINK.match(url) or not _page_allowed(url, allowed) or not key:
+                rejected_links += 1
+                continue
+            extension = (parsed.group("extension") or "pdf").lower()
+            listed.setdefault(key, []).append(
+                {"url": url, "label": label, "format": extension, "listing_title": title, "captured_utc": captured})
+            if extension != "pdf":
                 rejected_links += 1
                 continue
             by_key.setdefault(key, []).append(
@@ -136,9 +150,15 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
     rows: list[dict[str, Any]] = []
     unmatched: list[str] = []
     conflicts = 0
+    held: set[str] = set()
+    unkeyed = 0
     for _, record in _iter_jsonl(library_root / LIBRARY_MANIFEST):
         identity = str(record["document_id"])
         key = case_key(str(record.get("case_stem", "")))
+        if key:
+            held.add(key)
+        else:
+            unkeyed += 1
         found = by_key.get(key or "")
         if not found:
             unmatched.append(identity)
@@ -169,6 +189,15 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
             "source_url_alternates": sorted({item["url"] for item in found} - {primary["url"]}),
             "listing_conflict": conflicting,
         })
+    missing = [
+        {"case_key": key,
+         "decision_level": "appeal" if key.rsplit(".", 1)[1].startswith("a") else "hearing",
+         "labels": sorted({item["label"] for item in items}),
+         "formats": sorted({item["format"] for item in items}),
+         "source_urls": sorted({item["url"] for item in items}),
+         "listing_titles": sorted({item["listing_title"] for item in items}),
+         "captured_utc": max(item["captured_utc"] for item in items)}
+        for key, items in sorted(listed.items()) if key not in held]
     report = {
         "schema_version": "1.0",
         "created_utc": utc_now(),
@@ -183,12 +212,20 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
         "unmatched_documents": unmatched[:50],
         "unmatched_count": len(unmatched),
         "listing_conflicts": conflicts,
+        "listed_decisions": len(listed),
+        "not_in_library_count": len(missing),
+        "not_in_library_by_level": {level: sum(item["decision_level"] == level for item in missing)
+                                    for level in ("hearing", "appeal")},
+        "not_in_library_sample": [item["case_key"] for item in missing[:50]],
+        # A library record whose case stem does not parse cannot match a listing, so a
+        # decision it holds may be reported missing. Nonzero means review before acting.
+        "library_records_unkeyed": unkeyed,
         "basis_counts": {basis: sum(row["source_url_basis"] == basis for row in rows)
                          for basis in ("legacy_download_bytes_identical", "official_listing_label")},
         "downloads_performed": False,
         "library_written": False,
     }
-    return rows, report
+    return rows, missing, report
 
 
 def _iter_jsonl(path: Path):
