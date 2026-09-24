@@ -91,7 +91,7 @@ def build_parser() -> argparse.ArgumentParser:
     browser_import.add_argument("--registry", type=Path, default=PROJECT_ROOT / "config" / "source_registry.json")
     browser_import.add_argument("--state-dir", type=Path, default=PROJECT_ROOT / "state")
 
-    doha = commands.add_parser("doha-provenance", help="Record official DOHA source URLs for library decisions from captured listing pages")
+    doha = commands.add_parser("doha-provenance", help="Record official DOHA source URLs for library decisions from captured listing pages, and list listed decisions the library lacks")
     doha.add_argument("--library", type=Path, required=True)
     doha.add_argument("--capture", type=Path, action="append", required=True, help="Listing capture file; repeatable")
     doha.add_argument("--registry", type=Path, default=PROJECT_ROOT / "config" / "source_registry.json")
@@ -183,7 +183,7 @@ def main(argv: list[str] | None = None) -> int:
         hashes = {}
         if args.human_hashes:
             hashes = json.loads(args.human_hashes.read_text(encoding="utf-8")).get("human_hashes", {})
-        rows, report = build_ledger(args.library.resolve(), [path.resolve() for path in args.capture],
+        rows, missing, report = build_ledger(args.library.resolve(), [path.resolve() for path in args.capture],
                                     args.registry.resolve(), hashes)
         ledger = args.state_dir.resolve() / "provenance" / "doha_source_urls.jsonl"
         ledger.parent.mkdir(parents=True, exist_ok=True)
@@ -191,6 +191,11 @@ def main(argv: list[str] | None = None) -> int:
             for row in rows:
                 handle.write(json.dumps(row, separators=(",", ":")) + "\n")
         report["ledger"] = str(ledger)
+        not_held = ledger.parent / "doha_not_in_library.jsonl"
+        with not_held.open("w", encoding="utf-8", newline="\n") as handle:
+            for item in missing:
+                handle.write(json.dumps(item, separators=(",", ":")) + "\n")
+        report["not_in_library"] = str(not_held)
         (ledger.parent / "doha_source_urls_report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
         print(json.dumps(report, indent=2))
         return 0 if report["matched"] else 2
