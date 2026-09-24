@@ -1,8 +1,16 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-24 by Claude
+Last updated: 2026-09-24 by Claude (2)
 
 ## Current State
+2026-09-24 (later): `doha-provenance --summary` triages the listed-but-not-held
+decisions: by case year (from the case number, which is not the issue year) and
+hearing/appeal; by listing, with the share of each listing's decisions missing and a
+flag at >= 50% as a suspected capture/import gap; cases held under another suffix or
+level number (`held_variants`, now on every not-in-library row); and non-PDF-only
+postings. It prints text instead of the report JSON and stores the summary in the
+report. PR #2 (the reverse check) is merged. 103 tests pass. Still not run on real data.
+
 2026-09-24: `doha-provenance` now also reports the reverse direction: decisions a
 captured DOHA listing publishes that the library does not hold. It writes
 state/provenance/doha_not_in_library.jsonl (case key, hearing/appeal, all listing
@@ -70,6 +78,10 @@ No new decision needed for the authorized implementation. Prior source-acquisiti
 and migration questions remain scoped separately as noted above.
 
 ## Log
+2026-09-24 Claude — Added --summary. A hearing and its appeal never count as variants
+of each other; only a different suffix or level number (h1/h2) does, since those are
+plausible naming mismatches. The 50% capture-gap threshold is a heuristic constant
+(CAPTURE_GAP_SHARE), chosen so a mostly-missing listing reads as a capture problem.
 2026-09-24 Claude — Added the listing -> library direction to doha-provenance so
 missing rulings can be found offline from the existing capture. Non-PDF postings with
 a valid case number count as listed (a decision posted only as HTML is still missing)

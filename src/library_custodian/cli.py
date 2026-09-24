@@ -96,6 +96,7 @@ def build_parser() -> argparse.ArgumentParser:
     doha.add_argument("--capture", type=Path, action="append", required=True, help="Listing capture file; repeatable")
     doha.add_argument("--registry", type=Path, default=PROJECT_ROOT / "config" / "source_registry.json")
     doha.add_argument("--state-dir", type=Path, default=PROJECT_ROOT / "state")
+    doha.add_argument("--summary", action="store_true", help="Triage the listed-but-not-held decisions by case year, level and listing; print it as text instead of the report JSON")
     doha.add_argument("--human-hashes", type=Path, help="Deep-audit hashes (Archivist PRODUCTION_AUDIT.json) that let a recorded download prove identity by bytes")
     return parser
 
@@ -179,7 +180,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(report, indent=2))
         return 0
     if args.command == "doha-provenance":
-        from .doha_provenance import build_ledger
+        from .doha_provenance import build_ledger, format_summary, summarize_missing
         hashes = {}
         if args.human_hashes:
             hashes = json.loads(args.human_hashes.read_text(encoding="utf-8")).get("human_hashes", {})
@@ -196,8 +197,13 @@ def main(argv: list[str] | None = None) -> int:
             for item in missing:
                 handle.write(json.dumps(item, separators=(",", ":")) + "\n")
         report["not_in_library"] = str(not_held)
+        if args.summary:
+            report["not_in_library_summary"] = summarize_missing(missing, report["listed_by_listing"])
         (ledger.parent / "doha_source_urls_report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-        print(json.dumps(report, indent=2))
+        if args.summary:
+            print(format_summary(report["not_in_library_summary"], report["library_records_unkeyed"]))
+        else:
+            print(json.dumps(report, indent=2))
         return 0 if report["matched"] else 2
     return 64
 
