@@ -292,3 +292,5 @@ original failure; cost is one HEAD per known document per scan, escapable with
 (1) is deliberately left undone — it is a decision about cadence and hosting,
 not a code change, and it is the gap that actually caused the miss.
 
+## Trimmed from HANDOFF log 2026-09-24
+2026-09-10 Codex — Implementing the five authorized workspace improvements and accepted-answer wiki. Preserved the entire prior handoff in the archive, including pre-existing edits. Validation is in progress; do not interpret implementation as a live library release.
