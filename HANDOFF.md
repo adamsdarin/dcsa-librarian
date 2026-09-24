@@ -1,24 +1,18 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-24 by Claude (2)
+Last updated: 2026-09-24 by Claude
 
 ## Current State
-2026-09-24 (later): `doha-provenance --summary` triages the listed-but-not-held
-decisions: by case year (from the case number, which is not the issue year) and
-hearing/appeal; by listing, with the share of each listing's decisions missing and a
-flag at >= 50% as a suspected capture/import gap; cases held under another suffix or
-level number (`held_variants`, now on every not-in-library row); and non-PDF-only
-postings. It prints text instead of the report JSON and stores the summary in the
-report. PR #2 (the reverse check) is merged. 103 tests pass. Still not run on real data.
-
-2026-09-24: `doha-provenance` now also reports the reverse direction: decisions a
-captured DOHA listing publishes that the library does not hold. It writes
-state/provenance/doha_not_in_library.jsonl (case key, hearing/appeal, all listing
-URLs and titles, formats) and adds not_in_library_count / _by_level, listed_decisions
-and library_records_unkeyed to the report. The 09-22 "10,658 of 10,658 matched" figure
-only ever proved library -> listing; it said nothing about missing rulings. The
-check has NOT been run against real data yet: the cloud session has neither the
-library nor the 09-22 capture, and DOHA is unreachable from it. 99 tests pass.
+2026-09-24: `doha-provenance` now also reports decisions a captured DOHA listing
+publishes that the library does not hold (PR #2, merged), and `--summary` triages
+them (PR #3, merged as 37d57bc): by case year (from the case number, not the issue
+year) and hearing/appeal; by listing, with each listing's missing share and a flag at
+>= 50% as a suspected capture/import gap; cases held under another suffix or level
+number (`held_variants`, on every row of state/provenance/doha_not_in_library.jsonl);
+and non-PDF-only postings. The 09-22 "10,658 of 10,658 matched" figure only proved
+library -> listing and said nothing about missing rulings. Both changes are on main;
+103 tests pass. NOT yet run on real data: the cloud session has neither the library
+nor the 09-22 capture, and DOHA is unreachable from it.
 
 2026-09-22: New `doha-provenance` command records official DOHA source URLs for
 library decisions from captured listing pages. The August crawl had stopped at
@@ -61,8 +55,8 @@ Discovery/integrity plane. Scheduled wrappers now download quarantined sources a
 Live Git state: run `python ../workspace_health.py status`; prior details are in `HANDOFF-archive.md`.
 
 ## Next
-0. Run `doha-provenance` locally against the existing 09-22 capture and review
-   doha_not_in_library.jsonl. If library_records_unkeyed is nonzero, check those
+0. Pull main, then run `doha-provenance --summary` locally against the existing
+   09-22 capture and review doha_not_in_library.jsonl. If library_records_unkeyed is nonzero, check those
    records before treating any listed decision as missing. Anything only on the down
    archive page cannot appear.
 1. Re-run `doha-provenance` when the down archive page returns, and when new
@@ -78,6 +72,9 @@ No new decision needed for the authorized implementation. Prior source-acquisiti
 and migration questions remain scoped separately as noted above.
 
 ## Log
+2026-09-24 Claude — Merged PR #3 (--summary) into main after PR #2. Both were merged
+without CI (the repo has none) or human review, on the user's instruction; the only
+validation is the offline suite and a synthetic end-to-end run.
 2026-09-24 Claude — Added --summary. A hearing and its appeal never count as variants
 of each other; only a different suffix or level number (h1/h2) does, since those are
 plausible naming mismatches. The 50% capture-gap threshold is a heuristic constant
@@ -117,4 +114,3 @@ first-of-month schedule addition. No acquisition or library writes performed.
 2026-09-11 Codex — Completed cross-system role/handoff implementation and process map. Tests: 65 Librarian, 52 Archivist; three cross-system acceptance cases and shared-policy checks pass. No live publication, acquisition, scheduling, or guidance product changes. Portable regenerator assessed as a proposed recipe-driven CLI, not implemented.
 2026-09-11 Codex — Cross-system workflow audit in progress. User selected Librarian -> Archivist -> approved release -> comparison and Guidance Watch. Implementing staged source intake, published navigation graph, and durable release packets with completion receipts. Existing dirty files preserved. No live library changes; installed Windows task inspection found no DCSA/FSO/Custodian-named tasks.
 2026-09-10 Codex — Completed authorized implementation. Offline discovery/quarantine is exercised by the cross-system acceptance suite. Shared-policy check passes. Pre-existing untracked files remain untouched; no live source scan or scheduler change was made. Changes remain uncommitted, including preserved prior edits.
-2026-09-10 Codex — Implementing the five authorized workspace improvements and accepted-answer wiki. Preserved the entire prior handoff in the archive, including pre-existing edits. Validation is in progress; do not interpret implementation as a live library release.
