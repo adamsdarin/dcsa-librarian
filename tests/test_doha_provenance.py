@@ -12,7 +12,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from library_custodian.doha_provenance import LABEL, build_ledger, case_key  # noqa: E402
+from library_custodian.doha_provenance import (  # noqa: E402
+    LABEL, build_ledger, case_key, case_year, format_summary, summarize_missing)
 
 DOHA = "https://doha.ogc.osd.mil/Industrial-Security-Program/Industrial-Security-Clearance-Decisions"
 HEARINGS = f"{DOHA}/ISCR-Hearing-Decisions/"
@@ -179,6 +180,56 @@ class DohaProvenanceTests(unittest.TestCase):
         _, report = self.missing(capture)
         self.assertEqual(report["library_records_unkeyed"], 1)
         self.assertEqual(report["not_in_library_count"], 0)
+
+    def test_case_year_reads_the_two_digit_case_prefix(self) -> None:
+        self.assertEqual(case_year("19-02096.a1"), "2019")
+        self.assertEqual(case_year("98-00123.h1"), "1998")
+        self.assertEqual(case_year("04-08547-sd.h1"), "2004")
+
+    def test_summary_splits_missing_by_case_year_and_level(self) -> None:
+        self.decisions("19-02096.h1_denied_f")
+        capture = self.capture(self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                                         [["19-02096.h1.pdf", "1", 1], ["19-02100.h1.pdf", "2", 1],
+                                          ["18-01000.a1.pdf", "3", 1], ["19-02101.a1.pdf", "4", 1]]))
+        missing, report = self.missing(capture)
+        summary = summarize_missing(missing, report["listed_by_listing"])
+        self.assertEqual(summary["missing"], 3)
+        self.assertEqual(summary["by_case_year"], {"2018": {"hearing": 0, "appeal": 1},
+                                                   "2019": {"hearing": 1, "appeal": 1}})
+
+    def test_a_listing_mostly_missing_is_flagged_as_a_capture_gap(self) -> None:
+        self.decisions("19-02096.h1_x", "19-02097.h1_x", "19-02098.h1_x")
+        capture = self.capture(
+            self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                      [["19-02096.h1.pdf", "1", 1], ["19-02097.h1.pdf", "2", 1],
+                       ["19-02098.h1.pdf", "3", 1], ["19-02099.h1.pdf", "4", 1]]),
+            self.page(f"{HEARINGS}2020-ISCR-Hearing-Decisions/", "2020 ISCR Hearing Decisions",
+                      [["20-00001.h1.pdf", "5", 1], ["20-00002.h1.pdf", "6", 1]]))
+        missing, report = self.missing(capture)
+        rows = {row["listing_title"]: row for row in summarize_missing(missing, report["listed_by_listing"])["by_listing"]}
+        self.assertEqual((rows["2020 ISCR Hearing Decisions"]["missing"], rows["2020 ISCR Hearing Decisions"]["listed"]), (2, 2))
+        self.assertTrue(rows["2020 ISCR Hearing Decisions"]["suspect_capture_gap"])
+        self.assertEqual(rows["2019 ISCR Hearing Decisions"]["share"], 0.25)
+        self.assertFalse(rows["2019 ISCR Hearing Decisions"]["suspect_capture_gap"])
+
+    def test_a_case_held_under_another_suffix_or_level_is_surfaced(self) -> None:
+        self.decisions("19-00803-SD.h1_x", "19-00900.h1_x", "19-00960.a1_x")
+        capture = self.capture(self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                                         [["19-00803.h1.pdf", "1", 1], ["19-00900.h2.pdf", "2", 1],
+                                          ["19-00950.h1.htm", "3", 1], ["19-00960.h1.pdf", "4", 1]]))
+        missing, report = self.missing(capture)
+        by_key = {item["case_key"]: item for item in missing}
+        self.assertEqual(by_key["19-00803.h1"]["held_variants"], ["19-00803-sd.h1"])
+        self.assertEqual(by_key["19-00900.h2"]["held_variants"], ["19-00900.h1"])
+        self.assertEqual(by_key["19-00950.h1"]["held_variants"], [])
+        # Holding the appeal does not stand in for the hearing decision.
+        self.assertEqual(by_key["19-00960.h1"]["held_variants"], [])
+        summary = summarize_missing(missing, report["listed_by_listing"])
+        self.assertEqual(summary["held_variant_count"], 2)
+        self.assertEqual(summary["non_pdf_only_sample"], ["19-00950.h1"])
+        text = format_summary(summary, unkeyed=3)
+        self.assertIn("WARNING: 3 library records", text)
+        self.assertIn("19-00803.h1  held as 19-00803-sd.h1", text)
 
 
 if __name__ == "__main__":
