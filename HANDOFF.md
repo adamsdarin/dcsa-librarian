@@ -72,6 +72,11 @@ No new decision needed for the authorized implementation. Prior source-acquisiti
 and migration questions remain scoped separately as noted above.
 
 ## Log
+2026-09-24 Claude — Retired branch claude/dcsa-comparison-bot-k0ttop. Its two commits
+staged the Comparison Bot and then removed it again, so its only net change was a
+HANDOFF/README edit based on the 09-02 tree. Byte comparison against the bot's own
+repo showed nothing unique: 21 files identical, 7 later revisions, 5 added there.
+Kept only its purpose: README now names the related projects.
 2026-09-24 Claude — Merged PR #3 (--summary) into main after PR #2. Both were merged
 without CI (the repo has none) or human review, on the user's instruction; the only
 validation is the offline suite and a synthetic end-to-end run.
