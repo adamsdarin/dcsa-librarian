@@ -65,6 +65,12 @@ One archived listing page ("2016 and Prior ISCR Hearing Decisions - 2") is inacc
 - The inaccessible DOHA listing page has no recovery date.
 
 ## Log
+2026-09-25 Claude — doha-acquire pilot on the owner's machine: 20 of 20 acquired through
+launched Chrome, none refused, so the CDN admits it. Regrouped by decision level (h/a)
+instead of listing page: DOHA cross-posts ~1,860 rulings on both a hearing and an
+Appeal Board page, which had produced a mixed third group bound for an "other"
+folder. This matches the Archivist's decision_family. Not-held files from before this
+are refused; regenerate before resuming.
 2026-09-25 Claude — Added doha-acquire. Per-file intake packages rather than one per
 batch, because the Archivist's stage_intake reads one .intake.json per item and a plan
 already batches them. Bytes come from the page's own fetch() in Chrome, since the CDN
@@ -127,10 +133,3 @@ document was downloaded and the library was not written.
 2026-09-18 Claude — Added byte-verified provenance to discovery. A name match alone is
 never provenance; bytes_differ rows go to the Evidence Reviewer. This is how the
 Rebuilder's 749 retained-bytes-only records can gain official URLs over time.
-2026-09-18 Claude — Merged three cloud-session commits (Sept 7-13, pushed only to the
-feature branch) into the local line: URL percent-encoding, pinned failing URLs, and
-config/catalog_exclusions.json scope decisions (excluded documents are still crawled
-and reported, never re-offered or downloaded). Both sides had built intake packages;
-kept Codex's writer and adopted the cloud builder's stable url+hash submission_id and
-required-field check. That session's FCL intake (12 in-scope documents) still needs a
-library doctor and a handbook-edition check before acquisition.

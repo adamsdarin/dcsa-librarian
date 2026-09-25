@@ -361,3 +361,10 @@ hash-bound issue-period review and source-request handoff instructions. No live
 issue confirmed, source downloaded or library publication performed.
 2026-09-16 Codex — Fixed local-calendar period selection; boundary regression and
 all 72 Librarian tests pass. No acquisition or publication run.
+2026-09-18 Claude — Merged three cloud-session commits (Sept 7-13, pushed only to the
+feature branch) into the local line: URL percent-encoding, pinned failing URLs, and
+config/catalog_exclusions.json scope decisions (excluded documents are still crawled
+and reported, never re-offered or downloaded). Both sides had built intake packages;
+kept Codex's writer and adopted the cloud builder's stable url+hash submission_id and
+required-field check. That session's FCL intake (12 in-scope documents) still needs a
+library doctor and a handbook-edition check before acquisition.

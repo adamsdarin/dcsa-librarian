@@ -254,7 +254,7 @@ class BrowserTransport:
 
 def load_not_held(path: Path) -> list[dict[str, Any]]:
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
-    if any("group" not in row for row in rows):
-        # Written before decisions were grouped; the group decides the quarantine folder.
-        raise SystemExit(f"{path} predates grouping; re-run doha-provenance to regenerate it")
+    if any(row.get("group") not in GROUPS.values() for row in rows):
+        # Written before decisions were grouped by level; the group decides the quarantine folder.
+        raise SystemExit(f"{path} predates grouping by decision level; re-run doha-provenance to regenerate it")
     return rows

@@ -42,6 +42,15 @@ AGGREGATE_LISTING = re.compile(r"\band\s+prior\b", re.I)
 GROUPS = {"doha-iscr-hearings": "ISCR Hearing Decisions", "doha-appeals": "DOHA Appeal Board Decisions"}
 
 
+def decision_group(key: str) -> str:
+    """The group a decision belongs to, from the level DOHA prints: h = hearing, a = appeal.
+
+    Not from the listing page: DOHA cross-posts some rulings on both a hearing page and
+    an Appeal Board page, and the Archivist classifies by the same letter.
+    """
+    return GROUPS["doha-appeals"] if key.rsplit(".", 1)[1].startswith("a") else GROUPS["doha-iscr-hearings"]
+
+
 def case_key(value: str, pattern: re.Pattern[str] = STEM) -> str | None:
     """The case identity DOHA prints: year, number and decision level, normalized."""
     match = pattern.match(value.strip())
@@ -240,7 +249,9 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
         held_by_base.setdefault(case_base(key), []).append(key)
     missing = [
         {"case_key": key,
-         "group": " + ".join(sorted({item["group"] for item in items})),
+         "group": decision_group(key),
+         # Which collections' listing pages carry it; two means DOHA cross-posted it.
+         "listed_under": sorted({item["group"] for item in items}),
          "decision_level": "appeal" if key.rsplit(".", 1)[1].startswith("a") else "hearing",
          "labels": sorted({item["label"] for item in items}),
          "formats": sorted({item["format"] for item in items}),
@@ -260,8 +271,10 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
             listed_by_listing[title] = listed_by_listing.get(title, 0) + 1
         for item in items:
             listing_groups[item["listing_title"]] = item["group"]
-        for group in {item["group"] for item in items}:
-            listed_by_group[group] = listed_by_group.get(group, 0) + 1
+    cross_posted = sum(len({item["group"] for item in items}) > 1 for items in listed.values())
+    for key in listed:
+        group = decision_group(key)
+        listed_by_group[group] = listed_by_group.get(group, 0) + 1
     byte_inputs["human_hash_ids_in_manifest"] = hashed_ids
     report = {
         "schema_version": "1.0",
@@ -288,6 +301,7 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
         "listed_by_listing": dict(sorted(listed_by_listing.items())),
         "listing_groups": dict(sorted(listing_groups.items())),
         "listed_by_group": dict(sorted(listed_by_group.items())),
+        "listed_under_both_collections": cross_posted,
         # Why a byte-verified count is what it is: every input must be present and the
         # supplied hashes must be keyed by the manifest's current document IDs.
         "byte_verification_inputs": byte_inputs,
@@ -303,26 +317,24 @@ def summarize_missing(missing: list[dict[str, Any]], report: dict[str, Any]) -> 
     """Triage the listed-but-not-held decisions per group, by case year and listing."""
     groups: dict[str, dict[str, Any]] = {}
     for group, listed in report.get("listed_by_group", {}).items():
-        groups[group] = {"listed": listed, "not_held": 0, "by_case_year": {}, "by_listing": []}
+        groups[group] = {"listed": listed, "not_held": 0, "by_case_year": {}}
     by_listing: dict[str, int] = {}
     for item in missing:
-        entry = groups.setdefault(item["group"], {"listed": 0, "not_held": 0, "by_case_year": {}, "by_listing": []})
+        entry = groups.setdefault(item["group"], {"listed": 0, "not_held": 0, "by_case_year": {}})
         entry["not_held"] += 1
         year = case_year(item["case_key"])
         entry["by_case_year"][year] = entry["by_case_year"].get(year, 0) + 1
         for title in item["listing_titles"]:
             by_listing[title] = by_listing.get(title, 0) + 1
-    listed_by_listing = report.get("listed_by_listing", {})
     listing_groups = report.get("listing_groups", {})
-    for title, listed in listed_by_listing.items():
+    listings = []
+    for title, listed in report.get("listed_by_listing", {}).items():
         count = by_listing.get(title, 0)
-        group = listing_groups.get(title, "")
-        groups.setdefault(group, {"listed": 0, "not_held": 0, "by_case_year": {}, "by_listing": []})
-        groups[group]["by_listing"].append({"listing_title": title, "not_held": count, "listed": listed,
-                                            "share_not_held": round(count / listed, 3) if listed else 0.0})
+        listings.append({"listing_title": title, "collection": listing_groups.get(title, ""), "not_held": count,
+                         "listed": listed, "share_not_held": round(count / listed, 3) if listed else 0.0})
+    listings.sort(key=lambda row: (row["collection"], -row["share_not_held"], row["listing_title"]))
     for entry in groups.values():
         entry["by_case_year"] = dict(sorted(entry["by_case_year"].items()))
-        entry["by_listing"].sort(key=lambda row: (-row["share_not_held"], row["listing_title"]))
     variants = [item for item in missing if item.get("held_variants")]
     non_pdf = [item for item in missing if "pdf" not in item["formats"]]
     kinds: dict[str, int] = {}
@@ -332,6 +344,8 @@ def summarize_missing(missing: list[dict[str, Any]], report: dict[str, Any]) -> 
     return {
         "not_held": len(missing),
         "groups": dict(sorted(groups.items())),
+        "by_listing": listings,
+        "listed_under_both_collections": report.get("listed_under_both_collections", 0),
         "held_variant_count": len(variants),
         "held_variant_kinds": dict(sorted(kinds.items())),
         "held_variant_sample": [{"case_key": item["case_key"], "held_variants": item["held_variants"]}
@@ -355,9 +369,14 @@ def format_summary(summary: dict[str, Any], report: dict[str, Any]) -> str:
         lines += ["", f"== {group}: {entry['not_held']} of {entry['listed']} listed not held", "",
                   "  Case year   Not held"]
         lines += [f"  {year:<11}{count:>9}" for year, count in entry["by_case_year"].items()]
-        lines += ["", "  Listing (not held / listed)"]
-        lines += [f"  {row['not_held']:>6} / {row['listed']:<6}{row['share_not_held']:>7.1%}  {row['listing_title']}"
-                  for row in entry["by_listing"]]
+    lines += ["", "Listing pages (not held / listed). Group is by decision level (h/a), not page;",
+              f"{summary['listed_under_both_collections']} decisions are posted on both a hearing and an Appeal Board page."]
+    collection = None
+    for row in summary["by_listing"]:
+        if row["collection"] != collection:
+            collection = row["collection"]
+            lines += ["", f"  {collection} pages"]
+        lines.append(f"  {row['not_held']:>6} / {row['listed']:<6}{row['share_not_held']:>7.1%}  {row['listing_title']}")
     kinds = ", ".join(f"{kind}: {count}" for kind, count in summary["held_variant_kinds"].items()) or "none"
     lines += ["", f"Same case held under another number or suffix: {summary['held_variant_count']} ({kinds})",
               "  A different decision number (h1/h2, a1/a2) is a separate ruling and is still missing;",
