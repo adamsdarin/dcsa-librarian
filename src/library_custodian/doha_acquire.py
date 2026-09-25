@@ -81,15 +81,37 @@ def read_attempts(path: Path) -> dict[str, dict[str, Any]]:
         for line in path.read_text(encoding="utf-8").splitlines():
             if line.strip():
                 row = json.loads(line)
-                if row.get("status") == "acquired":
+                if row.get("status") in ("acquired", "non_pdf_document"):
                     done[row["case_key"]] = row
     return done
 
 
 def _looks_like(body: bytes, fmt: str) -> bool:
     if fmt == "pdf":
-        return body[:5] == b"%PDF-"
+        # The PDF format lets the header sit anywhere in the first 1,024 bytes.
+        return b"%PDF-" in body[:1024]
     return bool(body.strip())
+
+
+# Signatures of document formats DOHA has posted under a .pdf label. A response that
+# is one of these is a real decision in another format, not a block page.
+DOCUMENT_SIGNATURES = ((b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1", "word_97_2003_or_ole"), (b"\xffWPC", "wordperfect"),
+                       (b"{\\rtf", "rtf"), (b"PK\x03\x04", "zip_or_docx"))
+
+
+def sniff(body: bytes) -> str:
+    """Name what a response actually is, from its first bytes."""
+    head = body[:1024].lstrip()
+    if not head:
+        return "empty"
+    if b"%PDF-" in body[:1024]:
+        return "pdf"
+    for signature, name in DOCUMENT_SIGNATURES:
+        if head.startswith(signature):
+            return name
+    if head[:15].lower().startswith((b"<!doctype", b"<html", b"<?xml")):
+        return "html_or_xml"
+    return "unrecognised"
 
 
 def acquire(not_held: Iterable[dict[str, Any]], registry: dict[str, Any], run_dir: Path, transport: Transport,
@@ -108,7 +130,7 @@ def acquire(not_held: Iterable[dict[str, Any]], registry: dict[str, Any], run_di
     user_agent = str(registry.get("defaults", {}).get("user_agent", "*"))
     attempts_path = run_dir / "attempts.jsonl"
     done = read_attempts(attempts_path)
-    counts = {"acquired": 0, "already_acquired": 0, "refused": 0, "skipped": 0}
+    counts = {"acquired": 0, "already_acquired": 0, "refused": 0, "skipped": 0, "non_pdf_document": 0}
     consecutive = 0
     stopped = None
     todo = plan(not_held, groups, limit)
@@ -160,7 +182,23 @@ def acquire(not_held: Iterable[dict[str, Any]], registry: dict[str, Any], run_di
                     say(f"[{index + 1}/{len(todo)}] {stopped}")
                     break
                 response, final, problem = None, url, f"{type(exc).__name__}: {exc}"
+            kind = sniff(response.body) if response is not None and problem and problem.startswith("not_a_") else None
+            if kind and response is not None:
+                # Keep what came back, in quarantine only, so the cause can be seen.
+                refused_dir = run_dir / "refused"
+                refused_dir.mkdir(exist_ok=True)
+                (refused_dir / f"{key}.{kind}.bin").write_bytes(response.body[:max_bytes])
+            if kind in {name for _, name in DOCUMENT_SIGNATURES}:
+                # A real DOHA file in another format: not a block, so it does not count
+                # toward stopping the run, and it is set aside for review, not packaged.
+                counts["non_pdf_document"] += 1
+                consecutive = 0
+                record(dict(attempt, status="non_pdf_document", reason=kind, bytes=len(response.body)))
+                say(f"[{index + 1}/{len(todo)}] {key} is a {kind} file, not a PDF; set aside in refused/")
+                continue
             if problem:
+                if kind:
+                    problem = f"{problem} (content: {kind}, first bytes {response.body[:16].hex()})"
                 counts["refused"] += 1
                 consecutive += 1
                 record(dict(attempt, status="refused", reason=problem))

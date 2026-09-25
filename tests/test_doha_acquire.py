@@ -95,7 +95,7 @@ class DohaAcquireTests(unittest.TestCase):
         url = f"{HEARINGS}2025-ISCR-Hearing-Decisions/FileId/3/"
         challenge = Response(200, url, {"content-type": "text/html"}, b"<html>Access Denied</html>")
         report = self.run_acquire([row("24-00003.h1", url, "2025 ISCR Hearing Decisions")], FakeBrowser({url: challenge}))
-        self.assertEqual(report["counts"], {"acquired": 0, "already_acquired": 0, "refused": 1, "skipped": 0})
+        self.assertEqual(report["counts"], {"acquired": 0, "already_acquired": 0, "refused": 1, "skipped": 0, "non_pdf_document": 0})
         self.assertFalse((self.run_dir / "iscr-hearing-decisions").exists())
 
     def test_a_redirect_off_the_source_is_refused(self) -> None:
@@ -157,6 +157,35 @@ class DohaAcquireTests(unittest.TestCase):
         self.assertIn("Chrome window was closed", report["stopped"])
         # The interrupted decision is retried on resume, not treated as acquired.
         self.assertEqual(self.run_acquire(rows, FakeBrowser())["counts"]["acquired"], 5)
+
+    def test_a_pdf_header_after_leading_bytes_is_accepted(self) -> None:
+        url = f"{HEARINGS}2025-ISCR-Hearing-Decisions/FileId/3/"
+        padded = Response(200, url, {"content-type": "application/octet-stream"}, b"\r\n\x00junk" + PDF)
+        report = self.run_acquire([row("24-00003.h1", url, "2025 ISCR Hearing Decisions")], FakeBrowser({url: padded}))
+        self.assertEqual(report["counts"]["acquired"], 1)
+
+    def test_a_word_file_under_a_pdf_label_is_set_aside_and_does_not_stop_the_run(self) -> None:
+        body = b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1rest"
+        rows = [row(f"19-{n:05d}.a1", f"{APPEALS}2019-DOHA-Appeal-Board/FileId/{n}/", "2019 DOHA Appeal Board",
+                    "DOHA Appeal Board Decisions") for n in range(1, 8)]
+        responses = {r["source_urls"][0]: Response(200, r["source_urls"][0], {"content-type": "application/octet-stream"}, body)
+                     for r in rows[:6]}
+        report = self.run_acquire(rows, FakeBrowser(responses))
+        self.assertIsNone(report["stopped"])
+        self.assertEqual((report["counts"]["non_pdf_document"], report["counts"]["acquired"]), (6, 1))
+        self.assertTrue((self.run_dir / "refused" / "19-00001.a1.word_97_2003_or_ole.bin").is_file())
+        # Set-aside files are not requested again on resume.
+        again = FakeBrowser()
+        self.run_acquire(rows, again)
+        self.assertEqual(again.requested, [])
+
+    def test_an_unrecognised_refusal_records_what_came_back(self) -> None:
+        url = f"{HEARINGS}2025-ISCR-Hearing-Decisions/FileId/3/"
+        odd = Response(200, url, {"content-type": "application/octet-stream"}, b"\x01\x02\x03 not a document")
+        self.run_acquire([row("24-00003.h1", url, "2025 ISCR Hearing Decisions")], FakeBrowser({url: odd}))
+        reason = json.loads((self.run_dir / "attempts.jsonl").read_text().splitlines()[-1])["reason"]
+        self.assertIn("content: unrecognised, first bytes 010203", reason)
+        self.assertTrue((self.run_dir / "refused" / "24-00003.h1.unrecognised.bin").is_file())
 
 
 if __name__ == "__main__":
