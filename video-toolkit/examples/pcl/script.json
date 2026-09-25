@@ -1,0 +1,121 @@
+{
+  "title": "Your Security Clearance, Step by Step",
+  "scenes": [
+    {"id": "title", "step": null, "label": "",
+     "lines": [
+       {"cap": "Here's how a security clearance works, in about five minutes."}
+     ]},
+    {"id": "meet", "step": null, "label": "Meet Alex",
+     "lines": [
+       {"cap": "Meet Alex. Alex just accepted a job that needs a security clearance."},
+       {"cap": "A clearance is the government's decision that you're eligible for access to classified information."},
+       {"cap": "For contractor employees, that decision belongs to DCSA: the Defense Counterintelligence and Security Agency.",
+        "say": "For contractor employees, that decision belongs to D C S A: the Defense Counterintelligence and Security Agency."}
+     ]},
+    {"id": "basics", "step": null, "label": "Before you start",
+     "lines": [
+       {"cap": "First, the basics. Only an organization with a facility clearance can sponsor you for security clearance eligibility."},
+       {"cap": "And access to classified information is only granted on a need-to-know basis. There are no \"just in case\" clearances."},
+       {"cap": "If you need access on day one, the company can start the process pre-employment,"},
+       {"cap": "but you must start work within 45 days of being granted eligibility."}
+     ]},
+    {"id": "s1", "step": 1, "label": "Your FSO starts the request",
+     "lines": [
+       {"cap": "Step one. You will need to show proof of U.S. citizenship to your Facility Security Officer, or FSO.",
+        "say": "Step one. You will need to show proof of U.S. citizenship to your Facility Security Officer, or F S O."},
+       {"cap": "Then your FSO will start your investigation request, and you get an email invitation to complete the eApp in NBIS, DCSA's online application.",
+        "say": "Then your F S O will start your investigation request, and you get an email invitation to complete the e-App in NBIS, D C S A's online application."}
+     ]},
+    {"id": "s2", "step": 2, "label": "You complete the SF 86 in eApp",
+     "lines": [
+       {"cap": "Step two is yours. In eApp, you complete the SF 86, the Questionnaire for National Security Positions.",
+        "say": "Step two is yours. In e-App, you complete the S F eighty-six, the Questionnaire for National Security Positions."},
+       {"cap": "It asks where you've lived, worked, and studied, plus foreign contacts, travel, finances, and more."},
+       {"cap": "You should gather records first, so you're prepared for the questionnaire."},
+       {"cap": "Be complete and be honest. Leaving something out can hurt you more than the thing itself."},
+       {"cap": "You'll also sign release forms and get your fingerprints taken electronically."},
+       {"cap": "Heads up: a newer form, the Personnel Vetting Questionnaire, is being phased in to replace the SF 86.",
+        "say": "Heads up: a newer form, the Personnel Vetting Questionnaire, is being phased in to replace the S F eighty-six."}
+     ]},
+    {"id": "s3", "step": 3, "label": "Your FSO reviews it",
+     "lines": [
+       {"cap": "Step three. Your FSO reviews the form for completeness.",
+        "say": "Step three. Your F S O reviews the form for completeness."},
+       {"cap": "What you disclose isn't shared around the company. The NISPOM strictly prohibits that."},
+       {"cap": "Once the FSO review is complete, it will be released to DCSA, along with your fingerprints.",
+        "say": "Once the F S O review is complete, it will be released to D C S A, along with your fingerprints."}
+     ]},
+    {"id": "s4", "step": 4, "label": "DCSA checks the package",
+     "lines": [
+       {"cap": "Step four. DCSA checks that everything is there. If something's missing, it goes back to your FSO, and you fix it and resubmit.",
+        "say": "Step four. D C S A checks that everything is there. If something's missing, it goes back to your F S O, and you fix it and resubmit."}
+     ]},
+    {"id": "s5", "step": 5, "label": "Temporary eligibility",
+     "lines": [
+       {"cap": "Step five. While the full investigation runs, DCSA may grant temporary eligibility. You may hear it called an \"interim.\"",
+        "say": "Step five. While the full investigation runs, D C S A may grant temporary eligibility. You may hear it called an interim."},
+       {"cap": "It's based on your form and early checks, and it can let you start cleared work sooner."},
+       {"cap": "It has limits, and not getting temporary eligibility is not a denial. It just means you wait for the final decision."}
+     ]},
+    {"id": "s6", "step": 6, "label": "The background investigation",
+     "lines": [
+       {"cap": "Step six: the background investigation. DCSA checks records like criminal history and credit.",
+        "say": "Step six: the background investigation. D C S A checks records like criminal history and credit."},
+       {"cap": "Investigators may interview you, your references, and people who know you. Top Secret investigations dig deeper."},
+       {"cap": "If you speak to an investigator, answer promptly and honestly."},
+       {"cap": "And if you're unsure an investigator is legitimate, DCSA can verify them. You can contact DCSA by calling 878-274-1186.",
+        "say": "And if you're unsure an investigator is legitimate, D C S A can verify them. You can contact D C S A by calling eight seven eight, two seven four, one one eight six."}
+     ]},
+    {"id": "s7", "step": 7, "label": "Adjudication",
+     "lines": [
+       {"cap": "Step seven: adjudication. A DCSA adjudicator weighs your case against 13 national adjudicative guidelines, set out in Security Executive Agent Directive 4.",
+        "say": "Step seven: adjudication. A D C S A adjudicator weighs your case against thirteen national adjudicative guidelines, set out in Security Executive Agent Directive four."},
+       {"cap": "They look at many areas, including allegiance, foreign influence, finances, drug use, and personal conduct."},
+       {"cap": "You are looked at as a whole person. A single bad moment in time doesn't automatically mean a denial."},
+       {"cap": "Time, honesty, and changed behavior can mitigate past issues."},
+       {"cap": "Most cases end here, with a favorable decision. Some are approved with conditions and extra monitoring."}
+     ]},
+    {"id": "s8", "step": 8, "label": "Issues? DOHA reviews",
+     "lines": [
+       {"cap": "If the adjudicator can't decide in your favor, the case goes to DOHA, the Defense Office of Hearings and Appeals."},
+       {"cap": "If DOHA's attorneys agree there's a real concern, you receive a Statement of Reasons, or SOR, listing each one.",
+        "say": "If DOHA's attorneys agree there's a real concern, you receive a Statement of Reasons, or S O R, listing each one."},
+       {"cap": "If they don't agree, eligibility can still be granted."}
+     ]},
+    {"id": "s9", "step": 9, "label": "You respond to the SOR",
+     "lines": [
+       {"cap": "Step nine: if you receive an SOR and want to pursue the clearance, you will need to respond.",
+        "say": "Step nine: if you receive an S O R and want to pursue the clearance, you will need to respond."},
+       {"cap": "You have 20 days to answer in writing, under oath, admitting or denying each allegation."},
+       {"cap": "You can choose: a hearing before an administrative judge, or a decision on the written record."},
+       {"cap": "You may bring a lawyer or a personal representative. If you don't respond at all, the clearance is denied."}
+     ]},
+    {"id": "s10", "step": 10, "label": "Decision and appeal",
+     "lines": [
+       {"cap": "Step ten: the judge decides. Either side can appeal to the DOHA Appeal Board within 15 days."},
+       {"cap": "A final denial means waiting one year before your employer can apply again."}
+     ]},
+    {"id": "access", "step": null, "label": "Eligible is not the same as access",
+     "lines": [
+       {"cap": "Now, let's say Alex is approved. Being eligible isn't the same as access."},
+       {"cap": "Before seeing anything classified, Alex gets an initial security briefing and signs the SF 312, a nondisclosure agreement that lasts for life.",
+        "say": "Before seeing anything classified, Alex gets an initial security briefing and signs the S F three-twelve, a nondisclosure agreement that lasts for life."},
+       {"cap": "And Alex only sees what the job requires. That's called need-to-know."}
+     ]},
+    {"id": "cv", "step": null, "label": "Continuous vetting",
+     "lines": [
+       {"cap": "A clearance isn't one and done. Cleared people are enrolled in continuous vetting, with automated record checks and an updated form about every five years."},
+       {"cap": "Your part: report life changes to your FSO, like foreign travel and contacts, money trouble, or an arrest.",
+        "say": "Your part: report life changes to your F S O, like foreign travel and contacts, money trouble, or an arrest."}
+     ]},
+    {"id": "recap", "step": null, "label": "Recap",
+     "lines": [
+       {"cap": "So: your FSO starts it. You complete eApp. DCSA reviews, investigates, and decides, with DOHA stepping in if there are issues.",
+        "say": "So: your F S O starts it. You complete e-App. D C S A reviews, investigates, and decides, with DOHA stepping in if there are issues."},
+       {"cap": "Then you're briefed, you sign, and you keep reporting. Tell the truth, meet your deadlines, and talk to your FSO.",
+        "say": "Then you're briefed, you sign, and you keep reporting. Tell the truth, meet your deadlines, and talk to your F S O."}
+     ]},
+    {"id": "end", "step": null, "label": "", "hold": 7.0,
+     "lines": []}
+  ]
+}

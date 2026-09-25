@@ -56,6 +56,11 @@ Hearing Decisions - 2") is inaccessible with no recovery date.
   lifecycle review? Owner decision.
 
 ## Log
+2026-09-25 Claude — Owner asked for two more videos (the FCL process, completing a DD 254) in
+parallel sessions. The PCL video tooling existed only in session scratch, so it now lives
+in video-toolkit/ (not Librarian code) and the sessions start from this branch. Each
+pushes to its own branch (claude/fcl-video, claude/dd254-video) and checks in with the owner
+before the full render.
 2026-09-25 Claude — Finished the clearance video (5:34). The owner revised the narration
 and chose a Kokoro voice over Piper. I fixed typos in the revision and softened one
 overstatement ("not a single bad moment will result in a denial" became "doesn't

@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Clearance Cartoon</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+  html, body { margin: 0; padding: 0; background: #1d3557; overflow: hidden; }
+  #stage { position: relative; width: 1280px; height: 720px; overflow: hidden; }
+  #svg { position: absolute; inset: 0; }
+  #caption {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    max-width: 1060px; width: max-content; box-sizing: border-box;
+    padding: 8px 20px; border-radius: 14px;
+    background: rgba(29, 53, 87, 0.92); color: #fff;
+    font: 800 23px/1.26 Nunito, sans-serif; text-align: center;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.18);
+  }
+  #badge {
+    position: absolute; left: 22px; top: 20px; display: flex; align-items: center; gap: 12px;
+    padding: 8px 20px 8px 8px; border-radius: 40px; background: #fdf6e3;
+    border: 3.5px solid #2b2d42; box-shadow: 0 4px 0 rgba(0,0,0,0.18);
+    font: 600 26px Fredoka, sans-serif; color: #2b2d42;
+  }
+  #badge .num {
+    width: 46px; height: 46px; border-radius: 50%; background: #e9c46a; border: 3px solid #2b2d42;
+    display: flex; align-items: center; justify-content: center; font: 700 24px Fredoka, sans-serif;
+  }
+  #badge .num.small { font-size: 15px; letter-spacing: 0.5px; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <svg id="svg" viewBox="0 0 1280 720" width="1280" height="720" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div id="badge" style="display:none"></div>
+  <div id="caption" style="display:none"></div>
+</div>
+<script src="engine.js"></script>
+<script src="scenes.js"></script>
+</body>
+</html>
