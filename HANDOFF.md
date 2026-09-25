@@ -56,6 +56,11 @@ Hearing Decisions - 2") is inaccessible with no recovery date.
   lifecycle review? Owner decision.
 
 ## Log
+2026-09-25 Claude — FCL video (branch claude/fcl-video). Owner chose three videos (leadership,
+sponsor-side, FSO), done one at a time, anchored on the July 2026 handbook's flow. The leadership
+script and a 30 s sample are with the owner for approval. One correction to the brief needs sign-off:
+the ISR orientation meeting comes after the FCL (within 120 days), not before (handbook 2.3). DTM 24-004
+and the NI2 FOCI changes are left out. Work is in session scratch until approval; nothing is committed yet.
 2026-09-25 Claude — Owner asked for two more videos (the FCL process, completing a DD 254) in
 parallel sessions. The PCL video tooling existed only in session scratch, so it now lives
 in video-toolkit/ (not Librarian code) and the sessions start from this branch. Each
