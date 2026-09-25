@@ -23,7 +23,7 @@ export FFMPEG=$(./venv/bin/python -c "import imageio_ffmpeg;print(imageio_ffmpeg
 
 ## Pipeline
 1. `./venv/bin/python tts.py bf_emma 0.95 en-gb` writes `build/narration.wav` and `build/timeline.json`, and prints the runtime.
-2. `./venv/bin/python stills.py "s1:3,s1:9,..."` renders stills at scene-local times and tiles them 2x2 in `build/sheet_*.png`. Review every scene this way.
+2. `./venv/bin/python audit_say.py` checks acronym pronunciation. Then `./venv/bin/python stills.py "s1:3,s1:9,..."` renders stills at scene-local times and tiles them 2x2 in `build/sheet_*.png`. Review every scene this way.
 3. `node render.js --ranges 0-5.8,54-80 --out build/sample.mp4` renders a short sample with audio.
 4. `OUT_NAME=my-video ./render_full.sh` does the full render: 4 parallel frame-aligned chunks, then concat and loudness-normalized audio (about 5–8 minutes on 4 cores).
 
@@ -41,6 +41,11 @@ export FFMPEG=$(./venv/bin/python -c "import imageio_ffmpeg;print(imageio_ffmpeg
 - A prop held in a hand rotates with the arm. Wrap it in `inHand(armAngle, svg)` to keep it upright.
 - `pop()` scales around its x,y, so draw the popped content centered on the origin. For big groups, fade (`op`) instead.
 - Red "no" marks and stamps must sit beside text, not on it. Keep captions at two lines or fewer (split long lines in `script.json`).
-- Check pronunciation with `kokoro.tokenizer.phonemize(text, lang="en-gb")`. Spell acronyms in `say` ("D C S A", "S F eighty-six").
+- Pronunciation: run `./venv/bin/python audit_say.py` after every script edit. **Never space out an acronym ending in "A"**:
+  "D C S A may" is read as "D C S a-may" (the owner caught this at 2:13 of the PCL video). Unspaced caps ("DCSA") are
+  spelled correctly. Spacing is fine where it's needed and the last letter isn't A ("F S O", "S O R", "S F eighty-six").
+  **Possessives:** an all-caps acronym loses its "'s" ("DOHA's" becomes "Doha-r"). Write "Doha's" for a spoken word,
+  or spaced letters for a letter acronym ("D C S A's" is safe because "A's" is not followed by a separate word).
+  The owner flagged four misreads by ear before these rules existed; the audit now catches both patterns.
   Read phone numbers as digit groups.
 - Piper and Kokoro peak at full scale; `render.js` and `render_full.sh` apply `loudnorm` (I=-16, TP=-1.5).
