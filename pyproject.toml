@@ -9,6 +9,10 @@ description = "Model-agnostic discovery and intake framework for a governed DCSA
 requires-python = ">=3.11"
 dependencies = ["tzdata>=2025.1; platform_system == 'Windows'"]
 
+[project.optional-dependencies]
+# Only doha-acquire needs it: it drives the installed Chrome, so no browser download.
+browser = ["playwright>=1.40"]
+
 [project.scripts]
 dcsa-custodian = "library_custodian.cli:main"
 

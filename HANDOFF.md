@@ -41,13 +41,17 @@ the Archivist's decisions/doha_source_urls.jsonl is newer (09-23 phantom-row ret
 One archived listing page ("2016 and Prior ISCR Hearing Decisions - 2") is inaccessible.
 
 ## Next
-1. Acquire the ~21,900 DOHA decisions not held, in the two groups. No bulk downloader
-   exists and DOHA's CDN refuses the crawler, so this needs an agreed plan (browser
-   method, throttle, batching, quarantine layout, Archivist bulk intake) before any
-   download. Recent hearings (2024-2026) and 2017+ Appeal Board decisions first.
-2. Before any rebuilt DOHA ledger replaces the published one, restore byte verification
-   (317 on 09-22): find the hash input the 09-22 run used; byte_verification_inputs in
-   the report shows what is missing.
+1. Acquire the ~21,900 DOHA decisions not held (owner-approved plan, 09-25) with
+   `doha-acquire`: pilot with --limit 20, then resume the run in batches. It fetches
+   through Chrome (Playwright, optional dependency) from the listed URLs only, newest
+   listings first, 4 s apart, into quarantine/doha-acquire/<run>/ with one standard
+   .intake.json per file (proposed_collection doha_decisions). The Archivist's
+   intake plan takes these unchanged; it already separates hearing and appeal by
+   decision_family. Regenerate doha_not_in_library.jsonl first: files written before
+   grouping are refused.
+2. Byte verification is recoverable: any Archivist PRODUCTION_AUDIT.json from
+   doha-era-trial-20260922 onward gives 317 (checked 09-25); the 08-31 one gives 0
+   because its document IDs predate the current manifest. Use the newest release's.
 3. Retry the unresolved sources from the incomplete 2026-09-24 monthly scan when access
    is available; no further full sweep outside the authorized window.
 4. Re-check the WHS DTM and DoDM listings for DTM 24-004 and lifecycle-review its record.
@@ -61,6 +65,13 @@ One archived listing page ("2016 and Prior ISCR Hearing Decisions - 2") is inacc
 - The inaccessible DOHA listing page has no recovery date.
 
 ## Log
+2026-09-25 Claude — Added doha-acquire. Per-file intake packages rather than one per
+batch, because the Archivist's stage_intake reads one .intake.json per item and a plan
+already batches them. Bytes come from the page's own fetch() in Chrome, since the CDN
+refuses non-browser clients; verified byte-exact through Chromium over CDP. A 200
+response that is not a PDF is refused (a challenge page must not become a decision),
+and five refusals stop the run. Identity rests on the listing label until the
+Archivist reviews the text; the package says so.
 2026-09-25 Claude — First real reverse-check run; owner set DOHA scope to all ISCR
 hearing and Appeal Board decisions, kept as two groups. The summary now groups by the
 registry source a listing sits under, reports each listing's not-held count instead of
@@ -123,5 +134,3 @@ and reported, never re-offered or downloaded). Both sides had built intake packa
 kept Codex's writer and adopted the cloud builder's stable url+hash submission_id and
 required-field check. That session's FCL intake (12 in-scope documents) still needs a
 library doctor and a handbook-edition check before acquisition.
-2026-09-16 Codex — Fixed local-calendar period selection; boundary regression and
-all 72 Librarian tests pass. No acquisition or publication run.

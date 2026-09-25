@@ -58,6 +58,26 @@ installation under ignored .runtime is supported by custodian.py.
 
 The Windows/Unix wrappers download new or positively changed sources into quarantine and emit `.intake.json` packages. They accept both a bare job ID and `--job <id>`. `config/schedule.json` declares cadence; it does not install tasks. Archivist reviews packages and uses `build-candidate --intake-plan` before gated publication. See `../dcsa-archivist/agents/conductor.md` for the complete agent cycle. The historical `scripts/intake_voi.py` helper is not the general intake path.
 
+## Acquiring DOHA decisions the library lacks
+
+DOHA's CDN refuses the HTTP fetcher, so decisions are fetched through Chrome with
+`doha-acquire`, from the URLs in `state/provenance/doha_not_in_library.jsonl` (written
+by `doha-provenance`). Files and their `.intake.json` packages land in
+`quarantine/doha-acquire/<run>/iscr-hearing-decisions/` and `.../doha-appeal-board-decisions/`;
+nothing is written to the library. Needs `pip install playwright` and an installed Chrome.
+
+```powershell
+python custodian.py doha-acquire --limit 20                 # pilot
+python custodian.py doha-acquire --run-dir quarantine\doha-acquire\<run>   # resume
+```
+
+Newest listings first, hearings before appeals within a year, one request every 4
+seconds (`--delay`). Robots.txt is read through the browser and honoured; every URL
+and final URL must sit under a registry source; a 200 response that is not a PDF is
+refused; five refusals in a row stop the run. `--cdp-url http://127.0.0.1:9222`
+attaches to a Chrome you started with `--remote-debugging-port=9222` if a launched
+one is challenged.
+
 ## Related projects
 
 - **DCSA Archivist** (`adamsdarin/dcsa-archivist`) — reviews this project's intake packages, organizes, enriches and indexes the library, and stages approval-gated releases.
