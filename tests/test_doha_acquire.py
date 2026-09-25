@@ -128,6 +128,11 @@ class DohaAcquireTests(unittest.TestCase):
         with self.assertRaises(SystemExit) as raised:
             load_not_held(old)
         self.assertIn("re-run doha-provenance", str(raised.exception))
+        mixed = self.run_dir / "mixed.jsonl"
+        mixed.write_text(json.dumps({"case_key": "08-01000.h1", "source_urls": [],
+                                     "group": "DOHA Appeal Board Decisions + ISCR Hearing Decisions"}) + "\n", encoding="utf-8")
+        with self.assertRaises(SystemExit):
+            load_not_held(mixed)
 
 
 if __name__ == "__main__":

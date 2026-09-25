@@ -214,8 +214,7 @@ class DohaProvenanceTests(unittest.TestCase):
             self.page(f"{HEARINGS}2020-ISCR-Hearing-Decisions/", "2020 ISCR Hearing Decisions",
                       [["20-00001.h1.pdf", "5", 1]]))
         missing, report = self.missing(capture)
-        rows = {row["listing_title"]: row
-                for row in summarize_missing(missing, report)["groups"]["ISCR Hearing Decisions"]["by_listing"]}
+        rows = {row["listing_title"]: row for row in summarize_missing(missing, report)["by_listing"]}
         self.assertEqual(rows["2019 ISCR Hearing Decisions"]["share_not_held"], 0.25)
         self.assertEqual(rows["2020 ISCR Hearing Decisions"]["not_held"], 0)
         self.assertNotIn("suspect_capture_gap", rows["2019 ISCR Hearing Decisions"])
@@ -250,6 +249,23 @@ class DohaProvenanceTests(unittest.TestCase):
         self.assertEqual((inputs["human_hashes_supplied"], inputs["human_hash_ids_in_manifest"]), (1, 0))
         text = format_summary(summarize_missing(missing, report), report)
         self.assertIn("WARNING: hashes were supplied but no decision is byte-verified", text)
+    def test_a_cross_posted_decision_is_grouped_by_its_level_not_its_page(self) -> None:
+        self.decisions()
+        capture = self.capture(
+            self.page(f"{HEARINGS}Archived/2016-and-Prior-4/", "2016 and Prior ISCR Hearing Decisions - 4",
+                      [["08-01000.h1.pdf", "1", 1]]),
+            self.page(f"{APPEALS}2016-and-Prior-DOHA-Appeal-Board/", "2016 and Prior DOHA Appeal Board",
+                      [["08-01000.h1.pdf", "2", 1], ["08-01000.a1.pdf", "3", 1]]))
+        missing, report = self.missing(capture)
+        by_key = {item["case_key"]: item for item in missing}
+        self.assertEqual(by_key["08-01000.h1"]["group"], "ISCR Hearing Decisions")
+        self.assertEqual(by_key["08-01000.h1"]["listed_under"], ["DOHA Appeal Board Decisions", "ISCR Hearing Decisions"])
+        self.assertEqual(by_key["08-01000.a1"]["group"], "DOHA Appeal Board Decisions")
+        self.assertEqual(report["listed_under_both_collections"], 1)
+        summary = summarize_missing(missing, report)
+        self.assertEqual(set(summary["groups"]), {"ISCR Hearing Decisions", "DOHA Appeal Board Decisions"})
+        self.assertEqual(summary["groups"]["ISCR Hearing Decisions"]["listed"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()
