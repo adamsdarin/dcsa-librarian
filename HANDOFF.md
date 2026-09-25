@@ -56,6 +56,9 @@ Hearing Decisions - 2") is inaccessible with no recovery date.
   lifecycle review? Owner decision.
 
 ## Log
+2026-09-25 Claude — The owner heard "DCS"/"DCSMA" in the PCL video. Kokoro reads a spaced "A" before a
+word as the article, and drops the "'s" from all-caps acronyms. Narration now uses unspaced "DCSA",
+and video-toolkit/audit_say.py flags both patterns before rendering. The video was re-voiced and re-rendered.
 2026-09-25 Claude — Owner asked for two more videos (the FCL process, completing a DD 254) in
 parallel sessions. The PCL video tooling existed only in session scratch, so it now lives
 in video-toolkit/ (not Librarian code) and the sessions start from this branch. Each
