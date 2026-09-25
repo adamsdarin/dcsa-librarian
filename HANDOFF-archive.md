@@ -359,3 +359,5 @@ first-of-month schedule addition. No acquisition or library writes performed.
 2026-09-15 Codex — Closed filename-based period suppression; added retained,
 hash-bound issue-period review and source-request handoff instructions. No live
 issue confirmed, source downloaded or library publication performed.
+2026-09-16 Codex — Fixed local-calendar period selection; boundary regression and
+all 72 Librarian tests pass. No acquisition or publication run.

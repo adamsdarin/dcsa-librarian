@@ -3,6 +3,8 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import urllib.parse
+from datetime import datetime, timezone
 from pathlib import Path
 
 from .audit import audit_library
@@ -96,6 +98,16 @@ def build_parser() -> argparse.ArgumentParser:
     doha.add_argument("--capture", type=Path, action="append", required=True, help="Listing capture file; repeatable")
     doha.add_argument("--registry", type=Path, default=PROJECT_ROOT / "config" / "source_registry.json")
     doha.add_argument("--state-dir", type=Path, default=PROJECT_ROOT / "state")
+    acquire = commands.add_parser("doha-acquire", help="Fetch DOHA decisions the library lacks into quarantine through Chrome; never publishes")
+    acquire.add_argument("--not-held", type=Path, default=PROJECT_ROOT / "state" / "provenance" / "doha_not_in_library.jsonl")
+    acquire.add_argument("--group", choices=["hearings", "appeals", "all"], default="all")
+    acquire.add_argument("--limit", type=int, help="Fetch at most this many (use a small number for a pilot)")
+    acquire.add_argument("--delay", type=float, default=4.0, help="Seconds between requests (default 4)")
+    acquire.add_argument("--run-dir", type=Path, help="Resume this run; default starts a new one under --quarantine-dir")
+    acquire.add_argument("--quarantine-dir", type=Path, default=PROJECT_ROOT / "quarantine")
+    acquire.add_argument("--registry", type=Path, default=PROJECT_ROOT / "config" / "source_registry.json")
+    acquire.add_argument("--cdp-url", help="Attach to a Chrome started with --remote-debugging-port instead of launching one")
+    acquire.add_argument("--profile-dir", type=Path, default=PROJECT_ROOT / "state" / "chrome-profile")
     doha.add_argument("--summary", action="store_true", help="Triage the listed-but-not-held decisions per group (ISCR hearings, Appeal Board) by case year and listing; print it as text instead of the report JSON")
     doha.add_argument("--human-hashes", type=Path, help="Deep-audit hashes (Archivist PRODUCTION_AUDIT.json) that let a recorded download prove identity by bytes")
     return parser
@@ -179,6 +191,26 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(json.dumps(report, indent=2))
         return 0
+    if args.command == "doha-acquire":
+        from .discovery import make_run_dir
+        from .doha_acquire import BrowserTransport, acquire, load_not_held, parse_robots
+        from .doha_provenance import GROUPS
+        registry = json.loads(args.registry.read_text(encoding="utf-8-sig"))
+        rows = load_not_held(args.not_held.resolve())
+        groups = {"hearings": {GROUPS["doha-iscr-hearings"]}, "appeals": {GROUPS["doha-appeals"]}}.get(args.group)
+        run_dir = args.run_dir.resolve() if args.run_dir else make_run_dir(
+            args.quarantine_dir.resolve() / "doha-acquire", datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"))
+        run_dir.mkdir(parents=True, exist_ok=True)
+        start = next(source["url"] for source in registry["sources"] if source["id"] == "doha-iscr-hearings")
+        transport = BrowserTransport(start, args.profile_dir.resolve(), args.cdp_url)
+        try:
+            origin = "{0.scheme}://{0.netloc}".format(urllib.parse.urlsplit(start))
+            robots = parse_robots(transport.robots_text(origin))
+            report = acquire(rows, registry, run_dir, transport, robots, groups, args.limit, args.delay)
+        finally:
+            transport.close()
+        print(json.dumps(report, indent=2))
+        return 0 if report["counts"]["acquired"] or report["counts"]["already_acquired"] else 2
     if args.command == "doha-provenance":
         from .doha_provenance import build_ledger, format_summary, summarize_missing
         hashes = {}
