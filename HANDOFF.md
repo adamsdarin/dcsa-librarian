@@ -56,6 +56,10 @@ Hearing Decisions - 2") is inaccessible with no recovery date.
   lifecycle review? Owner decision.
 
 ## Log
+2026-09-25 Claude — The owner added federal agencies as sponsors in the PCL video's "Before you start".
+The rest of the video follows the contractor path (FSO, NISPOM, DOHA under 32 CFR 155), so, with the
+owner's approval, it now says so and points federal hires to their agency's security office. The 45-day
+rule is framed as a private-company rule, counted from the eligibility grant (117.10(f)(2)). Runtime 5:50.
 2026-09-25 Claude — The owner heard "DCS"/"DCSMA" in the PCL video. Kokoro reads a spaced "A" before a
 word as the article, and drops the "'s" from all-caps acronyms. Narration now uses unspaced "DCSA",
 and video-toolkit/audit_say.py flags both patterns before rendering. The video was re-voiced and re-rendered.

@@ -155,35 +155,50 @@ SCENES.meet = ({ local: u, L }) => {
 // ---------- Before you start ----------
 SCENES.basics = ({ local: u, L }) => {
   let s = bgSky(u);
-  s += slideIn(u, L[0] + 0.2, 230, 780, 230, 482, officeBuilding(240, 250, 'Your Employer'), 0.7);
-  s += pop(u, L[0] + 2.3, 345, 250, P.rosette('FCL'), 0.5, -8);
-  s += op(fade(u, L[0] + 2.8), tag(230, 530, 'Facility clearance'));
-  s += actor('alex', 560, 560, 0.95, { t: u, mood: 'happy', look: 5 });
-  if (u > L[0] + 4.3) {
-    const p = easeOut(prog(u, L[0] + 4.3, 0.6));
-    s += `<path d="M370 330 Q430 290 ${lerp(370, 490, p).toFixed(1)} ${lerp(330, 350, p).toFixed(1)}" fill="none" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/>`;
-    s += pop(u, L[0] + 4.8, 430, 270, chip(0, 0, 'sponsors you', { size: 18, fill: C.yellow }), 0.35);
+  // two kinds of sponsor: a cleared company or a federal agency
+  s += slideIn(u, L[0] + 0.2, 150, 780, 150, 482, g('scale(0.82)', officeBuilding(240, 250, 'Your Employer')), 0.7);
+  s += pop(u, L[0] + 2.8, 240, 285, g('scale(0.8)', P.rosette('FCL')), 0.5, -8);
+  s += op(fade(u, L[0] + 3.2), tag(150, 530, 'Facility clearance'));
+  s += slideIn(u, L[0] + 4.6, 410, 780, 410, 482, g('scale(0.72)', govBuilding(230, 'AGENCY', '#dfe7f1')), 0.6);
+  s += op(fade(u, L[0] + 5.0), tag(410, 530, 'Federal agency'));
+  s += actor('alex', 640, 560, 0.95, { t: u, mood: 'happy', look: u > L[1] ? 5 : -4 });
+  if (u > L[0] + 6.2) {
+    const p = easeOut(prog(u, L[0] + 6.2, 0.6));
+    s += op(1 - fade(u, L[4], 0.4), `<path d="M255 300 Q420 205 ${lerp(255, 585, p).toFixed(1)} ${lerp(300, 330, p).toFixed(1)}" fill="none" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/>` +
+      `<path d="M500 372 Q545 345 ${lerp(500, 585, p).toFixed(1)} ${lerp(372, 362, p).toFixed(1)}" fill="none" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/>`);
+    s += op(1 - fade(u, L[4], 0.4), pop(u, L[0] + 6.8, 420, 200, chip(0, 0, 'either can sponsor you', { size: 18, fill: C.yellow }), 0.35));
   }
   // need-to-know, no "just in case"
-  const f1 = 1 - fade(u, L[2] - 0.1, 0.4);
-  if (u < L[2] + 0.4) {
-    let n = pop(u, L[1] + 0.6, 830, 230, P.key(1.6), 0.45, -15) + op(fade(u, L[1] + 0.9), tag(830, 300, 'Need-to-know'));
-    n += pop(u, L[1] + 3.6, 1080, 230, P.bubble(250, 80, txt(0, 0, 'Just in case?', 26, { weight: 600 }), 'left'), 0.45);
-    n += pop(u, L[1] + 4.6, 1165, 305, P.stamp('NO', C.red, 34), 0.35, -10);
-    s += op(f1, n);
+  if (u > L[1] && u < L[2] + 0.4) {
+    let n = pop(u, L[1] + 0.6, 870, 230, P.key(1.6), 0.45, -15) + op(fade(u, L[1] + 0.9), tag(870, 300, 'Need-to-know'));
+    n += pop(u, L[1] + 3.6, 1100, 230, P.bubble(250, 80, txt(0, 0, 'Just in case?', 26, { weight: 600 }), 'left'), 0.45);
+    n += pop(u, L[1] + 4.6, 1180, 305, P.stamp('NO', C.red, 34), 0.35, -10);
+    s += op(1 - fade(u, L[2] - 0.1, 0.4), n);
   }
-  // pre-employment and the 45-day rule
-  if (u > L[2]) {
-    const xs = [780, 990, 1200], y = 330;
-    let tl = `<path d="M${xs[0]} ${y} H${lerp(xs[0], xs[2], easeOut(prog(u, L[3] + 0.2, 1.0)))}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/>`;
+  // pre-employment start, and the private-company 45-day rule
+  if (u > L[2] && u < L[4] + 0.4) {
+    const xs = [800, 1000, 1200], y = 330;
+    let tl = `<path d="M${xs[0]} ${y} H${lerp(xs[0], xs[2], easeOut(prog(u, L[3] + 0.6, 1.0)))}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/>`;
     tl += pop(u, L[2] + 0.3, xs[0], 215, P.doc(80, 96, 'Offer', { head: C.green, lines: 2, size: 14 }), 0.4);
     tl += pop(u, L[2] + 0.3, xs[0], y, `<circle r="14" fill="${C.teal}" ${S2}/>`, 0.35) + op(fade(u, L[2] + 0.5), txt(xs[0], y + 36, 'Offer accepted', 18, { weight: 600 }));
     tl += op(fade(u, L[2] + 1.6), txt(xs[0], y + 60, 'process can start', 16, { weight: 500, fill: C.gray }));
-    tl += pop(u, L[3] + 1.0, xs[1], y, `<circle r="14" fill="${C.yellow}" ${S2}/>`, 0.35) + op(fade(u, L[3] + 1.1), txt(xs[1], y + 36, 'Eligibility granted', 18, { weight: 600 }));
-    tl += pop(u, L[3] + 1.6, xs[2], y, `<circle r="14" fill="${C.green}" ${S2}/>`, 0.35) + op(fade(u, L[3] + 1.7), txt(xs[2], y + 36, 'Start work', 18, { weight: 600 }));
-    tl += op(fade(u, L[3] + 2.0), `<path d="M${xs[1]} ${y - 30} V${y - 46} H${xs[2]} V${y - 30}" fill="none" stroke="${C.red}" stroke-width="3"/>`);
-    tl += pop(u, L[3] + 2.2, (xs[1] + xs[2]) / 2, 200, P.calendar('45', 'days', 96), 0.45);
-    s += tl;
+    tl += pop(u, L[3] + 1.4, xs[1], y, `<circle r="14" fill="${C.yellow}" ${S2}/>`, 0.35) + op(fade(u, L[3] + 1.5), txt(xs[1], y + 36, 'Eligibility granted', 18, { weight: 600 }));
+    tl += pop(u, L[3] + 2.2, xs[2], y, `<circle r="14" fill="${C.green}" ${S2}/>`, 0.35) + op(fade(u, L[3] + 2.3), txt(xs[2] - 10, y + 36, 'In the cleared job', 18, { weight: 600 }));
+    tl += op(fade(u, L[3] + 2.6), `<path d="M${xs[1]} ${y - 30} V${y - 46} H${xs[2]} V${y - 30}" fill="none" stroke="${C.red}" stroke-width="3"/>`);
+    tl += pop(u, L[3] + 2.8, (xs[1] + xs[2]) / 2, 205, P.calendar('45', 'days', 96), 0.45);
+    tl += pop(u, L[3] + 0.4, 1000, 100, chip(0, 0, 'Private company rule', { size: 18, fill: C.cream }), 0.35);
+    s += op(1 - fade(u, L[4], 0.4), tl);
+  }
+  // scope: this video follows the contractor path
+  if (u > L[4]) {
+    s += pop(u, L[4] + 0.4, 662, 285, chip(0, 0, 'This video: contractor path', { size: 20, fill: C.yellow }), 0.4);
+    s += pop(u, L[4] + 3.4, 1030, 235, card(420, 150,
+      txt(0, -42, 'Working for a federal agency?', 22, { weight: 700 }) +
+      txt(0, -4, "Your agency's security office", 20, { weight: 500 }) + txt(0, 26, 'guides you; later steps differ.', 20, { weight: 500 }), { fill: C.cream }), 0.45);
+    if (u > L[4] + 3.6) {
+      const p = easeOut(prog(u, L[4] + 3.6, 0.6));
+      s += `<path d="M815 245 Q620 90 ${lerp(815, 425, p).toFixed(1)} ${lerp(245, 338, p).toFixed(1)}" fill="none" stroke="${C.ink}" stroke-width="4" stroke-dasharray="10 8"/>`;
+    }
   }
   return s;
 };

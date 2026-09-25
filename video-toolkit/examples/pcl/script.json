@@ -34,16 +34,19 @@
    "label": "Before you start",
    "lines": [
     {
-     "cap": "First, the basics. Only an organization with a facility clearance can sponsor you for security clearance eligibility."
+     "cap": "First, the basics. Only an organization with a facility clearance, or a federal agency, can sponsor you for security clearance eligibility."
     },
     {
      "cap": "And access to classified information is only granted on a need-to-know basis. There are no \"just in case\" clearances."
     },
     {
-     "cap": "If you need access on day one, the company can start the process pre-employment,"
+     "cap": "If you need access on day one, the process can start pre-employment."
     },
     {
-     "cap": "but you must start work within 45 days of being granted eligibility."
+     "cap": "But if the employment is with a private company, that company is required to have you in a cleared position within 45 days of your eligibility being granted."
+    },
+    {
+     "cap": "This video follows a contractor employee like Alex. If you'll work directly for a federal agency, its security office will guide you, and some later steps differ."
     }
    ]
   },
