@@ -56,6 +56,11 @@ Hearing Decisions - 2") is inaccessible with no recovery date.
   lifecycle review? Owner decision.
 
 ## Log
+2026-09-25 Claude — Finished the clearance video (5:34). The owner revised the narration
+and chose a Kokoro voice over Piper. I fixed typos in the revision and softened one
+overstatement ("not a single bad moment will result in a denial" became "doesn't
+automatically mean"), and flagged it to the owner. The revision names NBIS and the
+investigator-verification number, so re-check both before any reuse.
 2026-09-25 Claude — Owner asked for a ~5-minute cartoon video walking a new applicant
 through the personnel clearance process, based on "High Level PCL Process". That map
 predates 2019, so the owner chose current terms. Claims were checked against 32 CFR 117
