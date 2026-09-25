@@ -29,7 +29,7 @@ PDF = b"%PDF-1.7 synthetic decision"
 
 def row(key: str, url: str, title: str, group: str = "ISCR Hearing Decisions", fmt: str = "pdf") -> dict:
     return {"case_key": key, "group": group, "labels": [f"{key}.{fmt}"], "formats": [fmt],
-            "source_urls": [url], "listing_titles": [title]}
+            "source_urls": [url], "urls_by_format": {fmt: [url]}, "listing_titles": [title]}
 
 
 class FakeBrowser:
@@ -186,6 +186,26 @@ class DohaAcquireTests(unittest.TestCase):
         reason = json.loads((self.run_dir / "attempts.jsonl").read_text().splitlines()[-1])["reason"]
         self.assertIn("content: unrecognised, first bytes 010203", reason)
         self.assertTrue((self.run_dir / "refused" / "24-00003.h1.unrecognised.bin").is_file())
+
+    def test_a_decision_posted_as_html_and_pdf_is_fetched_as_the_pdf(self) -> None:
+        # The HTML posting's URL sorts first; the PDF one must still be chosen.
+        html_url = f"{APPEALS}2016-and-Prior-DOHA-Appeal-Board/FileId/100/"
+        pdf_url = f"{APPEALS}2016-and-Prior-DOHA-Appeal-Board/FileId/200/"
+        decision = dict(row("12-05512.a1", pdf_url, "2016 and Prior DOHA Appeal Board", "DOHA Appeal Board Decisions"),
+                        formats=["htm", "pdf"], source_urls=[html_url, pdf_url],
+                        urls_by_format={"htm": [html_url], "pdf": [pdf_url]})
+        browser = FakeBrowser({html_url: Response(200, html_url, {"content-type": "application/octet-stream"}, b"<p>text")})
+        report = self.run_acquire([decision], browser)
+        self.assertEqual(browser.requested, [pdf_url])
+        self.assertEqual(report["counts"]["acquired"], 1)
+
+    def test_a_not_held_file_without_urls_by_format_is_refused(self) -> None:
+        old = self.run_dir / "old.jsonl"
+        stale = row("24-00003.h1", f"{HEARINGS}x/FileId/3/", "2025 ISCR Hearing Decisions")
+        del stale["urls_by_format"]
+        old.write_text(json.dumps(stale) + "\n", encoding="utf-8")
+        with self.assertRaises(SystemExit):
+            load_not_held(old)
 
 
 if __name__ == "__main__":

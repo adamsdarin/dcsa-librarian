@@ -69,10 +69,13 @@ def plan(not_held: Iterable[dict[str, Any]], groups: set[str] | None = None, lim
     return chosen[:limit] if limit else chosen
 
 
-def choose_url(row: dict[str, Any]) -> str:
-    """Prefer a dated listing's URL over an 'and Prior' archive page's."""
-    urls = sorted(row["source_urls"])
-    return next((url for url in urls if "and-prior" not in url.casefold()), urls[0])
+def choose_url(row: dict[str, Any]) -> tuple[str, str]:
+    """The URL to fetch and the format it serves: a PDF posting if there is one, and a
+    dated listing's URL over an 'and Prior' archive page's."""
+    by_format = row["urls_by_format"]
+    fmt = "pdf" if "pdf" in by_format else sorted(by_format)[0]
+    urls = sorted(by_format[fmt])
+    return next((url for url in urls if "and-prior" not in url.casefold()), urls[0]), fmt
 
 
 def read_attempts(path: Path) -> dict[str, dict[str, Any]]:
@@ -147,7 +150,8 @@ def acquire(not_held: Iterable[dict[str, Any]], registry: dict[str, Any], run_di
             if key in done:
                 counts["already_acquired"] += 1
                 continue
-            url = canonicalize_url(choose_url(row))
+            chosen, fmt = choose_url(row)
+            url = canonicalize_url(chosen)
             source_id = _page_source(url, allowed)
             attempt = {"case_key": key, "group": row.get("group"), "url": url, "at": utc_now()}
             if not source_id:
@@ -160,7 +164,6 @@ def acquire(not_held: Iterable[dict[str, Any]], registry: dict[str, Any], run_di
                 continue
             if index and delay_seconds:
                 sleep(delay_seconds)
-            fmt = row.get("formats", ["pdf"])[0] if "pdf" not in row.get("formats", ["pdf"]) else "pdf"
             try:
                 response = transport.fetch(url)
                 final = canonicalize_url(response.url or url)
@@ -310,7 +313,8 @@ class BrowserTransport:
 
 def load_not_held(path: Path) -> list[dict[str, Any]]:
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
-    if any(row.get("group") not in GROUPS.values() for row in rows):
-        # Written before decisions were grouped by level; the group decides the quarantine folder.
-        raise SystemExit(f"{path} predates grouping by decision level; re-run doha-provenance to regenerate it")
+    if any(row.get("group") not in GROUPS.values() or "urls_by_format" not in row for row in rows):
+        # Written by an older doha-provenance: no level grouping, or URLs not tied to their
+        # format, which made PDF-and-HTML postings fetch the HTML copy.
+        raise SystemExit(f"{path} was written by an older version; re-run doha-provenance to regenerate it")
     return rows

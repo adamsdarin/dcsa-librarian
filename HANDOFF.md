@@ -65,6 +65,13 @@ One archived listing page ("2016 and Prior ISCR Hearing Decisions - 2") is inacc
 - The inaccessible DOHA listing page has no recovery date.
 
 ## Log
+2026-09-25 Claude — The run stopped at 2,507 on 14 Appeal Board decisions (2012-2015)
+refused as not PDF. The owner downloaded the same 14 by hand: all real PDFs. Cause was
+mine: older decisions are posted as both PDF and HTML under separate FileIds, and the
+not-held rows kept URLs and formats as unlinked sets, so doha-acquire could fetch the
+HTML copy. Rows now carry urls_by_format and the PDF URL is always chosen; older
+not-held files are refused. The 14 hand copies stay out of intake until a tool fetch
+matches their bytes.
 2026-09-25 Claude — First batch on the owner's machine is running (run
 quarantine/doha-acquire/20260925T151200Z, 1,041 PDFs by 16:40Z). It looked idle because
 it printed nothing until the end, and a closed Chrome window was counted as five DOHA
@@ -129,9 +136,3 @@ operator chose to ingest the NARA ISOO copy (archives.gov, allowlisted under
 official-reference-verification) instead; the retyped copy's hash is noted in the
 package only for reference. Fetched with the Librarian's own Fetcher and package
 writer; marked superseded/historical, not current policy.
-2026-09-22 Claude — Added doha-provenance. DOHA addresses decisions by opaque
-FileId, so a URL can only come from the listing that names the file; a case number
-can never produce one. The basis is recorded per row because a listing label is
-weaker evidence than matching bytes, and a decision posted on two listings keeps
-both URLs and withholds the year, which the Archivist reads as a date bound. No
-document was downloaded and the library was not written.
