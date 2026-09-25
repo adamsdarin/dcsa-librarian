@@ -23,28 +23,36 @@ missing files or findings). VOI-release-watch still has no successful run record
 entry point has lacked them since at least 09-09) and now also checks
 doha_local_indexes.
 
-DOHA provenance: the 09-22 ledger (state/provenance/doha_source_urls.jsonl, published by
-the Archivist) records official listing URLs for 10,658 of 10,658 library decisions; 317
-byte-verified, the rest official_listing_label. That only proves library -> listing.
-`doha-provenance` now also reports decisions a listing publishes that the library lacks
-(state/provenance/doha_not_in_library.jsonl), and `--summary` triages them by case year,
-hearing/appeal, listing (>= 50% missing flagged as a suspected capture/import gap), cases
-held under another suffix or level number, and non-PDF-only postings. NOT yet run on
-real data. The 09-22 report and capture are not in this checkout's state/, so their
-location must be found first. One archived DOHA listing page ("2016 and Prior ISCR
-Hearing Decisions - 2") is inaccessible with no recovery date.
+DOHA scope (owner decision 2026-09-25): the library holds all DOHA decisions in two
+groups, ISCR Hearing Decisions and DOHA Appeal Board Decisions. First real run of the
+reverse check (2026-09-25, 09-22 capture): DOHA lists ~32,600 decisions; the library
+holds 10,633, so 21,942 are not held. The gaps are whole blocks, not scattered: almost
+all Appeal Board decisions, the 2016-and-prior hearing pages 4-17, and recent hearings
+(2024: 574, 2025: 630 of 635, 2026: 396), which suggests the DOHA import stopped around
+mid-2024. Pages that are held (2018-2023 hearings) match almost exactly, so the capture
+looks complete. That run's byte-verified count was 0, not 317: the only
+PRODUCTION_AUDIT.json found (Archivist release voi-20260831-remediation-v1) did not
+reproduce the 09-22 basis, so its ledger must NOT replace the published one. The report
+now carries byte_verification_inputs to show which input failed. The 09-22 capture was
+in a session scratchpad under AppData\Local\Temp; it is now copied to
+state/captures/doha-capture-20260922.jsonl (local, gitignored). The 09-22 run's own
+ledger and report live only in the .claude/worktrees/quizzical-elbakyan-2e691d worktree;
+the Archivist's decisions/doha_source_urls.jsonl is newer (09-23 phantom-row retire).
+One archived listing page ("2016 and Prior ISCR Hearing Decisions - 2") is inaccessible.
 
 ## Next
-1. Find the 09-22 DOHA capture and report, back up state/provenance, then run
-   `python custodian.py doha-provenance --library <root> --capture <file>...
-   --human-hashes <PRODUCTION_AUDIT.json> --summary`. Confirm matched = 10,658 and
-   legacy_download_bytes_identical = 317 before trusting the output; without
-   --human-hashes the rebuilt ledger downgrades the 317 byte-verified rows.
-2. Retry the unresolved sources from the incomplete 2026-09-24 monthly scan when access
+1. Acquire the ~21,900 DOHA decisions not held, in the two groups. No bulk downloader
+   exists and DOHA's CDN refuses the crawler, so this needs an agreed plan (browser
+   method, throttle, batching, quarantine layout, Archivist bulk intake) before any
+   download. Recent hearings (2024-2026) and 2017+ Appeal Board decisions first.
+2. Before any rebuilt DOHA ledger replaces the published one, restore byte verification
+   (317 on 09-22): find the hash input the 09-22 run used; byte_verification_inputs in
+   the report shows what is missing.
+3. Retry the unresolved sources from the incomplete 2026-09-24 monthly scan when access
    is available; no further full sweep outside the authorized window.
-3. Re-check the WHS DTM and DoDM listings for DTM 24-004 and lifecycle-review its record.
-4. Rebuild the DOHA provenance ledger when the inaccessible listing page returns.
-5. Save future DOHA browser captures to a fixed, recorded path; the 09-22 one was not.
+4. Re-check the WHS DTM and DoDM listings for DTM 24-004 and lifecycle-review its record.
+5. Rebuild the DOHA provenance ledger when the inaccessible listing page returns.
+6. Save future DOHA browser captures under state/captures/ with the date in the name.
 
 ## Open Questions
 - gsa.gov (the SF forms library, linked from DCSA's FOCI page) is not in the source
@@ -53,6 +61,13 @@ Hearing Decisions - 2") is inaccessible with no recovery date.
 - The inaccessible DOHA listing page has no recovery date.
 
 ## Log
+2026-09-25 Claude — First real reverse-check run; owner set DOHA scope to all ISCR
+hearing and Appeal Board decisions, kept as two groups. The summary now groups by the
+registry source a listing sits under, reports each listing's not-held count instead of
+a capture-gap flag (the gaps are holdings, not the capture), and labels variants by what
+differs: h1/h2 or a1/a2 are separate rulings (remand, second appeal) and stay missing;
+only a suffix difference may be one file twice. Added byte_verification_inputs after the
+run silently produced 0 byte-verified rows.
 2026-09-25 Claude — Reconciled two local stashes with main. Today's uncommitted work
 (Codex scan, Claude FCL/NARA intake and Archivist publication, doctor contract fix) is merged
 here with the doha-provenance changes. A 2026-09-03 stashed HANDOFF (end-to-end pipeline
@@ -110,6 +125,3 @@ required-field check. That session's FCL intake (12 in-scope documents) still ne
 library doctor and a handbook-edition check before acquisition.
 2026-09-16 Codex — Fixed local-calendar period selection; boundary regression and
 all 72 Librarian tests pass. No acquisition or publication run.
-2026-09-15 Codex — Closed filename-based period suppression; added retained,
-hash-bound issue-period review and source-request handoff instructions. No live
-issue confirmed, source downloaded or library publication performed.

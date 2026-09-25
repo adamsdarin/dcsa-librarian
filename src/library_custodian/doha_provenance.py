@@ -37,9 +37,9 @@ FILE_LINK = re.compile(r"^(?P<page>https://[^?#]*/)FileId/(?P<file_id>\d+)/$")
 LABEL = re.compile(r"^(?P<year>\d{2})[-.](?P<number>\d{4,6})(?P<suffix>-[A-Za-z0-9]+)?\.(?P<level>[ha]\d)\.?(?P<extension>pdf|html?|wpd|doc)?$", re.I)
 STEM = re.compile(r"^(?P<year>\d{2})-(?P<number>\d{4,6})(?P<suffix>-[A-Za-z0-9]+)?\.(?P<level>[ha]\d)", re.I)
 AGGREGATE_LISTING = re.compile(r"\band\s+prior\b", re.I)
-# A listing whose decisions are mostly missing points at an incomplete capture or
-# import of that page, not at scattered rulings the library never had.
-CAPTURE_GAP_SHARE = 0.5
+# DOHA publishes two collections; the library keeps them as two groups. A listing
+# page belongs to the group of the registry source whose path it sits under.
+GROUPS = {"doha-iscr-hearings": "ISCR Hearing Decisions", "doha-appeals": "DOHA Appeal Board Decisions"}
 
 
 def case_key(value: str, pattern: re.Pattern[str] = STEM) -> str | None:
@@ -58,29 +58,48 @@ def case_base(key: str) -> str:
     return "-".join(stem.split("-")[:2]) + "." + level[0]
 
 
+def variant_difference(missing_key: str, held_key: str) -> str:
+    """How a held key of the same case differs from a missing one.
+
+    A different decision number (h1 vs h2, a1 vs a2) is DOHA numbering a separate
+    ruling -- a decision after remand, a second appeal -- so it is a missing ruling,
+    not a naming mismatch. Only a suffix difference (-SD) plausibly names one file twice.
+    """
+    (missing_stem, missing_level), (held_stem, held_level) = missing_key.split(".", 1), held_key.split(".", 1)
+    suffix = missing_stem.split("-")[2:] != held_stem.split("-")[2:]
+    number = missing_level != held_level
+    return "suffix_and_decision_number" if suffix and number else "suffix" if suffix else "decision_number"
+
+
 def case_year(key: str) -> str:
     """The year DOHA numbered the case in -- not the year the decision issued."""
     year = int(key[:2])
     return str(1900 + year if year >= 50 else 2000 + year)
 
 
-def _allowed_pages(registry: dict[str, Any]) -> list[tuple[list[str], str]]:
+def _allowed_pages(registry: dict[str, Any]) -> list[tuple[list[str], str, str]]:
     allowed = []
     for source in registry.get("sources", []):
         if not source.get("enabled", True):
             continue
         prefix = source.get("crawl_path_prefix")
         if prefix and source.get("allowed_domains"):
-            allowed.append((source["allowed_domains"], str(prefix)))
+            allowed.append((source["allowed_domains"], str(prefix), str(source.get("id", ""))))
     return allowed
 
 
-def _page_allowed(url: str, allowed: list[tuple[list[str], str]]) -> bool:
+def _page_source(url: str, allowed: list[tuple[list[str], str, str]]) -> str | None:
     parts = urllib.parse.urlsplit(url)
     if parts.scheme != "https":
-        return False
-    return any(domain_allowed(url, domains) and parts.path.casefold().startswith(prefix.casefold())
-               for domains, prefix in allowed)
+        return None
+    for domains, prefix, source_id in allowed:
+        if domain_allowed(url, domains) and parts.path.casefold().startswith(prefix.casefold()):
+            return source_id
+    return None
+
+
+def _page_allowed(url: str, allowed: list[tuple[list[str], str, str]]) -> bool:
+    return _page_source(url, allowed) is not None
 
 
 def read_captures(paths: Iterable[Path]) -> list[dict[str, Any]]:
@@ -100,12 +119,17 @@ def read_captures(paths: Iterable[Path]) -> list[dict[str, Any]]:
     return list(pages.values())
 
 
-def _legacy_downloads(library_root: Path, human_hashes: dict[str, str]) -> dict[str, tuple[str, str]]:
-    """Case key -> (URL, sha256) for files a recorded crawl actually downloaded."""
+def _legacy_downloads(library_root: Path, human_hashes: dict[str, str]
+                      ) -> tuple[dict[str, tuple[str, str]], dict[str, Any]]:
+    """Case key -> (URL, sha256) for files a recorded crawl actually downloaded, and
+    which of the inputs byte verification needs were present."""
     base = library_root / LEGACY_IMPORT
     progress, inventory = base / "download_progress.json", base / "inventory.csv"
+    inputs: dict[str, Any] = {"download_progress_found": progress.is_file(), "inventory_found": inventory.is_file(),
+                              "human_hashes_supplied": len(human_hashes), "recorded_downloads": 0,
+                              "inventory_rows_with_recorded_url": 0}
     if not progress.is_file() or not inventory.is_file() or not human_hashes:
-        return {}
+        return {}, inputs
     urls: dict[str, str] = {}
     for item in json.loads(progress.read_text(encoding="utf-8-sig")).get("browserManifest", []):
         key = case_key(str(item.get("label", "")), LABEL)
@@ -118,7 +142,8 @@ def _legacy_downloads(library_root: Path, human_hashes: dict[str, str]) -> dict[
             digest = str(row.get("sha256", "")).strip().lower()
             if key and key in urls and len(digest) == 64:
                 output[key] = (urls[key], digest)
-    return output
+    inputs.update(recorded_downloads=len(urls), inventory_rows_with_recorded_url=len(output))
+    return output, inputs
 
 
 def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: Path,
@@ -142,6 +167,8 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
             continue
         title = str(page.get("t", ""))
         captured = str(page.get("at", ""))
+        source_id = _page_source(page_url, allowed) or ""
+        group = GROUPS.get(source_id, source_id)
         for row in page["rows"]:
             if not isinstance(row, list) or len(row) < 2:
                 rejected_links += 1
@@ -155,14 +182,16 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
                 continue
             extension = (parsed.group("extension") or "pdf").lower()
             listed.setdefault(key, []).append(
-                {"url": url, "label": label, "format": extension, "listing_title": title, "captured_utc": captured})
+                {"url": url, "label": label, "format": extension, "listing_title": title, "captured_utc": captured,
+                 "group": group})
             if extension != "pdf":
                 rejected_links += 1
                 continue
             by_key.setdefault(key, []).append(
                 {"url": url, "listing_page": page_url, "listing_title": title, "captured_utc": captured,
                  "aggregate": bool(AGGREGATE_LISTING.search(title))})
-    legacy = _legacy_downloads(library_root, human_hashes or {})
+    legacy, byte_inputs = _legacy_downloads(library_root, human_hashes or {})
+    hashed_ids = 0
     rows: list[dict[str, Any]] = []
     unmatched: list[str] = []
     conflicts = 0
@@ -170,6 +199,7 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
     unkeyed = 0
     for _, record in _iter_jsonl(library_root / LIBRARY_MANIFEST):
         identity = str(record["document_id"])
+        hashed_ids += identity in (human_hashes or {})
         key = case_key(str(record.get("case_stem", "")))
         if key:
             held.add(key)
@@ -210,20 +240,29 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
         held_by_base.setdefault(case_base(key), []).append(key)
     missing = [
         {"case_key": key,
+         "group": " + ".join(sorted({item["group"] for item in items})),
          "decision_level": "appeal" if key.rsplit(".", 1)[1].startswith("a") else "hearing",
          "labels": sorted({item["label"] for item in items}),
          "formats": sorted({item["format"] for item in items}),
          "source_urls": sorted({item["url"] for item in items}),
          "listing_titles": sorted({item["listing_title"] for item in items}),
          "captured_utc": max(item["captured_utc"] for item in items),
-         # The same case held under another suffix or level number: a possible naming
-         # mismatch rather than a missing ruling, so review before acquiring.
-         "held_variants": sorted(held_by_base.get(case_base(key), []))}
+         # The same case held under another suffix or decision number. See
+         # variant_difference: only a suffix difference may be the same ruling.
+         "held_variants": [{"case_key": held_key, "differs_by": variant_difference(key, held_key)}
+                           for held_key in sorted(held_by_base.get(case_base(key), []))]}
         for key, items in sorted(listed.items()) if key not in held]
     listed_by_listing: dict[str, int] = {}
+    listing_groups: dict[str, str] = {}
+    listed_by_group: dict[str, int] = {}
     for items in listed.values():
         for title in {item["listing_title"] for item in items}:
             listed_by_listing[title] = listed_by_listing.get(title, 0) + 1
+        for item in items:
+            listing_groups[item["listing_title"]] = item["group"]
+        for group in {item["group"] for item in items}:
+            listed_by_group[group] = listed_by_group.get(group, 0) + 1
+    byte_inputs["human_hash_ids_in_manifest"] = hashed_ids
     report = {
         "schema_version": "1.0",
         "created_utc": utc_now(),
@@ -247,6 +286,11 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
         # decision it holds may be reported missing. Nonzero means review before acting.
         "library_records_unkeyed": unkeyed,
         "listed_by_listing": dict(sorted(listed_by_listing.items())),
+        "listing_groups": dict(sorted(listing_groups.items())),
+        "listed_by_group": dict(sorted(listed_by_group.items())),
+        # Why a byte-verified count is what it is: every input must be present and the
+        # supplied hashes must be keyed by the manifest's current document IDs.
+        "byte_verification_inputs": byte_inputs,
         "basis_counts": {basis: sum(row["source_url_basis"] == basis for row in rows)
                          for basis in ("legacy_download_bytes_identical", "official_listing_label")},
         "downloads_performed": False,
@@ -255,29 +299,41 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
     return rows, missing, report
 
 
-def summarize_missing(missing: list[dict[str, Any]], listed_by_listing: dict[str, int]) -> dict[str, Any]:
-    """Triage the listed-but-not-held decisions by case year, level and listing."""
-    by_year: dict[str, dict[str, int]] = {}
+def summarize_missing(missing: list[dict[str, Any]], report: dict[str, Any]) -> dict[str, Any]:
+    """Triage the listed-but-not-held decisions per group, by case year and listing."""
+    groups: dict[str, dict[str, Any]] = {}
+    for group, listed in report.get("listed_by_group", {}).items():
+        groups[group] = {"listed": listed, "not_held": 0, "by_case_year": {}, "by_listing": []}
     by_listing: dict[str, int] = {}
     for item in missing:
-        counts = by_year.setdefault(case_year(item["case_key"]), {"hearing": 0, "appeal": 0})
-        counts[item["decision_level"]] += 1
+        entry = groups.setdefault(item["group"], {"listed": 0, "not_held": 0, "by_case_year": {}, "by_listing": []})
+        entry["not_held"] += 1
+        year = case_year(item["case_key"])
+        entry["by_case_year"][year] = entry["by_case_year"].get(year, 0) + 1
         for title in item["listing_titles"]:
             by_listing[title] = by_listing.get(title, 0) + 1
-    listings = []
-    for title, count in by_listing.items():
-        listed = listed_by_listing.get(title, 0)
-        share = count / listed if listed else 1.0
-        listings.append({"listing_title": title, "missing": count, "listed": listed, "share": round(share, 3),
-                         "suspect_capture_gap": share >= CAPTURE_GAP_SHARE})
-    listings.sort(key=lambda row: (-row["share"], row["listing_title"]))
+    listed_by_listing = report.get("listed_by_listing", {})
+    listing_groups = report.get("listing_groups", {})
+    for title, listed in listed_by_listing.items():
+        count = by_listing.get(title, 0)
+        group = listing_groups.get(title, "")
+        groups.setdefault(group, {"listed": 0, "not_held": 0, "by_case_year": {}, "by_listing": []})
+        groups[group]["by_listing"].append({"listing_title": title, "not_held": count, "listed": listed,
+                                            "share_not_held": round(count / listed, 3) if listed else 0.0})
+    for entry in groups.values():
+        entry["by_case_year"] = dict(sorted(entry["by_case_year"].items()))
+        entry["by_listing"].sort(key=lambda row: (-row["share_not_held"], row["listing_title"]))
     variants = [item for item in missing if item.get("held_variants")]
     non_pdf = [item for item in missing if "pdf" not in item["formats"]]
+    kinds: dict[str, int] = {}
+    for item in variants:
+        for variant in item["held_variants"]:
+            kinds[variant["differs_by"]] = kinds.get(variant["differs_by"], 0) + 1
     return {
-        "missing": len(missing),
-        "by_case_year": dict(sorted(by_year.items())),
-        "by_listing": listings,
+        "not_held": len(missing),
+        "groups": dict(sorted(groups.items())),
         "held_variant_count": len(variants),
+        "held_variant_kinds": dict(sorted(kinds.items())),
         "held_variant_sample": [{"case_key": item["case_key"], "held_variants": item["held_variants"]}
                                 for item in variants[:25]],
         "non_pdf_only_count": len(non_pdf),
@@ -285,21 +341,29 @@ def summarize_missing(missing: list[dict[str, Any]], listed_by_listing: dict[str
     }
 
 
-def format_summary(summary: dict[str, Any], unkeyed: int) -> str:
+def format_summary(summary: dict[str, Any], report: dict[str, Any]) -> str:
     """Plain-text rendering of summarize_missing for a terminal."""
-    lines = [f"Listed by DOHA, not in library: {summary['missing']}"]
-    if unkeyed:
-        lines.append(f"WARNING: {unkeyed} library records have unparseable case stems; "
+    lines = [f"Listed by DOHA, not in library: {summary['not_held']}"]
+    if report.get("library_records_unkeyed"):
+        lines.append(f"WARNING: {report['library_records_unkeyed']} library records have unparseable case stems; "
                      "some of these may be held under another name.")
-    lines += ["", "Case year   Hearing   Appeal   Total"]
-    for year, counts in summary["by_case_year"].items():
-        lines.append(f"{year:<11}{counts['hearing']:>8}{counts['appeal']:>9}{counts['hearing'] + counts['appeal']:>8}")
-    lines += ["", "Listing (share of its decisions missing)"]
-    for row in summary["by_listing"]:
-        flag = "  <- suspect capture/import gap" if row["suspect_capture_gap"] else ""
-        lines.append(f"  {row['missing']:>5} / {row['listed']:<5} {row['share']:>6.1%}  {row['listing_title']}{flag}")
-    lines += ["", f"Held under another suffix or level number (review before acquiring): {summary['held_variant_count']}"]
-    lines += [f"  {row['case_key']}  held as {', '.join(row['held_variants'])}" for row in summary["held_variant_sample"]]
+    inputs = report.get("byte_verification_inputs", {})
+    if inputs.get("human_hashes_supplied") and not report.get("basis_counts", {}).get("legacy_download_bytes_identical"):
+        lines.append("WARNING: hashes were supplied but no decision is byte-verified; this ledger would downgrade "
+                     "published provenance. Inputs: " + ", ".join(f"{k}={v}" for k, v in inputs.items()))
+    for group, entry in summary["groups"].items():
+        lines += ["", f"== {group}: {entry['not_held']} of {entry['listed']} listed not held", "",
+                  "  Case year   Not held"]
+        lines += [f"  {year:<11}{count:>9}" for year, count in entry["by_case_year"].items()]
+        lines += ["", "  Listing (not held / listed)"]
+        lines += [f"  {row['not_held']:>6} / {row['listed']:<6}{row['share_not_held']:>7.1%}  {row['listing_title']}"
+                  for row in entry["by_listing"]]
+    kinds = ", ".join(f"{kind}: {count}" for kind, count in summary["held_variant_kinds"].items()) or "none"
+    lines += ["", f"Same case held under another number or suffix: {summary['held_variant_count']} ({kinds})",
+              "  A different decision number (h1/h2, a1/a2) is a separate ruling and is still missing;",
+              "  only a suffix difference may be the same file under another name."]
+    lines += [f"  {row['case_key']}  held: " + ", ".join(f"{v['case_key']} ({v['differs_by']})" for v in row["held_variants"])
+              for row in summary["held_variant_sample"]]
     lines += ["", f"Posted only in a non-PDF format: {summary['non_pdf_only_count']}"]
     lines += [f"  {key}" for key in summary["non_pdf_only_sample"]]
     return "\n".join(lines)

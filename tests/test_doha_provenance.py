@@ -18,9 +18,13 @@ from library_custodian.doha_provenance import (  # noqa: E402
 DOHA = "https://doha.ogc.osd.mil/Industrial-Security-Program/Industrial-Security-Clearance-Decisions"
 HEARINGS = f"{DOHA}/ISCR-Hearing-Decisions/"
 ARCHIVE = f"{DOHA}/ISCR-Hearing-Decisions/Archived-ISCR-Hearing-Decisions/"
+APPEALS = f"{DOHA}/DOHA-Appeal-Board/"
 REGISTRY = {"sources": [{"id": "doha-iscr-hearings", "enabled": True, "url": HEARINGS,
                          "allowed_domains": ["doha.ogc.osd.mil"],
-                         "crawl_path_prefix": "/Industrial-Security-Program/Industrial-Security-Clearance-Decisions/ISCR-Hearing-Decisions/"}]}
+                         "crawl_path_prefix": "/Industrial-Security-Program/Industrial-Security-Clearance-Decisions/ISCR-Hearing-Decisions/"},
+                        {"id": "doha-appeals", "enabled": True, "url": APPEALS,
+                         "allowed_domains": ["doha.ogc.osd.mil"],
+                         "crawl_path_prefix": "/Industrial-Security-Program/Industrial-Security-Clearance-Decisions/DOHA-Appeal-Board/"}]}
 
 
 class DohaProvenanceTests(unittest.TestCase):
@@ -186,51 +190,66 @@ class DohaProvenanceTests(unittest.TestCase):
         self.assertEqual(case_year("98-00123.h1"), "1998")
         self.assertEqual(case_year("04-08547-sd.h1"), "2004")
 
-    def test_summary_splits_missing_by_case_year_and_level(self) -> None:
+    def test_summary_groups_by_collection_and_case_year(self) -> None:
         self.decisions("19-02096.h1_denied_f")
-        capture = self.capture(self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
-                                         [["19-02096.h1.pdf", "1", 1], ["19-02100.h1.pdf", "2", 1],
-                                          ["18-01000.a1.pdf", "3", 1], ["19-02101.a1.pdf", "4", 1]]))
+        capture = self.capture(
+            self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                      [["19-02096.h1.pdf", "1", 1], ["19-02100.h1.pdf", "2", 1]]),
+            self.page(f"{APPEALS}2019-DOHA-Appeal-Board/", "2019 DOHA Appeal Board",
+                      [["18-01000.a1.pdf", "3", 1], ["19-02101.a1.pdf", "4", 1]]))
         missing, report = self.missing(capture)
-        summary = summarize_missing(missing, report["listed_by_listing"])
-        self.assertEqual(summary["missing"], 3)
-        self.assertEqual(summary["by_case_year"], {"2018": {"hearing": 0, "appeal": 1},
-                                                   "2019": {"hearing": 1, "appeal": 1}})
+        self.assertEqual({item["case_key"]: item["group"] for item in missing},
+                         {"18-01000.a1": "DOHA Appeal Board Decisions", "19-02100.h1": "ISCR Hearing Decisions",
+                          "19-02101.a1": "DOHA Appeal Board Decisions"})
+        groups = summarize_missing(missing, report)["groups"]
+        self.assertEqual((groups["ISCR Hearing Decisions"]["not_held"], groups["ISCR Hearing Decisions"]["listed"]), (1, 2))
+        self.assertEqual(groups["DOHA Appeal Board Decisions"]["by_case_year"], {"2018": 1, "2019": 1})
 
-    def test_a_listing_mostly_missing_is_flagged_as_a_capture_gap(self) -> None:
-        self.decisions("19-02096.h1_x", "19-02097.h1_x", "19-02098.h1_x")
+    def test_listings_report_what_is_not_held_including_fully_held_pages(self) -> None:
+        self.decisions("19-02096.h1_x", "19-02097.h1_x", "19-02098.h1_x", "20-00001.h1_x")
         capture = self.capture(
             self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
                       [["19-02096.h1.pdf", "1", 1], ["19-02097.h1.pdf", "2", 1],
                        ["19-02098.h1.pdf", "3", 1], ["19-02099.h1.pdf", "4", 1]]),
             self.page(f"{HEARINGS}2020-ISCR-Hearing-Decisions/", "2020 ISCR Hearing Decisions",
-                      [["20-00001.h1.pdf", "5", 1], ["20-00002.h1.pdf", "6", 1]]))
+                      [["20-00001.h1.pdf", "5", 1]]))
         missing, report = self.missing(capture)
-        rows = {row["listing_title"]: row for row in summarize_missing(missing, report["listed_by_listing"])["by_listing"]}
-        self.assertEqual((rows["2020 ISCR Hearing Decisions"]["missing"], rows["2020 ISCR Hearing Decisions"]["listed"]), (2, 2))
-        self.assertTrue(rows["2020 ISCR Hearing Decisions"]["suspect_capture_gap"])
-        self.assertEqual(rows["2019 ISCR Hearing Decisions"]["share"], 0.25)
-        self.assertFalse(rows["2019 ISCR Hearing Decisions"]["suspect_capture_gap"])
+        rows = {row["listing_title"]: row
+                for row in summarize_missing(missing, report)["groups"]["ISCR Hearing Decisions"]["by_listing"]}
+        self.assertEqual(rows["2019 ISCR Hearing Decisions"]["share_not_held"], 0.25)
+        self.assertEqual(rows["2020 ISCR Hearing Decisions"]["not_held"], 0)
+        self.assertNotIn("suspect_capture_gap", rows["2019 ISCR Hearing Decisions"])
 
-    def test_a_case_held_under_another_suffix_or_level_is_surfaced(self) -> None:
+    def test_variants_say_whether_a_suffix_or_the_decision_number_differs(self) -> None:
         self.decisions("19-00803-SD.h1_x", "19-00900.h1_x", "19-00960.a1_x")
         capture = self.capture(self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
                                          [["19-00803.h1.pdf", "1", 1], ["19-00900.h2.pdf", "2", 1],
                                           ["19-00950.h1.htm", "3", 1], ["19-00960.h1.pdf", "4", 1]]))
         missing, report = self.missing(capture)
         by_key = {item["case_key"]: item for item in missing}
-        self.assertEqual(by_key["19-00803.h1"]["held_variants"], ["19-00803-sd.h1"])
-        self.assertEqual(by_key["19-00900.h2"]["held_variants"], ["19-00900.h1"])
-        self.assertEqual(by_key["19-00950.h1"]["held_variants"], [])
+        self.assertEqual(by_key["19-00803.h1"]["held_variants"], [{"case_key": "19-00803-sd.h1", "differs_by": "suffix"}])
+        # A remand decision (h2) is a separate ruling from h1, not a naming mismatch.
+        self.assertEqual(by_key["19-00900.h2"]["held_variants"], [{"case_key": "19-00900.h1", "differs_by": "decision_number"}])
         # Holding the appeal does not stand in for the hearing decision.
         self.assertEqual(by_key["19-00960.h1"]["held_variants"], [])
-        summary = summarize_missing(missing, report["listed_by_listing"])
-        self.assertEqual(summary["held_variant_count"], 2)
+        summary = summarize_missing(missing, report)
+        self.assertEqual(summary["held_variant_kinds"], {"decision_number": 1, "suffix": 1})
         self.assertEqual(summary["non_pdf_only_sample"], ["19-00950.h1"])
-        text = format_summary(summary, unkeyed=3)
+        text = format_summary(summary, dict(report, library_records_unkeyed=3))
         self.assertIn("WARNING: 3 library records", text)
-        self.assertIn("19-00803.h1  held as 19-00803-sd.h1", text)
+        self.assertIn("19-00803.h1  held: 19-00803-sd.h1 (suffix)", text)
+        self.assertIn("== ISCR Hearing Decisions:", text)
 
+    def test_byte_verification_inputs_explain_a_zero_count(self) -> None:
+        self.decisions("19-02096.a1_denied_f")
+        capture = self.capture(self.page(f"{APPEALS}2019-DOHA-Appeal-Board/", "2019 DOHA Appeal Board",
+                                         [["19-02096.a1.pdf", "1", 1]]))
+        _, missing, report = build_ledger(self.library, [capture], self.registry, {"some-other-id": "a" * 64})
+        inputs = report["byte_verification_inputs"]
+        self.assertFalse(inputs["download_progress_found"])
+        self.assertEqual((inputs["human_hashes_supplied"], inputs["human_hash_ids_in_manifest"]), (1, 0))
+        text = format_summary(summarize_missing(missing, report), report)
+        self.assertIn("WARNING: hashes were supplied but no decision is byte-verified", text)
 
 if __name__ == "__main__":
     unittest.main()
