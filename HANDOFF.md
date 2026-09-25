@@ -65,6 +65,11 @@ One archived listing page ("2016 and Prior ISCR Hearing Decisions - 2") is inacc
 - The inaccessible DOHA listing page has no recovery date.
 
 ## Log
+2026-09-25 Claude — First batch on the owner's machine is running (run
+quarantine/doha-acquire/20260925T151200Z, 1,041 PDFs by 16:40Z). It looked idle because
+it printed nothing until the end, and a closed Chrome window was counted as five DOHA
+refusals. Added one progress line per decision (stderr; JSON report stays on stdout)
+and an immediate, resumable stop when the browser is closed.
 2026-09-25 Claude — doha-acquire pilot on the owner's machine: 20 of 20 acquired through
 launched Chrome, none refused, so the CDN admits it. Regrouped by decision level (h/a)
 instead of listing page: DOHA cross-posts ~1,860 rulings on both a hearing and an
@@ -130,6 +135,3 @@ can never produce one. The basis is recorded per row because a listing label is
 weaker evidence than matching bytes, and a decision posted on two listings keeps
 both URLs and withholds the year, which the Archivist reads as a date bound. No
 document was downloaded and the library was not written.
-2026-09-18 Claude — Added byte-verified provenance to discovery. A name match alone is
-never provenance; bytes_differ rows go to the Evidence Reviewer. This is how the
-Rebuilder's 749 retained-bytes-only records can gain official URLs over time.
