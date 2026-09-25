@@ -371,3 +371,9 @@ library doctor and a handbook-edition check before acquisition.
 2026-09-18 Claude — Added byte-verified provenance to discovery. A name match alone is
 never provenance; bytes_differ rows go to the Evidence Reviewer. This is how the
 Rebuilder's 749 retained-bytes-only records can gain official URLs over time.
+2026-09-22 Claude — Added doha-provenance. DOHA addresses decisions by opaque
+FileId, so a URL can only come from the listing that names the file; a case number
+can never produce one. The basis is recorded per row because a listing label is
+weaker evidence than matching bytes, and a decision posted on two listings keeps
+both URLs and withholds the year, which the Archivist reads as a date bound. No
+document was downloaded and the library was not written.

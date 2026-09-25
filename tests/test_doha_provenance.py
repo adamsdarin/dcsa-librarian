@@ -266,6 +266,15 @@ class DohaProvenanceTests(unittest.TestCase):
         self.assertEqual(set(summary["groups"]), {"ISCR Hearing Decisions", "DOHA Appeal Board Decisions"})
         self.assertEqual(summary["groups"]["ISCR Hearing Decisions"]["listed"], 1)
 
+    def test_each_url_keeps_its_format(self) -> None:
+        self.decisions()
+        capture = self.capture(self.page(f"{APPEALS}2016-and-Prior-DOHA-Appeal-Board/", "2016 and Prior DOHA Appeal Board",
+                                         [["12-05512.a1.htm", "100", 1], ["12-05512.a1.pdf", "200", 1]]))
+        missing, _ = self.missing(capture)
+        self.assertEqual(missing[0]["urls_by_format"],
+                         {"htm": [f"{APPEALS}2016-and-Prior-DOHA-Appeal-Board/FileId/100/"],
+                          "pdf": [f"{APPEALS}2016-and-Prior-DOHA-Appeal-Board/FileId/200/"]})
+
 
 if __name__ == "__main__":
     unittest.main()

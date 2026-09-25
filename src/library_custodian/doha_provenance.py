@@ -256,6 +256,10 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
          "labels": sorted({item["label"] for item in items}),
          "formats": sorted({item["format"] for item in items}),
          "source_urls": sorted({item["url"] for item in items}),
+         # Older decisions are often posted twice, as PDF and as HTML, each under its own
+         # FileId. Keep which URL is which, so a fetch can ask for the PDF.
+         "urls_by_format": {fmt: sorted({item["url"] for item in items if item["format"] == fmt})
+                            for fmt in sorted({item["format"] for item in items})},
          "listing_titles": sorted({item["listing_title"] for item in items}),
          "captured_utc": max(item["captured_utc"] for item in items),
          # The same case held under another suffix or decision number. See
