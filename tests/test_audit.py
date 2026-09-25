@@ -20,7 +20,7 @@ class AuditTests(unittest.TestCase):
         robot.write_text("robot text", encoding="utf-8")
         if not missing_human:
             human.write_bytes(b"%PDF-test")
-        for name in ("policy.json", "catalog.json", "aliases.json", "relationships.jsonl", "retrieval.json", "state.json", "router.json", "taxonomy.json", "coverage.json"):
+        for name in ("policy.json", "catalog.json", "aliases.json", "relationships.jsonl", "retrieval.json", "state.json", "router.json"):
             (root / name).write_text("{}\n", encoding="utf-8")
         database = root / "LOCAL_INDEXES" / "general.sqlite"
         with closing(sqlite3.connect(database)) as connection:
@@ -45,9 +45,7 @@ class AuditTests(unittest.TestCase):
             "retrieval": "retrieval.json",
             "library_state": "state.json",
             "doha_router": "router.json",
-            "doha_topic_taxonomy": "taxonomy.json",
-            "doha_topic_coverage": "coverage.json",
-            "local_indexes": ["LOCAL_INDEXES/general.sqlite"],
+            "doha_local_indexes": ["LOCAL_INDEXES/general.sqlite"],
         }
         (root / "START_HERE_FOR_ROBOTS.json").write_text(json.dumps(entry), encoding="utf-8")
         return root
@@ -57,6 +55,21 @@ class AuditTests(unittest.TestCase):
             report = audit_library(self.make_library(Path(temp)))
             self.assertTrue(report.ready)
             self.assertEqual(report.counters["manifest_records"], 1)
+
+    def test_current_entry_shape_without_doha_topic_keys_is_ready(self) -> None:
+        # The published entry point dropped doha_topic_taxonomy/doha_topic_coverage;
+        # their absence is not an integrity failure.
+        with tempfile.TemporaryDirectory() as temp:
+            report = audit_library(self.make_library(Path(temp)))
+            self.assertNotIn("missing_entry_reference", report.finding_totals)
+
+    def test_missing_doha_local_index_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = self.make_library(Path(temp))
+            (root / "LOCAL_INDEXES" / "general.sqlite").unlink()
+            report = audit_library(root)
+            self.assertFalse(report.ready)
+            self.assertEqual(report.finding_totals["missing_entry_target"], 1)
 
     def test_missing_human_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

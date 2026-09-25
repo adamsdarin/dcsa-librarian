@@ -18,9 +18,12 @@ ENTRY_PATH_KEYS = (
     "retrieval",
     "library_state",
     "doha_router",
-    "doha_topic_taxonomy",
-    "doha_topic_coverage",
 )
+# The Archivist's published entry point (release.py) has not carried
+# doha_topic_taxonomy/doha_topic_coverage since at least 2026-09-09; DOHA
+# retrieval is reached through doha_router and doha_local_indexes instead.
+# "local_indexes" is kept for older entry files.
+ENTRY_INDEX_LIST_KEYS = ("local_indexes", "doha_local_indexes")
 
 
 @dataclass
@@ -109,9 +112,10 @@ def audit_library(library_root: Path, strict_hashes: bool = False) -> AuditRepor
             report.add("error", "missing_entry_reference", f"Entry point has no string value for {key}", entry_path)
             continue
         required_paths.append(_library_path(root, value))
-    for value in entry.get("local_indexes", []):
-        if isinstance(value, str):
-            required_paths.append(_library_path(root, value))
+    for list_key in ENTRY_INDEX_LIST_KEYS:
+        for value in entry.get(list_key, []):
+            if isinstance(value, str):
+                required_paths.append(_library_path(root, value))
 
     for path in required_paths:
         if not path.is_file():
