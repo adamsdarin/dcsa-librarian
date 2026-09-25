@@ -368,3 +368,6 @@ and reported, never re-offered or downloaded). Both sides had built intake packa
 kept Codex's writer and adopted the cloud builder's stable url+hash submission_id and
 required-field check. That session's FCL intake (12 in-scope documents) still needs a
 library doctor and a handbook-edition check before acquisition.
+2026-09-18 Claude — Added byte-verified provenance to discovery. A name match alone is
+never provenance; bytes_differ rows go to the Evidence Reviewer. This is how the
+Rebuilder's 749 retained-bytes-only records can gain official URLs over time.

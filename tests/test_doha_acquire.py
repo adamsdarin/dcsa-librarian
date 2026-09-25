@@ -52,8 +52,9 @@ class DohaAcquireTests(unittest.TestCase):
         self.robots = parse_robots("User-agent: *\nAllow: /\n")
 
     def run_acquire(self, rows, browser, **kwargs):
+        self.lines = []
         return acquire(rows, REGISTRY, self.run_dir, browser, kwargs.pop("robots", self.robots),
-                       delay_seconds=0, sleep=lambda _: None, **kwargs)
+                       delay_seconds=0, sleep=lambda _: None, progress=self.lines.append, **kwargs)
 
     def test_newest_listings_first_and_hearings_before_appeals(self) -> None:
         rows = [row("04-00001.h1", f"{HEARINGS}Archived/2016-and-Prior-1/FileId/1/", "2016 and Prior ISCR Hearing Decisions - 4"),
@@ -133,6 +134,29 @@ class DohaAcquireTests(unittest.TestCase):
                                      "group": "DOHA Appeal Board Decisions + ISCR Hearing Decisions"}) + "\n", encoding="utf-8")
         with self.assertRaises(SystemExit):
             load_not_held(mixed)
+
+    def test_progress_is_reported_for_every_decision(self) -> None:
+        rows = [row(f"24-{n:05d}.h1", f"{HEARINGS}2025-ISCR-Hearing-Decisions/FileId/{n}/", "2025 ISCR Hearing Decisions")
+                for n in range(1, 4)]
+        self.run_acquire(rows, FakeBrowser())
+        self.assertIn("3 planned, 0 already in this run", self.lines[0])
+        self.assertEqual(sum("acquired" in line for line in self.lines[1:]), 3)
+        self.assertTrue(self.lines[-1].startswith("[3/3] "))
+
+    def test_a_closed_browser_stops_at_once_and_is_not_a_refusal(self) -> None:
+        class ClosedBrowser(FakeBrowser):
+            def fetch(self, url):
+                self.requested.append(url)
+                raise RuntimeError("Page.evaluate: Target page, context or browser has been closed")
+        rows = [row(f"24-{n:05d}.h1", f"{HEARINGS}2025-ISCR-Hearing-Decisions/FileId/{n}/", "2025 ISCR Hearing Decisions")
+                for n in range(1, 6)]
+        browser = ClosedBrowser()
+        report = self.run_acquire(rows, browser)
+        self.assertEqual(len(browser.requested), 1)
+        self.assertEqual(report["counts"]["refused"], 0)
+        self.assertIn("Chrome window was closed", report["stopped"])
+        # The interrupted decision is retried on resume, not treated as acquired.
+        self.assertEqual(self.run_acquire(rows, FakeBrowser())["counts"]["acquired"], 5)
 
 
 if __name__ == "__main__":

@@ -22,6 +22,7 @@ import base64
 import hashlib
 import json
 import re
+import sys
 import time
 import urllib.parse
 import urllib.robotparser
@@ -94,8 +95,14 @@ def _looks_like(body: bytes, fmt: str) -> bool:
 def acquire(not_held: Iterable[dict[str, Any]], registry: dict[str, Any], run_dir: Path, transport: Transport,
             robots: urllib.robotparser.RobotFileParser, groups: set[str] | None = None, limit: int | None = None,
             delay_seconds: float = 4.0, max_bytes: int = 50_000_000,
-            sleep: Callable[[float], None] = time.sleep) -> dict[str, Any]:
-    """Fetch each planned decision into run_dir and write its intake package."""
+            sleep: Callable[[float], None] = time.sleep,
+            progress: Callable[[str], None] | None = None) -> dict[str, Any]:
+    """Fetch each planned decision into run_dir and write its intake package.
+
+    Progress goes to `progress` (stderr by default), one line per decision, so a
+    run that takes hours never looks idle; the JSON report stays on stdout.
+    """
+    say = progress or (lambda line: print(line, file=sys.stderr, flush=True))
     allowed = _allowed_pages(registry)
     sources = {source["id"]: source for source in registry.get("sources", [])}
     user_agent = str(registry.get("defaults", {}).get("user_agent", "*"))
@@ -105,6 +112,9 @@ def acquire(not_held: Iterable[dict[str, Any]], registry: dict[str, Any], run_di
     consecutive = 0
     stopped = None
     todo = plan(not_held, groups, limit)
+    have = sum(row["case_key"] in done for row in todo)
+    say(f"{len(todo)} planned, {have} already in this run; fetching {len(todo) - have}, one every "
+        f"{delay_seconds:g} s. Keep the Chrome window open; Ctrl+C stops, re-running resumes.")
     with attempts_path.open("a", encoding="utf-8", newline="\n") as log:
         def record(row: dict[str, Any]) -> None:
             log.write(json.dumps(row, separators=(",", ":")) + "\n")
@@ -143,11 +153,18 @@ def acquire(not_held: Iterable[dict[str, Any]], registry: dict[str, Any], run_di
                     # A challenge or error page served with 200 must not become a "decision".
                     problem = f"not_a_{fmt}: {response.headers.get('content-type', '')}"
             except Exception as exc:  # the browser can fail in many ways; all are refusals here
+                if "has been closed" in str(exc) or type(exc).__name__ == "TargetClosedError":
+                    # Not DOHA refusing: the window went away. Nothing more can be fetched.
+                    record(dict(attempt, status="interrupted", reason="browser_closed"))
+                    stopped = "Chrome window was closed; re-run the same command to resume"
+                    say(f"[{index + 1}/{len(todo)}] {stopped}")
+                    break
                 response, final, problem = None, url, f"{type(exc).__name__}: {exc}"
             if problem:
                 counts["refused"] += 1
                 consecutive += 1
                 record(dict(attempt, status="refused", reason=problem))
+                say(f"[{index + 1}/{len(todo)}] {key} refused: {problem}")
                 if consecutive >= MAX_CONSECUTIVE_FAILURES:
                     stopped = f"{consecutive} refusals in a row; last: {problem}"
                     break
@@ -183,6 +200,7 @@ def acquire(not_held: Iterable[dict[str, Any]], registry: dict[str, Any], run_di
                 "the case, not the decision date).")
             package_path.write_text(json.dumps(package, indent=2) + "\n", encoding="utf-8")
             counts["acquired"] += 1
+            say(f"[{index + 1}/{len(todo)}] {key} acquired ({row.get('group')}, {len(response.body):,} bytes)")
             record(dict(attempt, status="acquired", resolved_url=final, sha256=digest, bytes=len(response.body),
                         path=str(destination.resolve()), submission_id=submission))
     report = {"schema_version": "1.0", "finished_utc": utc_now(), "run_dir": str(run_dir.resolve()),
