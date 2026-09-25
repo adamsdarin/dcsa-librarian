@@ -51,8 +51,17 @@ Hearing Decisions - 2") is inaccessible with no recovery date.
   registry, so SF 328 was verified against DCSA's official copy only. Add gsa.gov to
   official-reference-verification? Owner decision.
 - The inaccessible DOHA listing page has no recovery date.
+- The library's "High Level PCL Process" slide (pptx + txt) uses pre-2019 terms (NBIB,
+  DoD CAF, VROC, e-QIP, "interim") and is not marked superseded. Flag it for Archivist
+  lifecycle review? Owner decision.
 
 ## Log
+2026-09-25 Claude — Owner asked for a ~5-minute cartoon video walking a new applicant
+through the personnel clearance process, based on "High Level PCL Process". That map
+predates 2019, so the owner chose current terms. Claims were checked against 32 CFR 117
+and 155 (eCFR, current to 09-23) and the Jan 2025 and Jun 2026 VOIs. FSO-side system
+names and processing times were left out because both are changing (initiation moves
+from NBIS to DISS on 09-30). The video lives outside the repo; nothing was added to the library.
 2026-09-25 Claude — Reconciled two local stashes with main. Today's uncommitted work
 (Codex scan, Claude FCL/NARA intake and Archivist publication, doctor contract fix) is merged
 here with the doha-provenance changes. A 2026-09-03 stashed HANDOFF (end-to-end pipeline
