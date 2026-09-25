@@ -43,7 +43,7 @@ function run(cmd, args) {
   const out = path.resolve(arg('--out', path.join(BUILD, 'video.mp4')));
   const silent = out.replace(/\.mp4$/, '.video.mp4');
   const ff = spawn(FFMPEG, ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-',
-    '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-pix_fmt', 'yuv420p', '-r', String(fps), silent], { stdio: ['pipe', 'inherit', 'inherit'] });
+    '-c:v', 'libx264', '-preset', 'slow', '-tune', 'animation', '-crf', '21', '-pix_fmt', 'yuv420p', '-r', String(fps), silent], { stdio: ['pipe', 'inherit', 'inherit'] });
   const done = new Promise((res, rej) => ff.on('close', c => (c === 0 ? res() : rej(new Error('ffmpeg ' + c)))));
   let n = 0; const t0 = Date.now();
   const total = ranges.reduce((a, [s, e]) => a + Math.round((e - s) * fps), 0);

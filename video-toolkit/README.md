@@ -49,3 +49,5 @@ export FFMPEG=$(./venv/bin/python -c "import imageio_ffmpeg;print(imageio_ffmpeg
   The owner flagged four misreads by ear before these rules existed; the audit now catches both patterns.
   Read phone numbers as digit groups.
 - Piper and Kokoro peak at full scale; `render.js` and `render_full.sh` apply `loudnorm` (I=-16, TP=-1.5).
+- **File-card upload limit is 30 MB.** A 5:50 video at CRF 19 came to 30.7 MB and was rejected. `render.js` now encodes
+  with `-tune animation -crf 21` (the same video is about 26 MB, with no visible loss on flat art). Check the size before sending.
