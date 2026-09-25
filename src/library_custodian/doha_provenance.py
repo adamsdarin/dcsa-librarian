@@ -13,6 +13,10 @@ Two bases are recorded, and the weaker one says so:
 - ``official_listing_label``: the official listing publishes that case number
   and level under this URL. Identity is the listing's, not a byte match.
 
+The reverse direction is reported too: every decision a captured listing
+publishes that the library does not hold. It is only as complete as the capture;
+a listing page that was down or not captured cannot show what is missing from it.
+
 Nothing here downloads a document or writes into the library.
 """
 from __future__ import annotations
@@ -33,6 +37,9 @@ FILE_LINK = re.compile(r"^(?P<page>https://[^?#]*/)FileId/(?P<file_id>\d+)/$")
 LABEL = re.compile(r"^(?P<year>\d{2})[-.](?P<number>\d{4,6})(?P<suffix>-[A-Za-z0-9]+)?\.(?P<level>[ha]\d)\.?(?P<extension>pdf|html?|wpd|doc)?$", re.I)
 STEM = re.compile(r"^(?P<year>\d{2})-(?P<number>\d{4,6})(?P<suffix>-[A-Za-z0-9]+)?\.(?P<level>[ha]\d)", re.I)
 AGGREGATE_LISTING = re.compile(r"\band\s+prior\b", re.I)
+# A listing whose decisions are mostly missing points at an incomplete capture or
+# import of that page, not at scattered rulings the library never had.
+CAPTURE_GAP_SHARE = 0.5
 
 
 def case_key(value: str, pattern: re.Pattern[str] = STEM) -> str | None:
@@ -42,6 +49,19 @@ def case_key(value: str, pattern: re.Pattern[str] = STEM) -> str | None:
         return None
     suffix = (match.group("suffix") or "").lower()
     return f"{match.group('year')}-{int(match.group('number')):05d}{suffix}.{match.group('level').lower()}"
+
+
+def case_base(key: str) -> str:
+    """Year, number and decision type: '19-00803-sd.h1' -> '19-00803.h'. A hearing and
+    its appeal are different rulings, so they never stand in for each other."""
+    stem, level = key.split(".", 1)
+    return "-".join(stem.split("-")[:2]) + "." + level[0]
+
+
+def case_year(key: str) -> str:
+    """The year DOHA numbered the case in -- not the year the decision issued."""
+    year = int(key[:2])
+    return str(1900 + year if year >= 50 else 2000 + year)
 
 
 def _allowed_pages(registry: dict[str, Any]) -> list[tuple[list[str], str]]:
@@ -102,14 +122,19 @@ def _legacy_downloads(library_root: Path, human_hashes: dict[str, str]) -> dict[
 
 
 def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: Path,
-                 human_hashes: dict[str, str] | None = None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    """Match captured listing links to library decisions. Writes nothing."""
+                 human_hashes: dict[str, str] | None = None
+                 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+    """Match captured listing links to library decisions, and list the listed
+    decisions the library lacks. Writes nothing."""
     registry = json.loads(registry_path.read_text(encoding="utf-8-sig"))
     allowed = _allowed_pages(registry)
     pages = read_captures(capture_paths)
     rejected_pages: list[dict[str, str]] = []
     rejected_links = 0
     by_key: dict[str, list[dict[str, Any]]] = {}
+    # Every decision a listing publishes, in any format: an HTML-only posting is
+    # still a decision the library may lack, though it cannot be a PDF source URL.
+    listed: dict[str, list[dict[str, Any]]] = {}
     for page in pages:
         page_url = canonicalize_url(page["u"])
         if not _page_allowed(page_url, allowed):
@@ -125,8 +150,13 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
             url = f"{page_url}FileId/{file_id}/"
             parsed = LABEL.match(label)
             key = case_key(label, LABEL)
-            if (not FILE_LINK.match(url) or not _page_allowed(url, allowed) or not key
-                    or (parsed.group("extension") or "pdf").lower() != "pdf"):
+            if not FILE_LINK.match(url) or not _page_allowed(url, allowed) or not key:
+                rejected_links += 1
+                continue
+            extension = (parsed.group("extension") or "pdf").lower()
+            listed.setdefault(key, []).append(
+                {"url": url, "label": label, "format": extension, "listing_title": title, "captured_utc": captured})
+            if extension != "pdf":
                 rejected_links += 1
                 continue
             by_key.setdefault(key, []).append(
@@ -136,9 +166,15 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
     rows: list[dict[str, Any]] = []
     unmatched: list[str] = []
     conflicts = 0
+    held: set[str] = set()
+    unkeyed = 0
     for _, record in _iter_jsonl(library_root / LIBRARY_MANIFEST):
         identity = str(record["document_id"])
         key = case_key(str(record.get("case_stem", "")))
+        if key:
+            held.add(key)
+        else:
+            unkeyed += 1
         found = by_key.get(key or "")
         if not found:
             unmatched.append(identity)
@@ -169,6 +205,25 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
             "source_url_alternates": sorted({item["url"] for item in found} - {primary["url"]}),
             "listing_conflict": conflicting,
         })
+    held_by_base: dict[str, list[str]] = {}
+    for key in held:
+        held_by_base.setdefault(case_base(key), []).append(key)
+    missing = [
+        {"case_key": key,
+         "decision_level": "appeal" if key.rsplit(".", 1)[1].startswith("a") else "hearing",
+         "labels": sorted({item["label"] for item in items}),
+         "formats": sorted({item["format"] for item in items}),
+         "source_urls": sorted({item["url"] for item in items}),
+         "listing_titles": sorted({item["listing_title"] for item in items}),
+         "captured_utc": max(item["captured_utc"] for item in items),
+         # The same case held under another suffix or level number: a possible naming
+         # mismatch rather than a missing ruling, so review before acquiring.
+         "held_variants": sorted(held_by_base.get(case_base(key), []))}
+        for key, items in sorted(listed.items()) if key not in held]
+    listed_by_listing: dict[str, int] = {}
+    for items in listed.values():
+        for title in {item["listing_title"] for item in items}:
+            listed_by_listing[title] = listed_by_listing.get(title, 0) + 1
     report = {
         "schema_version": "1.0",
         "created_utc": utc_now(),
@@ -183,12 +238,71 @@ def build_ledger(library_root: Path, capture_paths: list[Path], registry_path: P
         "unmatched_documents": unmatched[:50],
         "unmatched_count": len(unmatched),
         "listing_conflicts": conflicts,
+        "listed_decisions": len(listed),
+        "not_in_library_count": len(missing),
+        "not_in_library_by_level": {level: sum(item["decision_level"] == level for item in missing)
+                                    for level in ("hearing", "appeal")},
+        "not_in_library_sample": [item["case_key"] for item in missing[:50]],
+        # A library record whose case stem does not parse cannot match a listing, so a
+        # decision it holds may be reported missing. Nonzero means review before acting.
+        "library_records_unkeyed": unkeyed,
+        "listed_by_listing": dict(sorted(listed_by_listing.items())),
         "basis_counts": {basis: sum(row["source_url_basis"] == basis for row in rows)
                          for basis in ("legacy_download_bytes_identical", "official_listing_label")},
         "downloads_performed": False,
         "library_written": False,
     }
-    return rows, report
+    return rows, missing, report
+
+
+def summarize_missing(missing: list[dict[str, Any]], listed_by_listing: dict[str, int]) -> dict[str, Any]:
+    """Triage the listed-but-not-held decisions by case year, level and listing."""
+    by_year: dict[str, dict[str, int]] = {}
+    by_listing: dict[str, int] = {}
+    for item in missing:
+        counts = by_year.setdefault(case_year(item["case_key"]), {"hearing": 0, "appeal": 0})
+        counts[item["decision_level"]] += 1
+        for title in item["listing_titles"]:
+            by_listing[title] = by_listing.get(title, 0) + 1
+    listings = []
+    for title, count in by_listing.items():
+        listed = listed_by_listing.get(title, 0)
+        share = count / listed if listed else 1.0
+        listings.append({"listing_title": title, "missing": count, "listed": listed, "share": round(share, 3),
+                         "suspect_capture_gap": share >= CAPTURE_GAP_SHARE})
+    listings.sort(key=lambda row: (-row["share"], row["listing_title"]))
+    variants = [item for item in missing if item.get("held_variants")]
+    non_pdf = [item for item in missing if "pdf" not in item["formats"]]
+    return {
+        "missing": len(missing),
+        "by_case_year": dict(sorted(by_year.items())),
+        "by_listing": listings,
+        "held_variant_count": len(variants),
+        "held_variant_sample": [{"case_key": item["case_key"], "held_variants": item["held_variants"]}
+                                for item in variants[:25]],
+        "non_pdf_only_count": len(non_pdf),
+        "non_pdf_only_sample": [item["case_key"] for item in non_pdf[:25]],
+    }
+
+
+def format_summary(summary: dict[str, Any], unkeyed: int) -> str:
+    """Plain-text rendering of summarize_missing for a terminal."""
+    lines = [f"Listed by DOHA, not in library: {summary['missing']}"]
+    if unkeyed:
+        lines.append(f"WARNING: {unkeyed} library records have unparseable case stems; "
+                     "some of these may be held under another name.")
+    lines += ["", "Case year   Hearing   Appeal   Total"]
+    for year, counts in summary["by_case_year"].items():
+        lines.append(f"{year:<11}{counts['hearing']:>8}{counts['appeal']:>9}{counts['hearing'] + counts['appeal']:>8}")
+    lines += ["", "Listing (share of its decisions missing)"]
+    for row in summary["by_listing"]:
+        flag = "  <- suspect capture/import gap" if row["suspect_capture_gap"] else ""
+        lines.append(f"  {row['missing']:>5} / {row['listed']:<5} {row['share']:>6.1%}  {row['listing_title']}{flag}")
+    lines += ["", f"Held under another suffix or level number (review before acquiring): {summary['held_variant_count']}"]
+    lines += [f"  {row['case_key']}  held as {', '.join(row['held_variants'])}" for row in summary["held_variant_sample"]]
+    lines += ["", f"Posted only in a non-PDF format: {summary['non_pdf_only_count']}"]
+    lines += [f"  {key}" for key in summary["non_pdf_only_sample"]]
+    return "\n".join(lines)
 
 
 def _iter_jsonl(path: Path):

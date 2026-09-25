@@ -12,7 +12,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from library_custodian.doha_provenance import LABEL, build_ledger, case_key  # noqa: E402
+from library_custodian.doha_provenance import (  # noqa: E402
+    LABEL, build_ledger, case_key, case_year, format_summary, summarize_missing)
 
 DOHA = "https://doha.ogc.osd.mil/Industrial-Security-Program/Industrial-Security-Clearance-Decisions"
 HEARINGS = f"{DOHA}/ISCR-Hearing-Decisions/"
@@ -48,7 +49,12 @@ class DohaProvenanceTests(unittest.TestCase):
         return {"u": url, "t": title, "at": at, "rows": rows}
 
     def build(self, capture: Path, hashes: dict | None = None):
-        return build_ledger(self.library, [capture], self.registry, hashes or {})
+        rows, _, report = build_ledger(self.library, [capture], self.registry, hashes or {})
+        return rows, report
+
+    def missing(self, capture: Path):
+        _, missing, report = build_ledger(self.library, [capture], self.registry, {})
+        return missing, report
 
     def test_case_key_normalizes_what_doha_prints(self) -> None:
         self.assertEqual(case_key("18.02204.h1.pdf", LABEL), "18-02204.h1")
@@ -124,6 +130,106 @@ class DohaProvenanceTests(unittest.TestCase):
         self.assertEqual(len(report["pages_rejected"]), 2)
         self.assertEqual(report["links_rejected"], 2)
         self.assertEqual(report["unmatched_count"], 1)
+
+    def test_listed_decisions_the_library_lacks_are_reported(self) -> None:
+        self.decisions("19-02096.a1_denied_f")
+        capture = self.capture(
+            self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                      [["19-02096.a1.pdf", "219192", 1], ["19-02100.h1.pdf", "219200", 1],
+                       ["19-02101.a1.pdf", "219201", 1]]),
+            self.page(f"{ARCHIVE}2016-and-Prior-ISCR-Hearing-Decisions-1/", "2016 and Prior ISCR Hearing Decisions - 1",
+                      [["19-02100.h1.pdf", "126000", 1]]))
+        missing, report = self.missing(capture)
+        self.assertEqual([item["case_key"] for item in missing], ["19-02100.h1", "19-02101.a1"])
+        self.assertEqual(missing[0]["decision_level"], "hearing")
+        self.assertEqual(missing[1]["decision_level"], "appeal")
+        # One decision on two listings is one missing decision with both URLs.
+        self.assertEqual(len(missing[0]["source_urls"]), 2)
+        self.assertEqual(report["listed_decisions"], 3)
+        self.assertEqual(report["not_in_library_count"], 2)
+        self.assertEqual(report["not_in_library_by_level"], {"hearing": 1, "appeal": 1})
+
+    def test_the_same_decision_at_another_level_is_still_missing(self) -> None:
+        self.decisions("19-02096.h1_denied_f")
+        capture = self.capture(self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                                         [["19-02096.h1.pdf", "1", 1], ["19-02096.a1.pdf", "2", 1]]))
+        missing, _ = self.missing(capture)
+        self.assertEqual([item["case_key"] for item in missing], ["19-02096.a1"])
+
+    def test_a_non_pdf_posting_counts_as_listed_but_never_as_a_source_url(self) -> None:
+        self.decisions()
+        capture = self.capture(self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                                         [["19-02097.h1.html", "3", 1]]))
+        rows, missing, report = build_ledger(self.library, [capture], self.registry, {})
+        self.assertEqual(rows, [])
+        self.assertEqual(missing[0]["formats"], ["html"])
+        self.assertEqual(report["links_rejected"], 1)
+
+    def test_links_outside_the_allowlist_never_count_as_missing(self) -> None:
+        self.decisions()
+        capture = self.capture(self.page("https://doha-mirror.example.com/decisions/", "Mirror",
+                                         [["19-02096.a1.pdf", "1", 1]]))
+        missing, report = self.missing(capture)
+        self.assertEqual(missing, [])
+        self.assertEqual(report["listed_decisions"], 0)
+
+    def test_unparseable_library_stems_are_counted_so_missing_can_be_doubted(self) -> None:
+        self.decisions("ISCR Case No 08-07664", "19-02096.a1_denied_f")
+        capture = self.capture(self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                                         [["19-02096.a1.pdf", "1", 1]]))
+        _, report = self.missing(capture)
+        self.assertEqual(report["library_records_unkeyed"], 1)
+        self.assertEqual(report["not_in_library_count"], 0)
+
+    def test_case_year_reads_the_two_digit_case_prefix(self) -> None:
+        self.assertEqual(case_year("19-02096.a1"), "2019")
+        self.assertEqual(case_year("98-00123.h1"), "1998")
+        self.assertEqual(case_year("04-08547-sd.h1"), "2004")
+
+    def test_summary_splits_missing_by_case_year_and_level(self) -> None:
+        self.decisions("19-02096.h1_denied_f")
+        capture = self.capture(self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                                         [["19-02096.h1.pdf", "1", 1], ["19-02100.h1.pdf", "2", 1],
+                                          ["18-01000.a1.pdf", "3", 1], ["19-02101.a1.pdf", "4", 1]]))
+        missing, report = self.missing(capture)
+        summary = summarize_missing(missing, report["listed_by_listing"])
+        self.assertEqual(summary["missing"], 3)
+        self.assertEqual(summary["by_case_year"], {"2018": {"hearing": 0, "appeal": 1},
+                                                   "2019": {"hearing": 1, "appeal": 1}})
+
+    def test_a_listing_mostly_missing_is_flagged_as_a_capture_gap(self) -> None:
+        self.decisions("19-02096.h1_x", "19-02097.h1_x", "19-02098.h1_x")
+        capture = self.capture(
+            self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                      [["19-02096.h1.pdf", "1", 1], ["19-02097.h1.pdf", "2", 1],
+                       ["19-02098.h1.pdf", "3", 1], ["19-02099.h1.pdf", "4", 1]]),
+            self.page(f"{HEARINGS}2020-ISCR-Hearing-Decisions/", "2020 ISCR Hearing Decisions",
+                      [["20-00001.h1.pdf", "5", 1], ["20-00002.h1.pdf", "6", 1]]))
+        missing, report = self.missing(capture)
+        rows = {row["listing_title"]: row for row in summarize_missing(missing, report["listed_by_listing"])["by_listing"]}
+        self.assertEqual((rows["2020 ISCR Hearing Decisions"]["missing"], rows["2020 ISCR Hearing Decisions"]["listed"]), (2, 2))
+        self.assertTrue(rows["2020 ISCR Hearing Decisions"]["suspect_capture_gap"])
+        self.assertEqual(rows["2019 ISCR Hearing Decisions"]["share"], 0.25)
+        self.assertFalse(rows["2019 ISCR Hearing Decisions"]["suspect_capture_gap"])
+
+    def test_a_case_held_under_another_suffix_or_level_is_surfaced(self) -> None:
+        self.decisions("19-00803-SD.h1_x", "19-00900.h1_x", "19-00960.a1_x")
+        capture = self.capture(self.page(f"{HEARINGS}2019-ISCR-Hearing-Decisions/", "2019 ISCR Hearing Decisions",
+                                         [["19-00803.h1.pdf", "1", 1], ["19-00900.h2.pdf", "2", 1],
+                                          ["19-00950.h1.htm", "3", 1], ["19-00960.h1.pdf", "4", 1]]))
+        missing, report = self.missing(capture)
+        by_key = {item["case_key"]: item for item in missing}
+        self.assertEqual(by_key["19-00803.h1"]["held_variants"], ["19-00803-sd.h1"])
+        self.assertEqual(by_key["19-00900.h2"]["held_variants"], ["19-00900.h1"])
+        self.assertEqual(by_key["19-00950.h1"]["held_variants"], [])
+        # Holding the appeal does not stand in for the hearing decision.
+        self.assertEqual(by_key["19-00960.h1"]["held_variants"], [])
+        summary = summarize_missing(missing, report["listed_by_listing"])
+        self.assertEqual(summary["held_variant_count"], 2)
+        self.assertEqual(summary["non_pdf_only_sample"], ["19-00950.h1"])
+        text = format_summary(summary, unkeyed=3)
+        self.assertIn("WARNING: 3 library records", text)
+        self.assertIn("19-00803.h1  held as 19-00803-sd.h1", text)
 
 
 if __name__ == "__main__":

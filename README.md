@@ -57,3 +57,9 @@ for daylight-saving-aware due times (declared in pyproject.toml); a repository-l
 installation under ignored .runtime is supported by custodian.py.
 
 The Windows/Unix wrappers download new or positively changed sources into quarantine and emit `.intake.json` packages. They accept both a bare job ID and `--job <id>`. `config/schedule.json` declares cadence; it does not install tasks. Archivist reviews packages and uses `build-candidate --intake-plan` before gated publication. See `../dcsa-archivist/agents/conductor.md` for the complete agent cycle. The historical `scripts/intake_voi.py` helper is not the general intake path.
+
+## Related projects
+
+- **DCSA Archivist** (`adamsdarin/dcsa-archivist`) — reviews this project's intake packages, organizes, enriches and indexes the library, and stages approval-gated releases.
+- **DCSA Comparison Bot** (`adamsdarin/dcsa-comparison-bot`) — reads this project's `candidates.jsonl` and a library manifest, and reports which document already held a new release changes and what changed, as proposals for human review. It closes the gap between "this URL is new" and "this is a newer edition of that". Nothing here imports from it.
+- **DCSA Library Rebuilder** (`adamsdarin/dcsa-library-rebuilder`) — a standalone agent that rebuilds a DCSA Library into an empty destination and proves the result; the rebuilt copy is a one-time snapshot that only stays current through this project and the Archivist. Its census reads the official URLs this project's byte-verified provenance publishes, which is how a document classed `retained_bytes_only` becomes reacquirable from an official source.
