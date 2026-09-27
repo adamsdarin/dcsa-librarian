@@ -41,11 +41,12 @@ the Archivist's decisions/doha_source_urls.jsonl is newer (09-23 phantom-row ret
 One archived listing page ("2016 and Prior ISCR Hearing Decisions - 2") is inaccessible.
 
 ## Next
-1. DOHA acquisition is done bar a final retry: run quarantine/doha-acquire/20260925T151200Z
-   (owner's machine) holds 21,941 of 21,942 not-held decisions as of 2026-09-26, one
-   refused. 14 Appeal Board decisions were set aside as WordPerfect before PDF URLs were
-   preferred; resuming the run now refetches their PDF postings. Next is Archivist
-   intake of the quarantined packages (one .intake.json per file) at this volume.
+1. DOHA acquisition is complete: run quarantine/doha-acquire/20260925T151200Z (owner's
+   machine) holds 21,941 of the 21,942 not-held decisions from the 09-22 capture, each
+   with a standard .intake.json. The one gap, 06-25928.h1 (hearing, 2007-11-20, denied),
+   is served by DOHA only as its digest; the case continues as 06-25928.a1 (remanded,
+   2008-04-09) and 06-25928.h2 (granted on remand), both acquired. The digest is kept in
+   the run's refused/ folder. Next is Archivist intake at this volume.
 2. Byte verification is recoverable: any Archivist PRODUCTION_AUDIT.json from
    doha-era-trial-20260922 onward gives 317 (checked 09-25); the 08-31 one gives 0
    because its document IDs predate the current manifest. Use the newest release's.
@@ -62,6 +63,11 @@ One archived listing page ("2016 and Prior ISCR Hearing Decisions - 2") is inacc
 - The inaccessible DOHA listing page has no recovery date.
 
 ## Log
+2026-09-27 Claude — Closed out DOHA acquisition at 21,941 of 21,942. The owner supplied
+manual copies of 06-25928.a1 and a file named 06-25928.h1; the latter's text is the
+decision on remand (it cites "my first decision" of 2007-11-20), so it is h2 in
+substance, and both copies were byte-identical to the tool's .a1 and .h2 fetches.
+Filenames and embedded PDF titles are not identity; the decision text is.
 2026-09-26 Claude — Full doha-acquire run finished on the owner's machine: 21,941 of
 21,942, one refused, nothing written to the library. 14 decisions had been fetched as
 their WordPerfect postings and set aside as non-PDF, and set-aside counted as done, so
@@ -131,4 +137,3 @@ doha_topic_taxonomy/doha_topic_coverage requirement was stale (Archivist entry h
 no findings. Uncommitted. 7 unrelated test_schedule/test_status errors need the missing tzdata package.
 2026-09-24 Codex — Ran the owner-approved monthly scan and integrity audit. All 17 registered sources failed availability/verification, so the scan remains incomplete and makes no clean-source claim; the release window remains open for later retry. Integrity passed across 11,622 records with no missing files or findings. No library publication occurred.
 2026-09-24 Claude — Owner-authorized targeted FCL acquisition. Ran doctor first (0 missing files; 2 entry-point contract errors unrelated to intake). The Librarian Fetcher reached DCSA and WHS normally; nothing was blocked. Fetched the 12 FCL documents from the Facility-Clearances listing and packaged them with the existing writer. None is byte-identical to any library file. Edition dates come from the document text and metadata, not filenames; the handbook's cover says July 2026 although its URL says 20260828. The /CTP/FC/ and /CTP/fc/ handbook URLs return the same bytes, so there is one package. SF 328, DTM 24-004 and DoDM 5220.32 V1/V2 are byte-identical to the official copies, so they were recorded as provenance rows, not re-quarantined. WHS still lists DTM 24-004 as CH 1 expiring 2026-07-31, with incorporation into DoDM 5220.32 V1 pending. No code changes; nothing committed.
-2026-09-23 Codex — Read-only scan-status confirmed no valid structured receipts for monthly-scan, monthly-integrity or VOI-release-watch. Status remains unknown, not successful; no out-of-cycle sweep was started.
