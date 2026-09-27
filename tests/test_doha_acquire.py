@@ -207,6 +207,25 @@ class DohaAcquireTests(unittest.TestCase):
         with self.assertRaises(SystemExit):
             load_not_held(old)
 
+    def test_a_set_aside_decision_is_refetched_when_a_pdf_url_exists(self) -> None:
+        wpd_url = f"{APPEALS}2016-and-Prior-DOHA-Appeal-Board/FileId/100/"
+        pdf_url = f"{APPEALS}2016-and-Prior-DOHA-Appeal-Board/FileId/200/"
+        # An earlier run fetched the WordPerfect posting and set it aside.
+        (self.run_dir / "attempts.jsonl").write_text(json.dumps(
+            {"case_key": "12-05512.a1", "status": "non_pdf_document", "reason": "wordperfect", "url": wpd_url}) + "\n",
+            encoding="utf-8")
+        decision = dict(row("12-05512.a1", pdf_url, "2016 and Prior DOHA Appeal Board", "DOHA Appeal Board Decisions"),
+                        formats=["pdf", "wpd"], source_urls=[wpd_url, pdf_url],
+                        urls_by_format={"pdf": [pdf_url], "wpd": [wpd_url]})
+        browser = FakeBrowser()
+        report = self.run_acquire([decision], browser)
+        self.assertEqual(browser.requested, [pdf_url])
+        self.assertEqual(report["counts"]["acquired"], 1)
+        # With the PDF acquired, a further resume leaves it alone.
+        again = FakeBrowser()
+        self.run_acquire([decision], again)
+        self.assertEqual(again.requested, [])
+
 
 if __name__ == "__main__":
     unittest.main()

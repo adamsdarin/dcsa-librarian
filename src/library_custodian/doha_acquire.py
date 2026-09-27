@@ -89,6 +89,21 @@ def read_attempts(path: Path) -> dict[str, dict[str, Any]]:
     return done
 
 
+def settled(row: dict[str, Any], done: dict[str, dict[str, Any]]) -> bool:
+    """Whether a resumed run can skip this decision.
+
+    Acquired is final. A set-aside non-PDF is final only if it was fetched from the URL
+    that would be chosen now: a run that fetched a decision's WordPerfect posting before
+    PDF URLs were preferred must go back for the PDF.
+    """
+    record = done.get(row["case_key"])
+    if record is None:
+        return False
+    if record.get("status") != "non_pdf_document":
+        return True
+    return record.get("url") == canonicalize_url(choose_url(row)[0])
+
+
 def _looks_like(body: bytes, fmt: str) -> bool:
     if fmt == "pdf":
         # The PDF format lets the header sit anywhere in the first 1,024 bytes.
@@ -137,7 +152,7 @@ def acquire(not_held: Iterable[dict[str, Any]], registry: dict[str, Any], run_di
     consecutive = 0
     stopped = None
     todo = plan(not_held, groups, limit)
-    have = sum(row["case_key"] in done for row in todo)
+    have = sum(settled(row, done) for row in todo)
     say(f"{len(todo)} planned, {have} already in this run; fetching {len(todo) - have}, one every "
         f"{delay_seconds:g} s. Keep the Chrome window open; Ctrl+C stops, re-running resumes.")
     with attempts_path.open("a", encoding="utf-8", newline="\n") as log:
@@ -147,7 +162,7 @@ def acquire(not_held: Iterable[dict[str, Any]], registry: dict[str, Any], run_di
 
         for index, row in enumerate(todo):
             key = row["case_key"]
-            if key in done:
+            if settled(row, done):
                 counts["already_acquired"] += 1
                 continue
             chosen, fmt = choose_url(row)

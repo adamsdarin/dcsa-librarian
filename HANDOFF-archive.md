@@ -377,3 +377,9 @@ can never produce one. The basis is recorded per row because a listing label is
 weaker evidence than matching bytes, and a decision posted on two listings keeps
 both URLs and withholds the year, which the Archivist reads as a date bound. No
 document was downloaded and the library was not written.
+2026-09-23 Claude — Operator handed in a retyped 2017 PDF of the 2005 Adjudicative
+Guidelines with no official URL. It matches no official file byte-for-byte, so the
+operator chose to ingest the NARA ISOO copy (archives.gov, allowlisted under
+official-reference-verification) instead; the retyped copy's hash is noted in the
+package only for reference. Fetched with the Librarian's own Fetcher and package
+writer; marked superseded/historical, not current policy.
