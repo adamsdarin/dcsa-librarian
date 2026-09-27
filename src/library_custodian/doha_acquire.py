@@ -99,6 +99,18 @@ def settled(row: dict[str, Any], done: dict[str, dict[str, Any]]) -> bool:
     record = done.get(row["case_key"])
     if record is None:
         return False
+    if record.get("status") == "acquired":
+        # Acquired is final only while its file and a readable package are both there:
+        # an interrupted write can leave an empty .intake.json, and the Archivist cannot
+        # take a decision without one.
+        if not record.get("path"):
+            return True
+        source = Path(record["path"])
+        package = source.with_name(source.name + ".intake.json")
+        try:
+            return source.is_file() and bool(json.loads(package.read_text(encoding="utf-8")).get("source_sha256"))
+        except (OSError, ValueError, AttributeError):
+            return False
     if record.get("status") != "non_pdf_document":
         return True
     return record.get("url") == canonicalize_url(choose_url(row)[0])

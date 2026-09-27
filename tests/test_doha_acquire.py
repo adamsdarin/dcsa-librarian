@@ -226,6 +226,20 @@ class DohaAcquireTests(unittest.TestCase):
         self.run_acquire([decision], again)
         self.assertEqual(again.requested, [])
 
+    def test_an_acquired_decision_with_a_broken_package_is_fetched_again(self) -> None:
+        rows = [row("24-00003.h1", f"{HEARINGS}2025-ISCR-Hearing-Decisions/FileId/3/", "2025 ISCR Hearing Decisions")]
+        self.run_acquire(rows, FakeBrowser())
+        package = self.run_dir / "iscr-hearing-decisions" / "24-00003.h1.pdf.intake.json"
+        package.write_text("", encoding="utf-8")
+        browser = FakeBrowser()
+        report = self.run_acquire(rows, browser)
+        self.assertEqual(len(browser.requested), 1)
+        self.assertEqual(report["counts"]["acquired"], 1)
+        self.assertTrue(json.loads(package.read_text(encoding="utf-8"))["source_sha256"])
+        again = FakeBrowser()
+        self.run_acquire(rows, again)
+        self.assertEqual(again.requested, [])
+
 
 if __name__ == "__main__":
     unittest.main()
