@@ -41,14 +41,11 @@ the Archivist's decisions/doha_source_urls.jsonl is newer (09-23 phantom-row ret
 One archived listing page ("2016 and Prior ISCR Hearing Decisions - 2") is inaccessible.
 
 ## Next
-1. Acquire the ~21,900 DOHA decisions not held (owner-approved plan, 09-25) with
-   `doha-acquire`: pilot with --limit 20, then resume the run in batches. It fetches
-   through Chrome (Playwright, optional dependency) from the listed URLs only, newest
-   listings first, 4 s apart, into quarantine/doha-acquire/<run>/ with one standard
-   .intake.json per file (proposed_collection doha_decisions). The Archivist's
-   intake plan takes these unchanged; it already separates hearing and appeal by
-   decision_family. Regenerate doha_not_in_library.jsonl first: files written before
-   grouping are refused.
+1. DOHA acquisition is done bar a final retry: run quarantine/doha-acquire/20260925T151200Z
+   (owner's machine) holds 21,941 of 21,942 not-held decisions as of 2026-09-26, one
+   refused. 14 Appeal Board decisions were set aside as WordPerfect before PDF URLs were
+   preferred; resuming the run now refetches their PDF postings. Next is Archivist
+   intake of the quarantined packages (one .intake.json per file) at this volume.
 2. Byte verification is recoverable: any Archivist PRODUCTION_AUDIT.json from
    doha-era-trial-20260922 onward gives 317 (checked 09-25); the 08-31 one gives 0
    because its document IDs predate the current manifest. Use the newest release's.
@@ -65,6 +62,11 @@ One archived listing page ("2016 and Prior ISCR Hearing Decisions - 2") is inacc
 - The inaccessible DOHA listing page has no recovery date.
 
 ## Log
+2026-09-26 Claude — Full doha-acquire run finished on the owner's machine: 21,941 of
+21,942, one refused, nothing written to the library. 14 decisions had been fetched as
+their WordPerfect postings and set aside as non-PDF, and set-aside counted as done, so
+the later PDF-URL fix never retried them. A set-aside decision is now final only if it
+was fetched from the URL that would be chosen today.
 2026-09-25 Claude — The run stopped at 2,507 on 14 Appeal Board decisions (2012-2015)
 refused as not PDF. The owner downloaded the same 14 by hand: all real PDFs. Cause was
 mine: older decisions are posted as both PDF and HTML under separate FileIds, and the
@@ -130,9 +132,3 @@ no findings. Uncommitted. 7 unrelated test_schedule/test_status errors need the 
 2026-09-24 Codex — Ran the owner-approved monthly scan and integrity audit. All 17 registered sources failed availability/verification, so the scan remains incomplete and makes no clean-source claim; the release window remains open for later retry. Integrity passed across 11,622 records with no missing files or findings. No library publication occurred.
 2026-09-24 Claude — Owner-authorized targeted FCL acquisition. Ran doctor first (0 missing files; 2 entry-point contract errors unrelated to intake). The Librarian Fetcher reached DCSA and WHS normally; nothing was blocked. Fetched the 12 FCL documents from the Facility-Clearances listing and packaged them with the existing writer. None is byte-identical to any library file. Edition dates come from the document text and metadata, not filenames; the handbook's cover says July 2026 although its URL says 20260828. The /CTP/FC/ and /CTP/fc/ handbook URLs return the same bytes, so there is one package. SF 328, DTM 24-004 and DoDM 5220.32 V1/V2 are byte-identical to the official copies, so they were recorded as provenance rows, not re-quarantined. WHS still lists DTM 24-004 as CH 1 expiring 2026-07-31, with incorporation into DoDM 5220.32 V1 pending. No code changes; nothing committed.
 2026-09-23 Codex — Read-only scan-status confirmed no valid structured receipts for monthly-scan, monthly-integrity or VOI-release-watch. Status remains unknown, not successful; no out-of-cycle sweep was started.
-2026-09-23 Claude — Operator handed in a retyped 2017 PDF of the 2005 Adjudicative
-Guidelines with no official URL. It matches no official file byte-for-byte, so the
-operator chose to ingest the NARA ISOO copy (archives.gov, allowlisted under
-official-reference-verification) instead; the retyped copy's hash is noted in the
-package only for reference. Fetched with the Librarian's own Fetcher and package
-writer; marked superseded/historical, not current policy.
