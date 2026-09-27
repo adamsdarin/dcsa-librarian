@@ -383,3 +383,4 @@ operator chose to ingest the NARA ISOO copy (archives.gov, allowlisted under
 official-reference-verification) instead; the retyped copy's hash is noted in the
 package only for reference. Fetched with the Librarian's own Fetcher and package
 writer; marked superseded/historical, not current policy.
+2026-09-23 Codex — Read-only scan-status confirmed no valid structured receipts for monthly-scan, monthly-integrity or VOI-release-watch. Status remains unknown, not successful; no out-of-cycle sweep was started.
