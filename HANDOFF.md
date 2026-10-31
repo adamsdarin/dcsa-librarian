@@ -56,6 +56,11 @@ Hearing Decisions - 2") is inaccessible with no recovery date.
   lifecycle review? Owner decision.
 
 ## Log
+2026-10-31 Claude — Built the four-part clearance series (11:53 total) from the approved scripts.
+At the owner's request, Part 3 names all 13 SEAD 4 guidelines aloud, replacing the approved five-item line.
+The investigator-verification number (878-274-1186) was re-checked against the October 2026 VOI contacts, as the
+09-25 entry required before reuse. Series sources are in video-toolkit/examples/series/. Toolkit changes:
+engine.js calls onTimeline() so one scenes.js can serve every part, and stills.py names whole-second stills correctly.
 2026-10-31 Claude — Owner asked to split the PCL video into four episodes (submission,
 investigation, adjudication, maintenance), "as long as necessary", reviewing all four scripts at
 once. Approved wording is kept; new lines are verified against 32 CFR 117/155/147, SEADs 4 and 7,
@@ -117,31 +122,3 @@ doha_topic_taxonomy/doha_topic_coverage requirement was stale (Archivist entry h
 no findings. Uncommitted. 7 unrelated test_schedule/test_status errors need the missing tzdata package.
 2026-09-24 Codex — Ran the owner-approved monthly scan and integrity audit. All 17 registered sources failed availability/verification, so the scan remains incomplete and makes no clean-source claim; the release window remains open for later retry. Integrity passed across 11,622 records with no missing files or findings. No library publication occurred.
 2026-09-24 Claude — Owner-authorized targeted FCL acquisition. Ran doctor first (0 missing files; 2 entry-point contract errors unrelated to intake). The Librarian Fetcher reached DCSA and WHS normally; nothing was blocked. Fetched the 12 FCL documents from the Facility-Clearances listing and packaged them with the existing writer. None is byte-identical to any library file. Edition dates come from the document text and metadata, not filenames; the handbook's cover says July 2026 although its URL says 20260828. The /CTP/FC/ and /CTP/fc/ handbook URLs return the same bytes, so there is one package. SF 328, DTM 24-004 and DoDM 5220.32 V1/V2 are byte-identical to the official copies, so they were recorded as provenance rows, not re-quarantined. WHS still lists DTM 24-004 as CH 1 expiring 2026-07-31, with incorporation into DoDM 5220.32 V1 pending. No code changes; nothing committed.
-2026-09-23 Codex — Read-only scan-status confirmed no valid structured receipts for monthly-scan, monthly-integrity or VOI-release-watch. Status remains unknown, not successful; no out-of-cycle sweep was started.
-2026-09-23 Claude — Operator handed in a retyped 2017 PDF of the 2005 Adjudicative
-Guidelines with no official URL. It matches no official file byte-for-byte, so the
-operator chose to ingest the NARA ISOO copy (archives.gov, allowlisted under
-official-reference-verification) instead; the retyped copy's hash is noted in the
-package only for reference. Fetched with the Librarian's own Fetcher and package
-writer; marked superseded/historical, not current policy.
-2026-09-22 Claude — Added doha-provenance. DOHA addresses decisions by opaque
-FileId, so a URL can only come from the listing that names the file; a case number
-can never produce one. The basis is recorded per row because a listing label is
-weaker evidence than matching bytes, and a decision posted on two listings keeps
-both URLs and withholds the year, which the Archivist reads as a date bound. No
-document was downloaded and the library was not written.
-2026-09-18 Claude — Added byte-verified provenance to discovery. A name match alone is
-never provenance; bytes_differ rows go to the Evidence Reviewer. This is how the
-Rebuilder's 749 retained-bytes-only records can gain official URLs over time.
-2026-09-18 Claude — Merged three cloud-session commits (Sept 7-13, pushed only to the
-feature branch) into the local line: URL percent-encoding, pinned failing URLs, and
-config/catalog_exclusions.json scope decisions (excluded documents are still crawled
-and reported, never re-offered or downloaded). Both sides had built intake packages;
-kept Codex's writer and adopted the cloud builder's stable url+hash submission_id and
-required-field check. That session's FCL intake (12 in-scope documents) still needs a
-library doctor and a handbook-edition check before acquisition.
-2026-09-16 Codex — Fixed local-calendar period selection; boundary regression and
-all 72 Librarian tests pass. No acquisition or publication run.
-2026-09-15 Codex — Closed filename-based period suppression; added retained,
-hash-bound issue-period review and source-request handoff instructions. No live
-issue confirmed, source downloaded or library publication performed.

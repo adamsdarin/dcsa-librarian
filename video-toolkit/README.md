@@ -27,6 +27,17 @@ export FFMPEG=$(./venv/bin/python -c "import imageio_ffmpeg;print(imageio_ffmpeg
 3. `node render.js --ranges 0-5.8,54-80 --out build/sample.mp4` renders a short sample with audio.
 4. `OUT_NAME=my-video ./render_full.sh` does the full render: 4 parallel frame-aligned chunks, then concat and loudness-normalized audio (about 5–8 minutes on 4 cores).
 
+## Multi-part series (`examples/series/`)
+The PCL video split into four episodes (submission, investigation, adjudication, maintenance). One `scenes.js` serves every
+part; each part has its own folder with its own script, narration and timeline.
+- `scripts_src.py` is the single source for all four scripts (`part1.json`…`part4.json` here); it records a source for every new line.
+- Script-level keys reach the page: `tts.py` copies them into `timeline.json`, and `engine.js` calls `onTimeline(TL)` if `scenes.js`
+  defines it. The series uses `series.part` for part-aware title, map, wrap-up and end cards, and `bar` to give Part 4 its own journey bar.
+- `sayAt(ctx, line, word)` estimates when a word is spoken from its position in the caption. Use it to time a list read aloud
+  (the 13 guidelines light up as they're named). It's good to a few tenths of a second; a word at the very end of a line lands late,
+  so key on an earlier word when the visual should lead.
+- Drop the room window (`bgRoom(u, { window: false })`) in any scene with graphics in the upper middle; it collided in six scenes.
+
 ## Owner preferences (settled in the PCL session)
 - Voice: Kokoro `bf_emma`, speed 0.95, lang `en-gb`. The owner rejected the Piper voices.
 - Target about 5 minutes (roughly 700 words at this voice). Burned-in captions, step badge, and a journey bar.

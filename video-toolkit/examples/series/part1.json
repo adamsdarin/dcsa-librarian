@@ -1,0 +1,181 @@
+{
+ "title": "Your Security Clearance, Part 1: Submission",
+ "series": {
+  "part": 1,
+  "name": "Submission"
+ },
+ "scenes": [
+  {
+   "id": "title",
+   "step": null,
+   "label": "",
+   "lines": [
+    {
+     "cap": "Your security clearance, part one: submission."
+    }
+   ]
+  },
+  {
+   "id": "map",
+   "step": null,
+   "label": "Part 1 of 4",
+   "lines": [
+    {
+     "cap": "Getting a clearance happens in four chunks: submission, investigation, adjudication, and maintenance."
+    },
+    {
+     "cap": "This part covers everything up to the moment your application reaches DCSA."
+    }
+   ]
+  },
+  {
+   "id": "meet",
+   "step": null,
+   "label": "Meet Alex",
+   "lines": [
+    {
+     "cap": "Meet Alex. Alex just accepted a job that needs a security clearance."
+    },
+    {
+     "cap": "A clearance is the government's decision that you're eligible for access to classified information."
+    },
+    {
+     "cap": "For contractor employees, that decision belongs to DCSA: the Defense Counterintelligence and Security Agency."
+    }
+   ]
+  },
+  {
+   "id": "basics",
+   "step": null,
+   "label": "Before you start",
+   "lines": [
+    {
+     "cap": "First, the basics. Only an organization with a facility clearance, or a federal agency, can sponsor you for security clearance eligibility."
+    },
+    {
+     "cap": "And access to classified information is only granted on a need-to-know basis. There are no \"just in case\" clearances."
+    },
+    {
+     "cap": "If you need access on day one, the process can start pre-employment."
+    },
+    {
+     "cap": "But if the employment is with a private company, that company is required to have you in a cleared position within 45 days of your eligibility being granted."
+    },
+    {
+     "cap": "This video follows a contractor employee like Alex. If you'll work directly for a federal agency, its security office will guide you, and some later steps differ."
+    }
+   ]
+  },
+  {
+   "id": "s1",
+   "step": 1,
+   "label": "Your FSO starts the request",
+   "lines": [
+    {
+     "cap": "Step one. You will need to show proof of U.S. citizenship to your Facility Security Officer, or FSO.",
+     "say": "Step one. You will need to show proof of U.S. citizenship to your Facility Security Officer, or F S O."
+    },
+    {
+     "cap": "Your FSO can check your documents in person or digitally.",
+     "say": "Your F S O can check your documents in person or digitally."
+    },
+    {
+     "cap": "Then your FSO will start your investigation request, and you get an email invitation to complete the eApp in NBIS, DCSA's online application.",
+     "say": "Then your F S O will start your investigation request, and you get an email invitation to complete the e-App in NBIS, D C S A's online application."
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "step": 2,
+   "label": "You complete the SF 86 in eApp",
+   "lines": [
+    {
+     "cap": "Step two is yours. In eApp, you complete the SF 86, the Questionnaire for National Security Positions.",
+     "say": "Step two is yours. In e-App, you complete the S F eighty-six, the Questionnaire for National Security Positions."
+    },
+    {
+     "cap": "It asks where you've lived, worked, and studied, plus foreign contacts, travel, finances, and more."
+    },
+    {
+     "cap": "Most questions look back seven to ten years, so you'll need dates, addresses, and people who can vouch for you."
+    },
+    {
+     "cap": "You should gather records first, so you're prepared for the questionnaire."
+    },
+    {
+     "cap": "Be complete and be honest. Leaving something out can hurt you more than the thing itself."
+    },
+    {
+     "cap": "Before you submit, check for gaps in your timeline, and make sure every date and address is filled in."
+    },
+    {
+     "cap": "You'll also sign release forms and get your fingerprints taken electronically."
+    },
+    {
+     "cap": "Your signed release pages and your fingerprint results are each good for 120 days, so don't let your application sit."
+    },
+    {
+     "cap": "Heads up: a newer form, the Personnel Vetting Questionnaire, is being phased in to replace the SF 86.",
+     "say": "Heads up: a newer form, the Personnel Vetting Questionnaire, is being phased in to replace the S F eighty-six."
+    },
+    {
+     "cap": "It shortens most look-back periods to five years."
+    }
+   ]
+  },
+  {
+   "id": "s3",
+   "step": 3,
+   "label": "Your FSO reviews it",
+   "lines": [
+    {
+     "cap": "Step three. Your FSO reviews the form for completeness.",
+     "say": "Step three. Your F S O reviews the form for completeness."
+    },
+    {
+     "cap": "What you disclose isn't shared around the company. The NISPOM strictly prohibits that."
+    },
+    {
+     "cap": "Once the FSO review is complete, it will be released to DCSA, along with your fingerprints.",
+     "say": "Once the F S O review is complete, it will be released to DCSA, along with your fingerprints."
+    }
+   ]
+  },
+  {
+   "id": "s4",
+   "step": 4,
+   "label": "DCSA checks the package",
+   "lines": [
+    {
+     "cap": "Step four. DCSA checks that everything is there. If something's missing, it goes back to your FSO, and you fix it and resubmit.",
+     "say": "Step four. DCSA checks that everything is there. If something's missing, it goes back to your F S O, and you fix it and resubmit."
+    },
+    {
+     "cap": "Missing fingerprints are a common reason a request gets rejected, so they should be taken close to when your form is released."
+    }
+   ]
+  },
+  {
+   "id": "next",
+   "step": null,
+   "label": "Wrap-up",
+   "lines": [
+    {
+     "cap": "That's submission: a sponsor with a real need, proof of citizenship, a complete and honest SF 86, releases and fingerprints, and an FSO review.",
+     "say": "That's submission: a sponsor with a real need, proof of citizenship, a complete and honest S F eighty-six, releases and fingerprints, and an F S O review."
+    },
+    {
+     "cap": "Next, in part two: the investigation."
+    }
+   ]
+  },
+  {
+   "id": "end",
+   "step": null,
+   "label": "",
+   "hold": 6.0,
+   "lines": []
+  }
+ ]
+}

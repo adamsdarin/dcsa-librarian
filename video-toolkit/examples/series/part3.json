@@ -1,0 +1,162 @@
+{
+ "title": "Your Security Clearance, Part 3: Adjudication",
+ "series": {
+  "part": 3,
+  "name": "Adjudication"
+ },
+ "scenes": [
+  {
+   "id": "title",
+   "step": null,
+   "label": "",
+   "lines": [
+    {
+     "cap": "Your security clearance, part three: adjudication."
+    }
+   ]
+  },
+  {
+   "id": "map",
+   "step": null,
+   "label": "Part 3 of 4",
+   "lines": [
+    {
+     "cap": "The investigation is done. Now someone decides. That's adjudication."
+    }
+   ]
+  },
+  {
+   "id": "s7",
+   "step": 7,
+   "label": "Adjudication",
+   "lines": [
+    {
+     "cap": "Step seven: adjudication. A DCSA adjudicator weighs your case against 13 national adjudicative guidelines, set out in Security Executive Agent Directive 4."
+    },
+    {
+     "cap": "The 13 are: allegiance to the United States, foreign influence, foreign preference, sexual behavior, and personal conduct;"
+    },
+    {
+     "cap": "financial considerations, alcohol consumption, drug involvement and substance misuse, and psychological conditions;"
+    },
+    {
+     "cap": "criminal conduct, handling protected information, outside activities, and use of information technology."
+    },
+    {
+     "cap": "Each guideline lists conditions that raise a concern, and conditions that can ease it."
+    },
+    {
+     "cap": "You are looked at as a whole person. A single bad moment in time doesn't automatically mean a denial."
+    }
+   ]
+  },
+  {
+   "id": "s7b",
+   "step": 7,
+   "label": "The whole person",
+   "lines": [
+    {
+     "cap": "Adjudicators weigh how serious it was, how recent and how often, your age at the time, whether it was voluntary, and whether you've changed."
+    },
+    {
+     "cap": "Time, honesty, and changed behavior can mitigate past issues."
+    },
+    {
+     "cap": "But any real doubt is resolved in favor of national security."
+    },
+    {
+     "cap": "Most cases end here, with a favorable decision. Some are approved with conditions and extra monitoring."
+    },
+    {
+     "cap": "That's called conditional eligibility. DCSA can use it to monitor a concern through continuous vetting instead of starting due process."
+    }
+   ]
+  },
+  {
+   "id": "s8",
+   "step": 8,
+   "label": "Issues? DOHA reviews",
+   "lines": [
+    {
+     "cap": "If the adjudicator can't decide in your favor, the case goes to DOHA, the Defense Office of Hearings and Appeals."
+    },
+    {
+     "cap": "If DOHA's attorneys agree there's a real concern, you receive a Statement of Reasons, or SOR, listing each one.",
+     "say": "If Doha's attorneys agree there's a real concern, you receive a Statement of Reasons, or S O R, listing each one."
+    },
+    {
+     "cap": "If they don't agree, eligibility can still be granted."
+    }
+   ]
+  },
+  {
+   "id": "s9",
+   "step": 9,
+   "label": "You respond to the SOR",
+   "lines": [
+    {
+     "cap": "Step nine: if you receive an SOR and want to pursue the clearance, you will need to respond.",
+     "say": "Step nine: if you receive an S O R and want to pursue the clearance, you will need to respond."
+    },
+    {
+     "cap": "You have 20 days to answer in writing, under oath, admitting or denying each allegation."
+    },
+    {
+     "cap": "You can choose: a hearing before an administrative judge, or a decision on the written record."
+    }
+   ]
+  },
+  {
+   "id": "s9b",
+   "step": 9,
+   "label": "Hearing or written record",
+   "lines": [
+    {
+     "cap": "On the written record, you get a copy of the government's evidence and have 30 days to respond with your own documents and explanation."
+    },
+    {
+     "cap": "At a hearing, a government attorney called Department Counsel presents the case. You can testify, call witnesses, and present documents."
+    },
+    {
+     "cap": "You carry the burden of persuasion, so explain the circumstances and show what has changed."
+    },
+    {
+     "cap": "You may bring a lawyer or a personal representative. If you don't respond at all, the clearance is denied."
+    }
+   ]
+  },
+  {
+   "id": "s10",
+   "step": 10,
+   "label": "Decision and appeal",
+   "lines": [
+    {
+     "cap": "Step ten: the judge decides. Either side can appeal to the DOHA Appeal Board within 15 days."
+    },
+    {
+     "cap": "A final denial means waiting one year before your employer can apply again."
+    }
+   ]
+  },
+  {
+   "id": "next",
+   "step": null,
+   "label": "Wrap-up",
+   "lines": [
+    {
+     "cap": "That's adjudication: the guidelines, the whole person, and due process if there are concerns."
+    },
+    {
+     "cap": "Once you're approved, a clearance needs looking after. That's part four: maintenance."
+    }
+   ]
+  },
+  {
+   "id": "end",
+   "step": null,
+   "label": "",
+   "hold": 6.0,
+   "lines": []
+  }
+ ]
+}

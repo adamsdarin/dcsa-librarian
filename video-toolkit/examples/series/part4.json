@@ -1,0 +1,168 @@
+{
+ "title": "Your Security Clearance, Part 4: Maintenance",
+ "series": {
+  "part": 4,
+  "name": "Maintenance"
+ },
+ "bar": {
+  "steps": [
+   "Briefing",
+   "Need-to-know",
+   "Continuous vetting",
+   "Reporting",
+   "Jobs and leaving"
+  ],
+  "bracket": null,
+  "scenes": [
+   "access",
+   "ntk",
+   "cv",
+   "report",
+   "report2",
+   "moves"
+  ]
+ },
+ "scenes": [
+  {
+   "id": "title",
+   "step": null,
+   "label": "",
+   "lines": [
+    {
+     "cap": "Your security clearance, part four: maintenance."
+    }
+   ]
+  },
+  {
+   "id": "map",
+   "step": null,
+   "label": "Part 4 of 4",
+   "lines": [
+    {
+     "cap": "Alex is approved. Now the job is keeping the clearance in good standing."
+    }
+   ]
+  },
+  {
+   "id": "access",
+   "step": 1,
+   "label": "Eligible is not the same as access",
+   "lines": [
+    {
+     "cap": "Now, let's say Alex is approved. Being eligible isn't the same as access."
+    },
+    {
+     "cap": "Before seeing anything classified, Alex gets an initial security briefing and signs the SF 312, a nondisclosure agreement that lasts for life.",
+     "say": "Before seeing anything classified, Alex gets an initial security briefing and signs the S F three-twelve, a nondisclosure agreement that lasts for life."
+    },
+    {
+     "cap": "The briefing covers threats, including insider threats, counterintelligence, how classification works, and your reporting duties."
+    }
+   ]
+  },
+  {
+   "id": "ntk",
+   "step": 2,
+   "label": "Need-to-know and refreshers",
+   "lines": [
+    {
+     "cap": "And Alex only sees what the job requires. That's called need-to-know."
+    },
+    {
+     "cap": "Every 12 months, you'll get refresher training."
+    }
+   ]
+  },
+  {
+   "id": "cv",
+   "step": 3,
+   "label": "Continuous vetting",
+   "lines": [
+    {
+     "cap": "A clearance isn't one and done. Cleared people are enrolled in continuous vetting, with automated record checks and an updated form about every five years."
+    },
+    {
+     "cap": "That includes FBI Rap Back, which alerts DCSA to new criminal records in near real time."
+    }
+   ]
+  },
+  {
+   "id": "report",
+   "step": 4,
+   "label": "What you report",
+   "lines": [
+    {
+     "cap": "Your part: report life changes to your FSO, like foreign travel and contacts, money trouble, or an arrest.",
+     "say": "Your part: report life changes to your F S O, like foreign travel and contacts, money trouble, or an arrest."
+    },
+    {
+     "cap": "Before a personal trip abroad, give your FSO your itinerary. Report changes, and unplanned day trips to Canada or Mexico, within five business days of getting back.",
+     "say": "Before a personal trip abroad, give your F S O your itinerary. Report changes, and unplanned day trips to Canada or Mexico, within five business days of getting back."
+    },
+    {
+     "cap": "Official travel for your government contract doesn't need to be reported."
+    },
+    {
+     "cap": "Report close and continuing ties with foreign nationals, and any contact with someone you think may be a foreign intelligence officer."
+    }
+   ]
+  },
+  {
+   "id": "report2",
+   "step": 4,
+   "label": "What you report",
+   "lines": [
+    {
+     "cap": "Also report attempts to get classified information from you, an arrest, alcohol- or drug-related treatment, bankruptcy, or a debt more than 120 days past due."
+    },
+    {
+     "cap": "Applying for foreign citizenship, using a foreign passport, and media contacts about classified matters are reportable too."
+    },
+    {
+     "cap": "Top Secret holders report more, including marriage, cohabitation, foreign bank accounts or property, and voting in a foreign election."
+    },
+    {
+     "cap": "And if you see reportable behavior by another cleared coworker, tell your FSO.",
+     "say": "And if you see reportable behavior by another cleared coworker, tell your F S O."
+    }
+   ]
+  },
+  {
+   "id": "moves",
+   "step": 5,
+   "label": "Changing jobs, and leaving",
+   "lines": [
+    {
+     "cap": "If you move to another cleared employer, your eligibility generally comes with you. Under federal reciprocity rules, your new FSO confirms it instead of starting over.",
+     "say": "If you move to another cleared employer, your eligibility generally comes with you. Under federal reciprocity rules, your new F S O confirms it instead of starting over."
+    },
+    {
+     "cap": "When you leave, or no longer need access, your FSO debriefs you. Your SF 312 obligations never end.",
+     "say": "When you leave, or no longer need access, your F S O debriefs you. Your S F three-twelve obligations never end."
+    }
+   ]
+  },
+  {
+   "id": "recap",
+   "step": null,
+   "label": "Series recap",
+   "lines": [
+    {
+     "cap": "So: your FSO starts it. You complete eApp. DCSA reviews, investigates, and decides, with DOHA stepping in if there are issues.",
+     "say": "So: your F S O starts it. You complete e-App. DCSA reviews, investigates, and decides, with DOHA stepping in if there are issues."
+    },
+    {
+     "cap": "Then you're briefed, you sign, and you keep reporting. Tell the truth, meet your deadlines, and talk to your FSO.",
+     "say": "Then you're briefed, you sign, and you keep reporting. Tell the truth, meet your deadlines, and talk to your F S O."
+    }
+   ]
+  },
+  {
+   "id": "end",
+   "step": null,
+   "label": "",
+   "hold": 7.0,
+   "lines": []
+  }
+ ]
+}

@@ -5,6 +5,7 @@ tl = json.load(open("build/timeline.json"))
 start = {s["id"]: s["start"] for s in tl["scenes"]}
 pairs = [p.split(":") for p in sys.argv[1].split(",")]
 times = [round(start[sc] + float(t), 2) for sc, t in pairs]
+times = [int(t) if t == int(t) else t for t in times]  # match JS number formatting in still_<t>.png
 env = dict(os.environ, NODE_PATH="/opt/node22/lib/node_modules")
 subprocess.run(["node", "render.js", "--stills", ",".join(map(str, times)), "--scale", "1"], check=True, env=env)
 ff = os.environ["FFMPEG"]

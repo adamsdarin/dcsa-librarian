@@ -1,0 +1,122 @@
+{
+ "title": "Your Security Clearance, Part 2: Investigation",
+ "series": {
+  "part": 2,
+  "name": "Investigation"
+ },
+ "scenes": [
+  {
+   "id": "title",
+   "step": null,
+   "label": "",
+   "lines": [
+    {
+     "cap": "Your security clearance, part two: investigation."
+    }
+   ]
+  },
+  {
+   "id": "map",
+   "step": null,
+   "label": "Part 2 of 4",
+   "lines": [
+    {
+     "cap": "In part one, Alex's application reached DCSA. Now comes the investigation, where DCSA checks the facts."
+    }
+   ]
+  },
+  {
+   "id": "s5",
+   "step": 5,
+   "label": "Temporary eligibility",
+   "lines": [
+    {
+     "cap": "Step five. While the full investigation runs, DCSA may grant temporary eligibility. You may hear it called an \"interim.\""
+    },
+    {
+     "cap": "It's based on your form and early checks, and it can let you start cleared work sooner."
+    },
+    {
+     "cap": "It has limits, and not getting temporary eligibility is not a denial. It just means you wait for the final decision."
+    },
+    {
+     "cap": "Those limits: temporary Secret doesn't cover Restricted Data, COMSEC, or NATO information. Those need a final decision."
+    },
+    {
+     "cap": "And temporary eligibility can't last more than a year unless DCSA approves."
+    }
+   ]
+  },
+  {
+   "id": "s6",
+   "step": 6,
+   "label": "The background investigation",
+   "lines": [
+    {
+     "cap": "Step six: the background investigation. DCSA checks records like criminal history and credit."
+    },
+    {
+     "cap": "How deep it goes depends on your level: a moderate-tier investigation for Secret, and a high-tier one for Top Secret."
+    },
+    {
+     "cap": "Checks can include national databases, your fingerprints, your credit, and your education and employment history."
+    },
+    {
+     "cap": "Investigators may interview you, your references, and people who know you. Top Secret investigations dig deeper."
+    },
+    {
+     "cap": "An interview is your chance to explain anything on your form. Keep a copy of your SF 86 handy, and if you don't know an answer, say so.",
+     "say": "An interview is your chance to explain anything on your form. Keep a copy of your S F eighty-six handy, and if you don't know an answer, say so."
+    },
+    {
+     "cap": "If you speak to an investigator, answer promptly and honestly."
+    }
+   ]
+  },
+  {
+   "id": "s6b",
+   "step": 6,
+   "label": "Who's who, and waiting",
+   "lines": [
+    {
+     "cap": "DCSA investigators carry an official DCSA credential card."
+    },
+    {
+     "cap": "And if you're unsure an investigator is legitimate, DCSA can verify them. You can contact DCSA by calling 878-274-1186.",
+     "say": "And if you're unsure an investigator is legitimate, DCSA can verify them. You can contact DCSA by calling eight seven eight, two seven four, one one eight six."
+    },
+    {
+     "cap": "Investigators don't decide your clearance. They gather the facts and report them to an adjudicator."
+    },
+    {
+     "cap": "While you wait, you can follow your case status online in DCSA's Individual Engagement Platform.",
+     "say": "While you wait, you can follow your case status online in D C S A's Individual Engagement Platform."
+    },
+    {
+     "cap": "And keep your FSO posted about changes, like a foreign trip or a new arrest. Reporting rules already apply while your case is in process.",
+     "say": "And keep your F S O posted about changes, like a foreign trip or a new arrest. Reporting rules already apply while your case is in process."
+    }
+   ]
+  },
+  {
+   "id": "next",
+   "step": null,
+   "label": "Wrap-up",
+   "lines": [
+    {
+     "cap": "That's the investigation: temporary eligibility if you qualify, then record checks and interviews."
+    },
+    {
+     "cap": "When it's done, the results go to an adjudicator. That's part three."
+    }
+   ]
+  },
+  {
+   "id": "end",
+   "step": null,
+   "label": "",
+   "hold": 6.0,
+   "lines": []
+  }
+ ]
+}

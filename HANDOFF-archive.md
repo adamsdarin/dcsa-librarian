@@ -356,3 +356,34 @@ first-of-month schedule addition. No acquisition or library writes performed.
 2026-09-11 Codex — Completed cross-system role/handoff implementation and process map. Tests: 65 Librarian, 52 Archivist; three cross-system acceptance cases and shared-policy checks pass. No live publication, acquisition, scheduling, or guidance product changes. Portable regenerator assessed as a proposed recipe-driven CLI, not implemented.
 2026-09-11 Codex — Cross-system workflow audit in progress. User selected Librarian -> Archivist -> approved release -> comparison and Guidance Watch. Implementing staged source intake, published navigation graph, and durable release packets with completion receipts. Existing dirty files preserved. No live library changes; installed Windows task inspection found no DCSA/FSO/Custodian-named tasks.
 2026-09-10 Codex — Completed authorized implementation. Offline discovery/quarantine is exercised by the cross-system acceptance suite. Shared-policy check passes. Pre-existing untracked files remain untouched; no live source scan or scheduler change was made. Changes remain uncommitted, including preserved prior edits.
+
+# Log entries trimmed from HANDOFF.md on 2026-10-31
+
+2026-09-23 Codex — Read-only scan-status confirmed no valid structured receipts for monthly-scan, monthly-integrity or VOI-release-watch. Status remains unknown, not successful; no out-of-cycle sweep was started.
+2026-09-23 Claude — Operator handed in a retyped 2017 PDF of the 2005 Adjudicative
+Guidelines with no official URL. It matches no official file byte-for-byte, so the
+operator chose to ingest the NARA ISOO copy (archives.gov, allowlisted under
+official-reference-verification) instead; the retyped copy's hash is noted in the
+package only for reference. Fetched with the Librarian's own Fetcher and package
+writer; marked superseded/historical, not current policy.
+2026-09-22 Claude — Added doha-provenance. DOHA addresses decisions by opaque
+FileId, so a URL can only come from the listing that names the file; a case number
+can never produce one. The basis is recorded per row because a listing label is
+weaker evidence than matching bytes, and a decision posted on two listings keeps
+both URLs and withholds the year, which the Archivist reads as a date bound. No
+document was downloaded and the library was not written.
+2026-09-18 Claude — Added byte-verified provenance to discovery. A name match alone is
+never provenance; bytes_differ rows go to the Evidence Reviewer. This is how the
+Rebuilder's 749 retained-bytes-only records can gain official URLs over time.
+2026-09-18 Claude — Merged three cloud-session commits (Sept 7-13, pushed only to the
+feature branch) into the local line: URL percent-encoding, pinned failing URLs, and
+config/catalog_exclusions.json scope decisions (excluded documents are still crawled
+and reported, never re-offered or downloaded). Both sides had built intake packages;
+kept Codex's writer and adopted the cloud builder's stable url+hash submission_id and
+required-field check. That session's FCL intake (12 in-scope documents) still needs a
+library doctor and a handbook-edition check before acquisition.
+2026-09-16 Codex — Fixed local-calendar period selection; boundary regression and
+all 72 Librarian tests pass. No acquisition or publication run.
+2026-09-15 Codex — Closed filename-based period suppression; added retained,
+hash-bound issue-period review and source-request handoff instructions. No live
+issue confirmed, source downloaded or library publication performed.

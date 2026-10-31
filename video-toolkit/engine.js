@@ -326,7 +326,12 @@ let TL = null;
 const SCENES = {};  // id -> function(ctx) returning svg; registered in scenes.js
 let BAR_SCENES = new Set(['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10']);
 
-function init(timeline) { TL = timeline; return document.fonts.ready.then(() => true); }
+function init(timeline) {
+  TL = timeline;
+  // a video's scenes.js may define onTimeline(TL) to configure the bar or anything else per script
+  if (typeof onTimeline === 'function') onTimeline(TL);
+  return document.fonts.ready.then(() => true);
+}
 
 function sceneAt(t) {
   const sc = TL.scenes;
