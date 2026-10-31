@@ -56,6 +56,10 @@ Hearing Decisions - 2") is inaccessible with no recovery date.
   lifecycle review? Owner decision.
 
 ## Log
+2026-10-31 Claude — FCL video: the cloud session's scratch was reclaimed before the owner replied, so
+the leadership draft (script, scene code for title/meet/Step 1, sign-off flags, verified research) is
+now saved in video-toolkit/examples/fcl/FCL-VIDEO-HANDOFF.md for the owner to continue in a local
+chat. Still awaiting the owner's approval of video 1 of 3. Re-check the Oct 1 DFARS/NI2 FOCI change.
 2026-10-31 Claude — Owner asked to split the PCL video into four episodes (submission,
 investigation, adjudication, maintenance), "as long as necessary", reviewing all four scripts at
 once. Approved wording is kept; new lines are verified against 32 CFR 117/155/147, SEADs 4 and 7,
@@ -69,6 +73,11 @@ rule is framed as a private-company rule, counted from the eligibility grant (11
 2026-09-25 Claude — The owner heard "DCS"/"DCSMA" in the PCL video. Kokoro reads a spaced "A" before a
 word as the article, and drops the "'s" from all-caps acronyms. Narration now uses unspaced "DCSA",
 and video-toolkit/audit_say.py flags both patterns before rendering. The video was re-voiced and re-rendered.
+2026-09-25 Claude — FCL video (branch claude/fcl-video). Owner chose three videos (leadership,
+sponsor-side, FSO), done one at a time, anchored on the July 2026 handbook's flow. The leadership
+script and a 30 s sample are with the owner for approval. One correction to the brief needs sign-off:
+the ISR orientation meeting comes after the FCL (within 120 days), not before (handbook 2.3). DTM 24-004
+and the NI2 FOCI changes are left out. Work is in session scratch until approval; nothing is committed yet.
 2026-09-25 Claude — Owner asked for two more videos (the FCL process, completing a DD 254) in
 parallel sessions. The PCL video tooling existed only in session scratch, so it now lives
 in video-toolkit/ (not Librarian code) and the sessions start from this branch. Each
