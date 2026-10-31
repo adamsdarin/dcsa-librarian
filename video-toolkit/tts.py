@@ -9,7 +9,7 @@ import wave
 from pathlib import Path
 
 import numpy as np
-from kokoro_onnx import Kokoro
+from kokoro_setup import load_kokoro
 
 ROOT = Path(__file__).parent
 BUILD = ROOT / "build"
@@ -26,7 +26,7 @@ TAIL = 0.9                 # after a scene's last line
 def main():
     BUILD.mkdir(exist_ok=True)
     script = json.loads((ROOT / "script.json").read_text())
-    kokoro = Kokoro(str(ROOT / "voices" / "kokoro-v1.0.onnx"), str(ROOT / "voices" / "voices-v1.0.bin"))
+    kokoro = load_kokoro(ROOT)
     rate = 24000
 
     audio = []
@@ -66,7 +66,8 @@ def main():
         w.setsampwidth(2)
         w.setframerate(rate)
         w.writeframes(pcm.tobytes())
-    timeline = {"title": script["title"], "duration": round(t, 3), "scenes": scenes}
+    timeline = {k: v for k, v in script.items() if k != "scenes"}
+    timeline.update(duration=round(t, 3), scenes=scenes)
     (BUILD / "timeline.json").write_text(json.dumps(timeline, indent=1))
     words = sum(len(l["cap"].split()) for s in script["scenes"] for l in s["lines"])
     print(f"voice={VOICE} speed={SPEED} words={words} duration={t:.1f}s ({t/60:.2f} min)")

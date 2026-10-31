@@ -1,6 +1,6 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-09-25 by Claude
+Last updated: 2026-10-31 by Claude
 
 ## Current State
 Librarian owns official-source discovery, integrity checks and quarantine intake; it
@@ -56,6 +56,12 @@ Hearing Decisions - 2") is inaccessible with no recovery date.
   lifecycle review? Owner decision.
 
 ## Log
+2026-10-31 Claude — Owner asked to split the PCL video into four episodes (submission,
+investigation, adjudication, maintenance), "as long as necessary", reviewing all four scripts at
+once. Approved wording is kept; new lines are verified against 32 CFR 117/155/147, SEADs 4 and 7,
+ISL 2021-02, and the Jul–Oct 2026 VOIs. Verified content runs ~11.5 min, not the 20–24 estimated;
+unpadded on purpose. Toolkit fix: espeak-ng ignores data paths over ~160 characters, so Kokoro
+failed in deep venvs; kokoro_setup.py copies the data to a short path. Scripts are with the owner.
 2026-09-25 Claude — The owner added federal agencies as sponsors in the PCL video's "Before you start".
 The rest of the video follows the contractor path (FSO, NISPOM, DOHA under 32 CFR 155), so, with the
 owner's approval, it now says so and points federal hires to their agency's security office. The 45-day

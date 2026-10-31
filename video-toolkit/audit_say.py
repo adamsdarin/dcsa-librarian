@@ -5,9 +5,10 @@ and drops the possessive from an all-caps acronym ("DOHA's" -> "Doha-r", "DCSA's
 Run this after every script edit; listen for anything flagged.
 Usage: venv/bin/python audit_say.py [lang]"""
 import json, re, sys
-from kokoro_onnx import Kokoro
+from pathlib import Path
+from kokoro_setup import load_kokoro
 lang = sys.argv[1] if len(sys.argv) > 1 else "en-gb"
-k = Kokoro("voices/kokoro-v1.0.onnx", "voices/voices-v1.0.bin")
+k = load_kokoro(Path(__file__).resolve().parent)
 flags = 0
 for sc in json.load(open("script.json"))["scenes"]:
     for line in sc["lines"]:
