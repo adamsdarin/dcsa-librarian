@@ -6,6 +6,7 @@ import sys
 import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfoNotFoundError
 
 from .audit import audit_library
 from .discovery import discover, import_browser_capture, preflight, render_preflight_text
@@ -114,6 +115,21 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    try:
+        return _run(argv)
+    except ZoneInfoNotFoundError as exc:
+        # A bare Windows Python ships no time zone database. Say so plainly: a
+        # scheduled run that dies in a traceback is easy to miss.
+        print(
+            f"Time zone data is missing ({exc.args[0] if exc.args else exc}). This Python has no "
+            "'tzdata' package. Install it with: python -m pip install tzdata "
+            "(or, from the project directory: python -m pip install --target .runtime tzdata).",
+            file=sys.stderr,
+        )
+        return 1
+
+
+def _run(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == 'confirm-period':
         from .schedule import confirm_period

@@ -267,7 +267,7 @@ def render_schtasks(schedule: Schedule, command: str) -> str:
     One task per time of day: a monthly task cannot repeat within a day.
     """
     lines = [
-        f":: Rendered from config/schedule.json by: python custodian.py schedule --render schtasks",
+        ":: Rendered from config/schedule.json by: python custodian.py schedule --render schtasks",
         f":: Times are local ({schedule.timezone_name}). schtasks uses local time, so these follow DST.",
         ":: Run this from the project directory in an elevated Command Prompt.",
     ]

@@ -63,6 +63,13 @@ One archived listing page ("2016 and Prior ISCR Hearing Decisions - 2") is inacc
 - The inaccessible DOHA listing page has no recovery date.
 
 ## Log
+2026-11-09 Claude — Repo hygiene on branch claude/repo-hygiene (not pushed, not merged). Added a
+GitHub Actions test workflow (ubuntu and windows, Python 3.12; offline tests and ruff only, never
+a scan, so the no-CI-adapter rule for DCSA scans still holds), a `dev` extra (pytest, ruff), a
+minimal ruff config (E9, F) and monthly Dependabot. The scheduler wrappers run the PATH `python`
+against custodian.py without installing the project, so tzdata is present only if installed there
+or under .runtime; the CLI now exits 1 naming tzdata instead of a traceback, and scheduling.md
+documents the install step. No installed task was changed.
 2026-09-27 Claude — Closed out DOHA acquisition at 21,941 of 21,942. The owner supplied
 manual copies of 06-25928.a1 and a file named 06-25928.h1; the latter's text is the
 decision on remand (it cites "my first decision" of 2007-11-20), so it is h2 in
