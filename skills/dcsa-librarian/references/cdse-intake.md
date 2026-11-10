@@ -13,9 +13,9 @@ Use the official CDSE registry or toolkit page as the discovery root. Prefer the
 
 1. Run the library audit before discovery.
 2. Use a configured allowlist and bounded document cap. Honor robots, rate, timeout, response-size, and public-access rules.
-3. Download only with user authorization and stage originals plus robot derivatives outside the active corpus.
+3. Stage downloaded originals plus robot derivatives outside the active corpus.
 4. Validate PDF readability, page count, extraction quality, hashes, duplicates, and citation locator stability.
-5. Present the candidate bill of materials and lifecycle/authority proposals before promotion.
+5. Record the candidate bill of materials and lifecycle/authority proposals in the intake handoff.
 6. Promote only through a tested release command after every governance gate passes. Rebuild manifests and indexes atomically; retain a rollback target.
 
 If command-line retrieval is blocked but ordinary browser download is allowed, use the browser without bypassing access controls and record that acquisition method. A blocked robots endpoint is an evidence gap; it is not permission to ignore site rules.

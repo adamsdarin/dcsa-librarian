@@ -1,5 +1,15 @@
 # Scheduling
 
+## Contents
+- What is and is not agnostic
+- The scan runs locally, on an ordinary desktop (proving it works; Windows, Linux, and macOS setup; change notices)
+- Running a declared job
+- The declared jobs
+- Time zones
+- Running without the library
+- State is the baseline, so state must survive
+- If a source starts failing
+
 ## What is and is not agnostic
 
 No agent framework schedules itself. Something outside it has to tick: a cron
@@ -186,6 +196,6 @@ persist on disk anyway, but committing them gives a durable history:
 
 A run that cannot reach a source has not cleared it. Do not respond by spoofing
 a user agent or disabling robots handling. If the direct crawler is rejected by
-a CDN, use the browser fallback in [discovery.md](discovery.md) — it navigates
+a CDN, use the browser fallback in `discovery.md` — it navigates
 the public site as an ordinary user and hands the capture back to the
 deterministic importer.
