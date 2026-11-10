@@ -1,6 +1,44 @@
 {
+  "schema_version": 2,
   "source_id": "nara-cui-policy",
-  "scanned_at": "2026-08-30T23:34:35Z",
+  "scanned_at": "2026-10-01T14:04:33Z",
+  "documents": {
+    "https://www.archives.gov/files/cui/documents/cui-notice-2023.10.03-annual-reporting-requirements.pdf.pdf": {
+      "inferred_filename": "cui-notice-2023.10.03-annual-reporting-requirements.pdf.pdf",
+      "sha256": "ce6f14566223064663a0b090e4c15c48f1ea5c0d2af0702511784c4ff2233623",
+      "etag": "\"24014-609a53d02f228\"",
+      "last_modified": "Wed, 08 Nov 2023 14:52:38 GMT",
+      "content_length": "147476"
+    },
+    "https://www.archives.gov/files/cui/registry/policy-guidance/registry-documents/2018-cui-advisory-council-charter.pdf": {
+      "inferred_filename": "2018-cui-advisory-council-charter.pdf",
+      "sha256": "8cab326c0e0ce6ef64c2475f5ec843fb494b617932142c88ce040c4cf6043fc9",
+      "etag": "\"11b8c-56645a046ee88\"",
+      "last_modified": "Wed, 28 Feb 2018 13:21:51 GMT",
+      "content_length": "72588"
+    },
+    "https://www.archives.gov/files/cui/registry/policy-guidance/registry-documents/cui-registry-committee-charter.pdf": {
+      "inferred_filename": "cui-registry-committee-charter.pdf",
+      "sha256": "45ef298f4a4a42cfb72b303f891050e02a2bd3ffa509bf5ef19f61b412c50c4d",
+      "etag": "\"ece0-5888a35398620\"",
+      "last_modified": "Fri, 10 May 2019 15:27:43 GMT",
+      "content_length": "60640"
+    },
+    "https://www.archives.gov/files/cui/documents/2011-overview-for-compliance-plans.pdf": {
+      "inferred_filename": "2011-overview-for-compliance-plans.pdf",
+      "sha256": "274040516dd3a5b4343a5a352dd6268e1261f36cd59efafa2714aa2cea36fe10",
+      "etag": "\"3a3c3d-59f16ac120bd0\"",
+      "last_modified": "Fri, 21 Feb 2020 14:16:48 GMT",
+      "content_length": "3816509"
+    },
+    "https://www.archives.gov/files/cui/documents/2010-overview-for-depts-and-agencies-from-ea.pdf": {
+      "inferred_filename": "2010-overview-for-depts-and-agencies-from-ea.pdf",
+      "sha256": "f05e24d1b2d5cdfeaa1cba962ac47bf639a6104ca6fdb41b2e6e339917ad04a1",
+      "etag": "\"11e02-59f16b2d1ff48\"",
+      "last_modified": "Fri, 21 Feb 2020 14:18:41 GMT",
+      "content_length": "73218"
+    }
+  },
   "document_urls": [
     "https://www.archives.gov/files/cui/documents/2010-overview-for-depts-and-agencies-from-ea.pdf",
     "https://www.archives.gov/files/cui/documents/2011-overview-for-compliance-plans.pdf",
@@ -12,10 +50,12 @@
     {
       "url": "https://www.archives.gov/cui/registry/policy-guidance",
       "content_type": "text/html",
-      "etag": "W/\"1788116400-0-gzip\"",
-      "last_modified": "Sun, 30 Aug 2026 19:00:00 GMT",
+      "etag": "W/\"1790786259-0-gzip\"",
+      "last_modified": "Wed, 30 Sep 2026 16:37:39 GMT",
+      "content_length": "41299",
       "final_url": "https://www.archives.gov/cui/registry/policy-guidance",
-      "sha256": "bfe61b47095113fb17a178d5477780af1efd041d08bf6c5ed8cdadaeb0da155a"
+      "redirect_chain": [],
+      "sha256": "3f7eb9772945ddde3ede3125aaea907d1df28c4c7a2972087bd2d579d4c6c3fc"
     }
   ]
 }

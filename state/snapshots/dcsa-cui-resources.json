@@ -1,0 +1,157 @@
+{
+  "schema_version": 2,
+  "source_id": "dcsa-cui-resources",
+  "scanned_at": "2026-10-01T14:04:33Z",
+  "documents": {
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Contractual%20Considerations%20for%20Industry%20Version%201.pdf": {
+      "inferred_filename": "DCSA CUI Contractual Considerations for Industry Version 1.pdf",
+      "sha256": "9a8081245283a5c28278903841c6187609adc2fae985f75a1182e18f4bbc375b",
+      "etag": null,
+      "last_modified": "Tue, 07 Nov 2023 16:15:25 GMT",
+      "content_length": "194370"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20101%20Version%202U.pdf": {
+      "inferred_filename": "DCSA CUI 101 Version 2U.pdf",
+      "sha256": "ce6a1648056ea2b7c09c47ad7dd36fa451485db1a7356049a87b0b03cbf5ede9",
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:46:04 GMT",
+      "content_length": "221498"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Roadmap%20to%20Compliance%20Version%203U.pdf": {
+      "inferred_filename": "DCSA CUI Roadmap to Compliance Version 3U.pdf",
+      "sha256": "dfca48dc50bd77d7d266a19a77d76ae1ffc3ffd2cecb4256943bfb697e2a464c",
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:46:20 GMT",
+      "content_length": "1917896"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DoD%20CUI%20ResourcesU.pdf": {
+      "inferred_filename": "DoD CUI ResourcesU.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:46:16 GMT",
+      "content_length": "318054"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Quick%20Start%20Guide%20Version%202U.pdf": {
+      "inferred_filename": "DCSA CUI Quick Start Guide Version 2U.pdf",
+      "sha256": "c4765ede648938f475c74c2665760c6891c0d263acb97a46bf10d0fc03350204",
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:46:14 GMT",
+      "content_length": "1064882"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Training%20Template%20Version%203.pdf": {
+      "inferred_filename": "DCSA CUI Training Template Version 3.pdf",
+      "sha256": "ef9f9a025e5b35b3e39c3bd55a6b2bf0bc07be78408890a18644bed15d0ded8d",
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:13:48 GMT",
+      "content_length": "3071559"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Glossary%20and%20Policy%20Summaries%20Version%202U.pdf": {
+      "inferred_filename": "DCSA CUI Glossary and Policy Summaries Version 2U.pdf",
+      "sha256": "e5633a751e2cac9570931fcca4479871bca64ed300dc528b4bbc77585b7dd6d1",
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:46:11 GMT",
+      "content_length": "940891"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Security%20Controls%20Playbook%20Version%202U.xlsx": {
+      "inferred_filename": "DCSA CUI Security Controls Playbook Version 2U.xlsx",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:46:04 GMT",
+      "content_length": "570090"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Destruction%20Guidance%20Version%202U.pdf": {
+      "inferred_filename": "DCSA CUI Destruction Guidance Version 2U.pdf",
+      "sha256": "b4d17d87e1ba2675628ada9b697ffba5ef26092231567ef70a257e83c0a9f620",
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:46:03 GMT",
+      "content_length": "254414"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSATeleworkDosDontsVersion2U.pdf": {
+      "inferred_filename": "DCSATeleworkDosDontsVersion2U.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:46:09 GMT",
+      "content_length": "339761"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Frequently%20Asked%20Questions%20(May%202025).pdf": {
+      "inferred_filename": "DCSA CUI Frequently Asked Questions (May 2025).pdf",
+      "sha256": "61e9fa5c91e03fdb288b8d442d78bf8d91e59fc1271880c2a89202f1182f1906",
+      "etag": null,
+      "last_modified": "Thu, 05 Jun 2025 15:02:13 GMT",
+      "content_length": "1529035"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/SF901-18a%20CUI%20Cover%20SheetU.pdf": {
+      "inferred_filename": "SF901-18a CUI Cover SheetU.pdf",
+      "sha256": "26f2edc6526602fb7d8a2549cc3bf195d4a922e8614918fc20aebaf90ee394e1",
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:46:18 GMT",
+      "content_length": "590675"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/CUI%20Quarterly%20Newsletter%20-%20March%202026.pdf": {
+      "inferred_filename": "CUI Quarterly Newsletter - March 2026.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Thu, 05 Mar 2026 19:49:26 GMT",
+      "content_length": "612109"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Landscape%20Version%202U.pdf": {
+      "inferred_filename": "DCSA CUI Landscape Version 2U.pdf",
+      "sha256": "ef0e29190a435cddf36d5face6af3234ef2ea9bb23c3cbee9466c92c33c958e3",
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:46:05 GMT",
+      "content_length": "987603"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Self-Inspection%20Tool%20for%20DoDU.pdf": {
+      "inferred_filename": "DCSA CUI Self-Inspection Tool for DoDU.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:46:05 GMT",
+      "content_length": "717591"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/SF901-18a%20CUI%20Cover%20Sheet.pdf": {
+      "inferred_filename": "SF901-18a CUI Cover Sheet.pdf",
+      "sha256": "26f2edc6526602fb7d8a2549cc3bf195d4a922e8614918fc20aebaf90ee394e1",
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 18:11:09 GMT",
+      "content_length": "590675"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf": {
+      "inferred_filename": "DCSA Strategic Execution Plan.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    }
+  },
+  "document_urls": [
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/CUI%20Quarterly%20Newsletter%20-%20March%202026.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20101%20Version%202U.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Contractual%20Considerations%20for%20Industry%20Version%201.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Destruction%20Guidance%20Version%202U.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Frequently%20Asked%20Questions%20(May%202025).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Glossary%20and%20Policy%20Summaries%20Version%202U.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Landscape%20Version%202U.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Quick%20Start%20Guide%20Version%202U.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Roadmap%20to%20Compliance%20Version%203U.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Security%20Controls%20Playbook%20Version%202U.xlsx",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Self-Inspection%20Tool%20for%20DoDU.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Training%20Template%20Version%203.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSATeleworkDosDontsVersion2U.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DoD%20CUI%20ResourcesU.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/SF901-18a%20CUI%20Cover%20Sheet.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/SF901-18a%20CUI%20Cover%20SheetU.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf"
+  ],
+  "pages": [
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Controlled-Unclassified-Information-CUI/Resources/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Controlled-Unclassified-Information-CUI/Resources/",
+      "redirect_chain": [],
+      "sha256": "acfa04063df091af313285f4c83c9a3eb1f888550b97a918965beed2a1a7ba7a"
+    }
+  ]
+}

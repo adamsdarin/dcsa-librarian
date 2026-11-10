@@ -1,0 +1,109 @@
+{
+  "schema_version": 2,
+  "source_id": "dcsa-security-review-rating",
+  "scanned_at": "2026-10-01T14:04:33Z",
+  "documents": {
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20Appointed%20Personnel%20Duties%20Job%20Aid%20v1.2%20%20(Effective%201%20Oct%202024).pdf": {
+      "inferred_filename": "DCSA Appointed Personnel Duties Job Aid v1.2  (Effective 1 Oct 2024).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Wed, 05 Jun 2024 17:50:59 GMT",
+      "content_length": "264056"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20Categorizing%20NISPOM%20Non-Compliances%20Job%20Aid%20(June%202024).pdf": {
+      "inferred_filename": "DCSA Categorizing NISPOM Non-Compliances Job Aid (June 2024).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Wed, 07 Aug 2024 16:56:28 GMT",
+      "content_length": "222183"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/Compliance%20Security%20Reviews%2010012024.pdf": {
+      "inferred_filename": "Compliance Security Reviews 10012024.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Tue, 01 Oct 2024 20:31:53 GMT",
+      "content_length": "459835"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20Security%20Rating%20Score%20Tool%202.0%20(October%201,%202026).xlsx": {
+      "inferred_filename": "DCSA Security Rating Score Tool 2.0 (October 1, 2026).xlsx",
+      "sha256": "5f40f0c0f4a04b77153c29f9a9435a3026be9c4fae849f992726057534ba848c",
+      "etag": null,
+      "last_modified": "Tue, 29 Sep 2026 16:50:01 GMT",
+      "content_length": "220156"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20Security%20Rating%20Gold%20Standard%20Criteria%20Reference%20Card%202.0%20(October%201,%202026).pdf": {
+      "inferred_filename": "DCSA Security Rating Gold Standard Criteria Reference Card 2.0 (October 1, 2026).pdf",
+      "sha256": "ef4a640c12d6e2ae0cb2b40c140b3a218f872ad1bae62e0e1fbfd3bbf20b6b6a",
+      "etag": null,
+      "last_modified": "Tue, 29 Sep 2026 17:16:18 GMT",
+      "content_length": "426572"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20Gold%20Standard%20Criteria%20(Effective%201%20Oct%202024).pdf": {
+      "inferred_filename": "DCSA Gold Standard Criteria (Effective 1 Oct 2024).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Wed, 05 Jun 2024 17:51:01 GMT",
+      "content_length": "688686"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20Security%20Rating%20Process%20Slick%20Sheet%20(Effective%201%20Oct%202024).pdf": {
+      "inferred_filename": "DCSA Security Rating Process Slick Sheet (Effective 1 Oct 2024).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Wed, 05 Jun 2024 17:51:01 GMT",
+      "content_length": "689423"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/Security%20Review%20Process%20Slick%20Sheet.pdf": {
+      "inferred_filename": "Security Review Process Slick Sheet.pdf",
+      "sha256": "1585ad8e07b4b1a41b7c2cb21ef14b36452072776f41956e8e4a699ec991d900",
+      "etag": null,
+      "last_modified": "Wed, 02 Oct 2024 17:55:28 GMT",
+      "content_length": "486322"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20SRRP%20Terms%20and%20Definitions%20(June%202024).pdf": {
+      "inferred_filename": "DCSA SRRP Terms and Definitions (June 2024).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Wed, 07 Aug 2024 16:56:30 GMT",
+      "content_length": "424727"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/Quick%20Start%20Guide%20-%20DCSA%20Security%20Review%20Rating%20Score%20Tool%202.0%20(October%201,%202026).pdf": {
+      "inferred_filename": "Quick Start Guide - DCSA Security Review Rating Score Tool 2.0 (October 1, 2026).pdf",
+      "sha256": "909e65ce7737b990e1e7f624f7791b03cd5e54216a7a1e73a266779c5c0c0ff3",
+      "etag": null,
+      "last_modified": "Tue, 29 Sep 2026 17:16:31 GMT",
+      "content_length": "543859"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf": {
+      "inferred_filename": "DCSA Strategic Execution Plan.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    }
+  },
+  "document_urls": [
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/Compliance%20Security%20Reviews%2010012024.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20Appointed%20Personnel%20Duties%20Job%20Aid%20v1.2%20%20(Effective%201%20Oct%202024).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20Categorizing%20NISPOM%20Non-Compliances%20Job%20Aid%20(June%202024).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20Gold%20Standard%20Criteria%20(Effective%201%20Oct%202024).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20SRRP%20Terms%20and%20Definitions%20(June%202024).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20Security%20Rating%20Gold%20Standard%20Criteria%20Reference%20Card%202.0%20(October%201,%202026).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20Security%20Rating%20Process%20Slick%20Sheet%20(Effective%201%20Oct%202024).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/DCSA%20Security%20Rating%20Score%20Tool%202.0%20(October%201,%202026).xlsx",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/Quick%20Start%20Guide%20-%20DCSA%20Security%20Review%20Rating%20Score%20Tool%202.0%20(October%201,%202026).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/DCSA-SRRP/Security%20Review%20Process%20Slick%20Sheet.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf"
+  ],
+  "pages": [
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/National-Industrial-Security-Program-Oversight/Security-Review-Rating-Process/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/National-Industrial-Security-Program-Oversight/Security-Review-Rating-Process/",
+      "redirect_chain": [],
+      "sha256": "044cafd9053e5b197e5be0a270fc76cd95b934aec77edb9c942032ed813f2abe"
+    }
+  ]
+}

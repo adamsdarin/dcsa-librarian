@@ -1,0 +1,77 @@
+{
+  "schema_version": 2,
+  "source_id": "dod-issuances",
+  "scanned_at": "2026-10-01T14:04:33Z",
+  "documents": {
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/iss_process/AO%20FP%20Checklist.pdf": {
+      "inferred_filename": "AO FP Checklist.pdf",
+      "sha256": "9c989a6a96cfb7f9fd0f16a3c3aa2999ac35962082a1ccadd4a7b37fb2f592a8",
+      "etag": null,
+      "last_modified": "Thu, 20 Nov 2025 13:06:10 GMT",
+      "content_length": "240683"
+    },
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/forms/Cancellations_List.xlsx": {
+      "inferred_filename": "Cancellations_List.xlsx",
+      "sha256": "1a8a0c88991a9fc7833f01442140746f48f9f2451cf1a8d8cff1cce6b607086c",
+      "etag": null,
+      "last_modified": "Thu, 03 Sep 2026 17:15:59 GMT",
+      "content_length": "160646"
+    },
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodm/775008m.PDF?ver=O1fUAw7HuDT42x7JTiwnWw%3d%3d": {
+      "inferred_filename": "775008m.PDF",
+      "sha256": "7fc3c7471285c4f52c12797110947a8663cc7140d66d1cd94f6df3767f9df702",
+      "etag": null,
+      "last_modified": "Fri, 11 Feb 2022 15:46:41 GMT",
+      "content_length": "2851435"
+    },
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/775007p.pdf": {
+      "inferred_filename": "775007p.pdf",
+      "sha256": "15965f1e993dd862d5a8cf69527ac79675830e67179e4a2e0cd0e05f88024a1d",
+      "etag": null,
+      "last_modified": "Tue, 19 Apr 2022 17:28:03 GMT",
+      "content_length": "257594"
+    },
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/iss_process/Working_Forms_With_Issuances.pdf?ver=hZS0IyJmfpJXkPMEVw9nBQ%3d%3d": {
+      "inferred_filename": "Working_Forms_With_Issuances.pdf",
+      "sha256": "e442d1860996c2e310bbdcf6359061be95b5fde20d13f709dbe2b48a4873ae6f",
+      "etag": null,
+      "last_modified": "Thu, 21 Jul 2022 19:02:06 GMT",
+      "content_length": "745592"
+    },
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/iss_process/coordination/Refreshing%20Coordinations%20Flowchart%20(508%20text).pdf?ver=jsqhkFHpzVgj9JL_QlEppg%3d%3d": {
+      "inferred_filename": "Refreshing Coordinations Flowchart (508 text).pdf",
+      "sha256": "54b80cbfd72a64ac4a6d9a021e61c28046c5d46bab99fdd4800a261d0e61d1d5",
+      "etag": null,
+      "last_modified": "Wed, 21 Jan 2026 19:20:42 GMT",
+      "content_length": "169931"
+    },
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/iss_process/process/Expedited_Issuance_Guide.pdf?ver=4P_BitZqVZMunUqGv9oBEg%3d%3d": {
+      "inferred_filename": "Expedited_Issuance_Guide.pdf",
+      "sha256": "f542980307780521d7135f0ba71e7177481ebbbbc320383be7656f6c1237e7d9",
+      "etag": null,
+      "last_modified": "Thu, 22 Jan 2026 13:06:50 GMT",
+      "content_length": "134653"
+    }
+  },
+  "document_urls": [
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/forms/Cancellations_List.xlsx",
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/iss_process/AO%20FP%20Checklist.pdf",
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/iss_process/Working_Forms_With_Issuances.pdf?ver=hZS0IyJmfpJXkPMEVw9nBQ%3d%3d",
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/iss_process/coordination/Refreshing%20Coordinations%20Flowchart%20(508%20text).pdf?ver=jsqhkFHpzVgj9JL_QlEppg%3d%3d",
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/iss_process/process/Expedited_Issuance_Guide.pdf?ver=4P_BitZqVZMunUqGv9oBEg%3d%3d",
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/775007p.pdf",
+    "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodm/775008m.PDF?ver=O1fUAw7HuDT42x7JTiwnWw%3d%3d"
+  ],
+  "pages": [
+    {
+      "url": "https://www.esd.whs.mil/DD/DoD-Issuances/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.esd.whs.mil/DD/DoD-Issuances/",
+      "redirect_chain": [],
+      "sha256": "82a71fb78ff7728e4a2e696e5246aa927ae350623228d0fe673319d5ec50634c"
+    }
+  ]
+}
