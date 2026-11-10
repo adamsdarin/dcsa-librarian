@@ -399,5 +399,22 @@ class DoctorJobTests(unittest.TestCase):
             self.assertIn("not a clean bill of health", text)
 
 
+class MissingTimeZoneDataTests(unittest.TestCase):
+    def test_missing_tzdata_is_named_instead_of_a_traceback(self) -> None:
+        import contextlib
+        import io
+        from zoneinfo import ZoneInfoNotFoundError
+
+        from library_custodian import cli
+
+        stderr = io.StringIO()
+        error = ZoneInfoNotFoundError("No time zone found with key America/New_York")
+        with mock.patch.object(cli, "run_scheduled_job", side_effect=error), contextlib.redirect_stderr(stderr):
+            code = cli.main(["scheduled-scan", "--job", "monthly-scan"])
+        self.assertEqual(code, EXIT_SOURCE_ERROR)
+        self.assertIn("tzdata", stderr.getvalue())
+        self.assertIn("pip install", stderr.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()

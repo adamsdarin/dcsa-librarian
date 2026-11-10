@@ -38,6 +38,19 @@ python custodian.py preflight --source dcsa-nisp-tools
 python custodian.py preflight --source dcsa-fcl
 ```
 
+The wrappers run `python custodian.py` with whatever `python` is on PATH; they
+do not install the project. On Windows that interpreter has no time zone
+database unless the `tzdata` package is present, and the scheduled jobs need
+one. Install it once, either into that Python or into the ignored `.runtime`
+directory that `custodian.py` adds to its path:
+
+```
+python -m pip install tzdata
+python -m pip install --target .runtime tzdata
+```
+
+Without it a scheduled job exits 1 with a message naming `tzdata`.
+
 `selftest` confirms the install. The two `preflight` runs confirm the machine
 can reach DCSA and that the parser can see documents on those pages — including
 whether the Voice of Industry newsletters are visible or hidden behind a
