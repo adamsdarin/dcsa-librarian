@@ -1,0 +1,245 @@
+{
+  "schema_version": 2,
+  "source_id": "dcsa-diss-resources",
+  "scanned_at": "2026-10-01T14:04:33Z",
+  "documents": {
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Industry_Continuous_Vetting_Guidance_260416_FINAL.pdf": {
+      "inferred_filename": "Industry_Continuous_Vetting_Guidance_260416_FINAL.pdf",
+      "sha256": "5b38dbc61b8a3004fd93b2b914145385ce1464e67f7092b8dbab0901d7eab4fd",
+      "etag": null,
+      "last_modified": "Tue, 19 May 2026 17:29:28 GMT",
+      "content_length": "319894"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DISS-SII-Knowledge-Article%20(1).pdf": {
+      "inferred_filename": "DISS-SII-Knowledge-Article (1).pdf",
+      "sha256": "6b938a6653dd7ddcee84038c97824492f012d6decab3a00bcee2a82500583518",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:14:04 GMT",
+      "content_length": "469343"
+    },
+    "https://www.dcsa.mil/Portals/91/Documents/IS/DISS/Foreign_Travel_Reporting_DISS_SEAD3%20(1).pdf": {
+      "inferred_filename": "Foreign_Travel_Reporting_DISS_SEAD3 (1).pdf",
+      "sha256": "0fe53a28f4a92c543d55e4e20384ed94256ab16d575127276d51e17135b4eaf7",
+      "etag": null,
+      "last_modified": "Wed, 10 Aug 2022 21:55:39 GMT",
+      "content_length": "1163374"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/NEW_Instructions_Adding_DISS_Trusted_Site.pdf": {
+      "inferred_filename": "NEW_Instructions_Adding_DISS_Trusted_Site.pdf",
+      "sha256": "2ea8bb6ee73b3d2d16af24c4fbabb527cc3bfb09ea8df7df55976f079f6d646a",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:14:47 GMT",
+      "content_length": "161836"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DISS_Data_Portal_Instructions.pdf": {
+      "inferred_filename": "DISS_Data_Portal_Instructions.pdf",
+      "sha256": "20684d8578a99ac5f30b3b5638ecbffe94a18cf34a4b667ea0684f76f080c85d",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:14:03 GMT",
+      "content_length": "3120149"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Adding_DISS_as_a_Trusted_Site.pdf": {
+      "inferred_filename": "Adding_DISS_as_a_Trusted_Site.pdf",
+      "sha256": "29277a34d6a0a1de75b7813535a2f5a0f279c6edf058fe01ab5a3e1ad7523691",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:13:24 GMT",
+      "content_length": "657028"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DCSA_Contact_Center_Encryption_v1-2.pdf": {
+      "inferred_filename": "DCSA_Contact_Center_Encryption_v1-2.pdf",
+      "sha256": "aa9c69b0fbde9212c6ae80d5d6b9f09ed15b0f0641f1ff9d7441ad0f040bfbeb",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:13:24 GMT",
+      "content_length": "2123546"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DCSA_DISS_Fact_Sheet_040121.pdf": {
+      "inferred_filename": "DCSA_DISS_Fact_Sheet_040121.pdf",
+      "sha256": "ada742c3f11da62a26022c250657e8d8e40b786924e2fec78c58810a93825095",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:13:24 GMT",
+      "content_length": "582487"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/NDA%20Job%20Aid%20022525.pdf": {
+      "inferred_filename": "NDA Job Aid 022525.pdf",
+      "sha256": "c0c31c5280253765824a92c8c50c00545667062770c287752be2083900032661",
+      "etag": null,
+      "last_modified": "Tue, 04 Mar 2025 21:16:28 GMT",
+      "content_length": "1005326"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Hierarchy-change_template.xlsx": {
+      "inferred_filename": "Hierarchy-change_template.xlsx",
+      "sha256": "2261a732283f8eaa4f035550f8c8222560c304f4b3cb2152ed6c4e92f7c0edf0",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:14:40 GMT",
+      "content_length": "10010"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Add-Subject_template.xlsx": {
+      "inferred_filename": "Add-Subject_template.xlsx",
+      "sha256": "afeffb989d96d12ecd026fb99f631c9134bf42de23085210b791858203157e8d",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:13:18 GMT",
+      "content_length": "10763"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Add-Access_template.xlsx": {
+      "inferred_filename": "Add-Access_template.xlsx",
+      "sha256": "6ca91cb1af567c70026ddf019fb40d4358402360e41e480773fa0a926a70cf47",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:13:18 GMT",
+      "content_length": "11744"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Debrief-Access_template.xlsx": {
+      "inferred_filename": "Debrief-Access_template.xlsx",
+      "sha256": "78f436599b73684f03ab6589ddd49f590a24efa21b0aaf09a73701dc00f1a4f8",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:13:58 GMT",
+      "content_length": "8681"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Delete-Subject_template.xlsx": {
+      "inferred_filename": "Delete-Subject_template.xlsx",
+      "sha256": "45b53f38ffaa68ae0d14936157f0bcedb472ff1c1d67e836e76d2b32f25588df",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:13:58 GMT",
+      "content_length": "8402"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/NEW_DISS_Account_Request_Procedure.pdf": {
+      "inferred_filename": "NEW_DISS_Account_Request_Procedure.pdf",
+      "sha256": "77e8edcf7b5263a08365ace0dd86a2ff8896a3665a8363ae5765548bfece1ffc",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:14:48 GMT",
+      "content_length": "781416"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DCSA_DISS_JVS_Industry_PSSAR_FAQs_12Feb21.pdf": {
+      "inferred_filename": "DCSA_DISS_JVS_Industry_PSSAR_FAQs_12Feb21.pdf",
+      "sha256": "dfd8670b4e00261096d5c32db542ac6874c2e6e36aba8f9925d8f1eca3451aa7",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:13:52 GMT",
+      "content_length": "3099590"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/NEW_JVS_Access.pdf": {
+      "inferred_filename": "NEW_JVS_Access.pdf",
+      "sha256": "b18f890869b33582fca9108a59994bffede5e5d31237908b5b12c450fde971ae",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:14:47 GMT",
+      "content_length": "124257"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/5_DCSA_DISS_JVS_Initial_Login_2021_05_18%20(1).pdf": {
+      "inferred_filename": "5_DCSA_DISS_JVS_Initial_Login_2021_05_18 (1).pdf",
+      "sha256": "80f4c46be08d8fe1933d2eaf5d4b2c727b2090606b386f6bd7840a33b68cddfa",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:13:02 GMT",
+      "content_length": "1812039"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/4_DCSA_DISS_JVS_Agency_PSSAR_Read_Only_Access_2022_01_11.pdf": {
+      "inferred_filename": "4_DCSA_DISS_JVS_Agency_PSSAR_Read_Only_Access_2022_01_11.pdf",
+      "sha256": "d50e4ac538cfc5882529abfb9b0dc589a5fbb6c4815b432e46ccb5464dade73c",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:11:59 GMT",
+      "content_length": "2011066"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/7_DCSA_DISS_JVS_Create_PACP_User_2021_06_23.pdf": {
+      "inferred_filename": "7_DCSA_DISS_JVS_Create_PACP_User_2021_06_23.pdf",
+      "sha256": "d6a6d20805e0c56273806b230ca9b0669264919fc839d56254e3be9ebeba424b",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:13:10 GMT",
+      "content_length": "1739031"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/3__DCSA_DISS_JVS-Troubleshooting_Guide.pdf": {
+      "inferred_filename": "3__DCSA_DISS_JVS-Troubleshooting_Guide.pdf",
+      "sha256": "679b1df5b24a8ace0bf76617dae35cd9193e2480695ba2f5e2ba674f67307fda",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:11:59 GMT",
+      "content_length": "2393797"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/4_DCSA_DISS_JVS_Agency_PSSAR_Read_Only_Access_2021_05_25%20(1).pdf": {
+      "inferred_filename": "4_DCSA_DISS_JVS_Agency_PSSAR_Read_Only_Access_2021_05_25 (1).pdf",
+      "sha256": "06f6bb94c1a327ea7fd2301adff1e2f56b8b73aa17de577527cdf2cbbcdbc530",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:11:59 GMT",
+      "content_length": "1962323"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/6_DCSA_DISS_JVS_Verification_by_SSN_2021_05_11%20(1).pdf": {
+      "inferred_filename": "6_DCSA_DISS_JVS_Verification_by_SSN_2021_05_11 (1).pdf",
+      "sha256": "e9498d849065474d4b2230336de34bae7e57fca8271268aabe9c4b769ee313d8",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:13:06 GMT",
+      "content_length": "1399611"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/8_DCSA_DSS_JVS_Consolidating_SMOs_Job_Aid_2022_01_11.pdf": {
+      "inferred_filename": "8_DCSA_DSS_JVS_Consolidating_SMOs_Job_Aid_2022_01_11.pdf",
+      "sha256": "26d71abef33327d400b0a03086fe83c73832d67ccf681dec414da13c7a28a4c0",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:13:14 GMT",
+      "content_length": "1623727"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DISS_JVS_Webinar-Industry_Slides_060721.pdf": {
+      "inferred_filename": "DISS_JVS_Webinar-Industry_Slides_060721.pdf",
+      "sha256": "17082be99b73bcfc4f428fb5f805049e5ef9fb0e11c58d1e6831ec94fc36796a",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:14:04 GMT",
+      "content_length": "12693288"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DISS_JVS_Webinar-GovtAgency_Slides_060421.pdf": {
+      "inferred_filename": "DISS_JVS_Webinar-GovtAgency_Slides_060421.pdf",
+      "sha256": "10f4f9fd072ecce7b03766890acc9774ed20ff98b4cb082dd982392fc3cd586a",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:14:04 GMT",
+      "content_length": "10738597"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DISS_SMO_Consolidation_and_PII_Accuracy_webinar.pdf": {
+      "inferred_filename": "DISS_SMO_Consolidation_and_PII_Accuracy_webinar.pdf",
+      "sha256": "5b4b02ee0c0d21ea509bbec52b7253b0a335e0469e737b1ebab59e2f72cce546",
+      "etag": null,
+      "last_modified": "Fri, 16 Jun 2023 18:14:31 GMT",
+      "content_length": "14475252"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf": {
+      "inferred_filename": "DCSA Strategic Execution Plan.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    }
+  },
+  "document_urls": [
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/3__DCSA_DISS_JVS-Troubleshooting_Guide.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/4_DCSA_DISS_JVS_Agency_PSSAR_Read_Only_Access_2021_05_25%20(1).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/4_DCSA_DISS_JVS_Agency_PSSAR_Read_Only_Access_2022_01_11.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/5_DCSA_DISS_JVS_Initial_Login_2021_05_18%20(1).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/6_DCSA_DISS_JVS_Verification_by_SSN_2021_05_11%20(1).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/7_DCSA_DISS_JVS_Create_PACP_User_2021_06_23.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/8_DCSA_DSS_JVS_Consolidating_SMOs_Job_Aid_2022_01_11.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Add-Access_template.xlsx",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Add-Subject_template.xlsx",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Adding_DISS_as_a_Trusted_Site.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DCSA_Contact_Center_Encryption_v1-2.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DCSA_DISS_Fact_Sheet_040121.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DCSA_DISS_JVS_Industry_PSSAR_FAQs_12Feb21.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DISS-SII-Knowledge-Article%20(1).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DISS_Data_Portal_Instructions.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DISS_JVS_Webinar-GovtAgency_Slides_060421.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DISS_JVS_Webinar-Industry_Slides_060721.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/DISS_SMO_Consolidation_and_PII_Accuracy_webinar.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Debrief-Access_template.xlsx",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Delete-Subject_template.xlsx",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Hierarchy-change_template.xlsx",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/Industry_Continuous_Vetting_Guidance_260416_FINAL.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/NDA%20Job%20Aid%20022525.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/NEW_DISS_Account_Request_Procedure.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/NEW_Instructions_Adding_DISS_Trusted_Site.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/DISS/NEW_JVS_Access.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf",
+    "https://www.dcsa.mil/Portals/91/Documents/IS/DISS/Foreign_Travel_Reporting_DISS_SEAD3%20(1).pdf"
+  ],
+  "pages": [
+    {
+      "url": "https://www.dcsa.mil/Systems-Applications/Defense-Information-System-for-Security-DISS/DISS-Resources/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Systems-Applications/Defense-Information-System-for-Security-DISS/DISS-Resources/",
+      "redirect_chain": [],
+      "sha256": "76a259cb916c7470777be52b356aa5c7bd8eb4285e6c1f42ae9536c837e7dd0a"
+    }
+  ]
+}

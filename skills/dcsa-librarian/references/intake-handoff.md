@@ -2,7 +2,7 @@
 
 This role stops at quarantine. Validated candidates are handed to the DCSA
 Archivist; nothing here organises the corpus, rebuilds manifests or prepares a
-release. The gates in [governance.md](governance.md) apply to promotion, and
+release. The gates in `governance.md` apply to promotion, and
 promotion is not this role's to perform.
 
 ## Order of operations

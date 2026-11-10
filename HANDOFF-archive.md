@@ -384,3 +384,150 @@ official-reference-verification) instead; the retyped copy's hash is noted in th
 package only for reference. Fetched with the Librarian's own Fetcher and package
 writer; marked superseded/historical, not current policy.
 2026-09-23 Codex — Read-only scan-status confirmed no valid structured receipts for monthly-scan, monthly-integrity or VOI-release-watch. Status remains unknown, not successful; no out-of-cycle sweep was started.
+
+
+---
+
+Archived handoff before 2026-10-01 refresh
+
+# HANDOFF — dcsa-librarian
+
+Last updated: 2026-09-25 by Claude
+
+## Current State
+Librarian owns official-source discovery, integrity checks and quarantine intake; it
+never writes to or publishes the approved corpus.
+
+2026-09-24 intake: the owner-authorized targeted FCL intake (FCL Orientation Handbook,
+cover "July 2026"; Quick Start Guide; ten job aids; 12 packages from
+quarantine/20260924T122142Z/dcsa-fcl) and the 2026-09-23 NARA ISOO Adjudicative
+Guidelines package were published by the Archivist in release fcl-intake-20260924b.
+The 2018 and 2021 handbook editions are marked superseded, not deleted. Byte-verified
+provenance rows for SF 328, DTM 24-004 and DoDM 5220.32 V1/V2 were applied. DTM 24-004
+is recorded currency_unresolved: past its 2026-07-31 expiration with no Change 2,
+cancellation or incorporation posted by WHS.
+
+2026-09-24 monthly run: the approved scan completed incompletely. All 17 enabled sources
+were unavailable or could not be fully verified, so no source is cleared and the release
+window stays open for retry. The integrity audit passed (11,622 manifest records, no
+missing files or findings). VOI-release-watch still has no successful run record.
+`doctor` no longer requires doha_topic_taxonomy / doha_topic_coverage (the Archivist
+entry point has lacked them since at least 09-09) and now also checks
+doha_local_indexes.
+
+DOHA scope (owner decision 2026-09-25): the library holds all DOHA decisions in two
+groups, ISCR Hearing Decisions and DOHA Appeal Board Decisions. First real run of the
+reverse check (2026-09-25, 09-22 capture): DOHA lists ~32,600 decisions; the library
+holds 10,633, so 21,942 are not held. The gaps are whole blocks, not scattered: almost
+all Appeal Board decisions, the 2016-and-prior hearing pages 4-17, and recent hearings
+(2024: 574, 2025: 630 of 635, 2026: 396), which suggests the DOHA import stopped around
+mid-2024. Pages that are held (2018-2023 hearings) match almost exactly, so the capture
+looks complete. That run's byte-verified count was 0, not 317: the only
+PRODUCTION_AUDIT.json found (Archivist release voi-20260831-remediation-v1) did not
+reproduce the 09-22 basis, so its ledger must NOT replace the published one. The report
+now carries byte_verification_inputs to show which input failed. The 09-22 capture was
+in a session scratchpad under AppData\Local\Temp; it is now copied to
+state/captures/doha-capture-20260922.jsonl (local, gitignored). The 09-22 run's own
+ledger and report live only in the .claude/worktrees/quizzical-elbakyan-2e691d worktree;
+the Archivist's decisions/doha_source_urls.jsonl is newer (09-23 phantom-row retire).
+One archived listing page ("2016 and Prior ISCR Hearing Decisions - 2") is inaccessible.
+
+## Next
+1. DOHA acquisition is complete: run quarantine/doha-acquire/20260925T151200Z (owner's
+   machine) holds 21,941 of the 21,942 not-held decisions from the 09-22 capture, each
+   with a standard .intake.json. The one gap, 06-25928.h1 (hearing, 2007-11-20, denied),
+   is served by DOHA only as its digest; the case continues as 06-25928.a1 (remanded,
+   2008-04-09) and 06-25928.h2 (granted on remand), both acquired. The digest is kept in
+   the run's refused/ folder. Next is Archivist intake at this volume.
+2. Byte verification is recoverable: any Archivist PRODUCTION_AUDIT.json from
+   doha-era-trial-20260922 onward gives 317 (checked 09-25); the 08-31 one gives 0
+   because its document IDs predate the current manifest. Use the newest release's.
+3. Retry the unresolved sources from the incomplete 2026-09-24 monthly scan when access
+   is available; no further full sweep outside the authorized window.
+4. Re-check the WHS DTM and DoDM listings for DTM 24-004 and lifecycle-review its record.
+5. Rebuild the DOHA provenance ledger when the inaccessible listing page returns.
+6. Save future DOHA browser captures under state/captures/ with the date in the name.
+
+## Open Questions
+- gsa.gov (the SF forms library, linked from DCSA's FOCI page) is not in the source
+  registry, so SF 328 was verified against DCSA's official copy only. Add gsa.gov to
+  official-reference-verification? Owner decision.
+- The inaccessible DOHA listing page has no recovery date.
+
+## Log
+2026-09-27 Claude — Closed out DOHA acquisition at 21,941 of 21,942. The owner supplied
+manual copies of 06-25928.a1 and a file named 06-25928.h1; the latter's text is the
+decision on remand (it cites "my first decision" of 2007-11-20), so it is h2 in
+substance, and both copies were byte-identical to the tool's .a1 and .h2 fetches.
+Filenames and embedded PDF titles are not identity; the decision text is.
+2026-09-26 Claude — Full doha-acquire run finished on the owner's machine: 21,941 of
+21,942, one refused, nothing written to the library. 14 decisions had been fetched as
+their WordPerfect postings and set aside as non-PDF, and set-aside counted as done, so
+the later PDF-URL fix never retried them. A set-aside decision is now final only if it
+was fetched from the URL that would be chosen today.
+2026-09-25 Claude — The run stopped at 2,507 on 14 Appeal Board decisions (2012-2015)
+refused as not PDF. The owner downloaded the same 14 by hand: all real PDFs. Cause was
+mine: older decisions are posted as both PDF and HTML under separate FileIds, and the
+not-held rows kept URLs and formats as unlinked sets, so doha-acquire could fetch the
+HTML copy. Rows now carry urls_by_format and the PDF URL is always chosen; older
+not-held files are refused. The 14 hand copies stay out of intake until a tool fetch
+matches their bytes.
+2026-09-25 Claude — First batch on the owner's machine is running (run
+quarantine/doha-acquire/20260925T151200Z, 1,041 PDFs by 16:40Z). It looked idle because
+it printed nothing until the end, and a closed Chrome window was counted as five DOHA
+refusals. Added one progress line per decision (stderr; JSON report stays on stdout)
+and an immediate, resumable stop when the browser is closed.
+2026-09-25 Claude — doha-acquire pilot on the owner's machine: 20 of 20 acquired through
+launched Chrome, none refused, so the CDN admits it. Regrouped by decision level (h/a)
+instead of listing page: DOHA cross-posts ~1,860 rulings on both a hearing and an
+Appeal Board page, which had produced a mixed third group bound for an "other"
+folder. This matches the Archivist's decision_family. Not-held files from before this
+are refused; regenerate before resuming.
+2026-09-25 Claude — Added doha-acquire. Per-file intake packages rather than one per
+batch, because the Archivist's stage_intake reads one .intake.json per item and a plan
+already batches them. Bytes come from the page's own fetch() in Chrome, since the CDN
+refuses non-browser clients; verified byte-exact through Chromium over CDP. A 200
+response that is not a PDF is refused (a challenge page must not become a decision),
+and five refusals stop the run. Identity rests on the listing label until the
+Archivist reviews the text; the package says so.
+2026-09-25 Claude — First real reverse-check run; owner set DOHA scope to all ISCR
+hearing and Appeal Board decisions, kept as two groups. The summary now groups by the
+registry source a listing sits under, reports each listing's not-held count instead of
+a capture-gap flag (the gaps are holdings, not the capture), and labels variants by what
+differs: h1/h2 or a1/a2 are separate rulings (remand, second appeal) and stay missing;
+only a suffix difference may be one file twice. Added byte_verification_inputs after the
+run silently produced 0 byte-verified rows.
+2026-09-25 Claude — Reconciled two local stashes with main. Today's uncommitted work
+(Codex scan, Claude FCL/NARA intake and Archivist publication, doctor contract fix) is merged
+here with the doha-provenance changes. A 2026-09-03 stashed HANDOFF (end-to-end pipeline
+confirmation, manual VOI rollback, ISOO Notice 2026-06 in quarantine) was never recorded on
+main; it is preserved in HANDOFF-archive.md, not restored as current state.
+2026-09-24 Claude — Retired branch claude/dcsa-comparison-bot-k0ttop. Its two commits
+staged the Comparison Bot and then removed it again, so its only net change was a
+HANDOFF/README edit based on the 09-02 tree. Byte comparison against the bot's own
+repo showed nothing unique: 21 files identical, 7 later revisions, 5 added there.
+Kept only its purpose: README now names the related projects.
+2026-09-24 Claude — Merged PR #3 (--summary) into main after PR #2. Both were merged
+without CI (the repo has none) or human review, on the user's instruction; the only
+validation is the offline suite and a synthetic end-to-end run.
+2026-09-24 Claude — Added --summary. A hearing and its appeal never count as variants
+of each other; only a different suffix or level number (h1/h2) does, since those are
+plausible naming mismatches. The 50% capture-gap threshold is a heuristic constant
+(CAPTURE_GAP_SHARE), chosen so a mostly-missing listing reads as a capture problem.
+2026-09-24 Claude — Added the listing -> library direction to doha-provenance so
+missing rulings can be found offline from the existing capture. Non-PDF postings with
+a valid case number count as listed (a decision posted only as HTML is still missing)
+but never become source URLs. Library records whose case stem does not parse are
+counted, because they can make a held decision look missing. Not yet run on real data.
+2026-09-24 Claude (as Archivist) — Consumed quarantine/20260924T122142Z/dcsa-fcl: all 12 packages published
+in Archivist release fcl-intake-20260924b (INDUSTRIAL_SECURITY/TOOLS/DCSA_ISSUED_JOB_AIDS); 2018/2021
+handbooks marked superseded, not deleted. The 4 verified provenance rows were applied (SF 328, DoDM 5220.32
+V1/V2, DTM 24-004). The 2026-09-23 NARA Adjudicative Guidelines package was published in the same release.
+DTM 24-004 recorded currency_unresolved (past stated expiration, unconfirmed by WHS). Doctor's
+doha_topic_taxonomy/doha_topic_coverage requirement was stale (Archivist entry has lacked them since at least
+09-09); removed from ENTRY_PATH_KEYS, doha_local_indexes now checked too, 2 tests added; doctor now ready with
+no findings. Uncommitted. 7 unrelated test_schedule/test_status errors need the missing tzdata package.
+2026-09-24 Codex — Ran the owner-approved monthly scan and integrity audit. All 17 registered sources failed availability/verification, so the scan remains incomplete and makes no clean-source claim; the release window remains open for later retry. Integrity passed across 11,622 records with no missing files or findings. No library publication occurred.
+2026-09-24 Claude — Owner-authorized targeted FCL acquisition. Ran doctor first (0 missing files; 2 entry-point contract errors unrelated to intake). The Librarian Fetcher reached DCSA and WHS normally; nothing was blocked. Fetched the 12 FCL documents from the Facility-Clearances listing and packaged them with the existing writer. None is byte-identical to any library file. Edition dates come from the document text and metadata, not filenames; the handbook's cover says July 2026 although its URL says 20260828. The /CTP/FC/ and /CTP/fc/ handbook URLs return the same bytes, so there is one package. SF 328, DTM 24-004 and DoDM 5220.32 V1/V2 are byte-identical to the official copies, so they were recorded as provenance rows, not re-quarantined. WHS still lists DTM 24-004 as CH 1 expiring 2026-07-31, with incorporation into DoDM 5220.32 V1 pending. No code changes; nothing committed.
+2026-09-30 Codex - The 09:00 monthly VOI watch ran for period 2026-09. The configured DCSA NISP Tools source returned HTTP 403, so the scan is incomplete: zero documents were observed, no absence claim is supported, nothing was quarantined or published, and the release window remains open for the noon retry. Official-page fallback was also inaccessible rather than evidence of non-publication.
+2026-09-30 Codex - Browser fallback resolved the DCSA 403. A rendered, allowlisted NISP Tools capture identified the official September 2026 VOI link; the original 11-page PDF was fetched through Chrome into quarantine run 20260930T191823Z with SHA-256 78219950b2349242f44ae1a844a7b2843fdab7d68678546fe43d7dbba8bcbd02 and a standard provenance-bound intake package. Page-one identity review confirmed September 2026, and confirm-period recorded reviewed_issue_confirmed. No library publication occurred; Archivist review and release gates remain next.

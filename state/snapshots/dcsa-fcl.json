@@ -1,0 +1,151 @@
+{
+  "schema_version": 2,
+  "source_id": "dcsa-fcl",
+  "scanned_at": "2026-10-01T14:04:33Z",
+  "documents": {
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/Submitting_a_Sponsorship_Request_External.pdf": {
+      "inferred_filename": "Submitting_a_Sponsorship_Request_External.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Tue, 02 May 2023 19:14:44 GMT",
+      "content_length": "2480084"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/DCSA%20FCL_Orientation_Handbook_20260828.pdf": {
+      "inferred_filename": "DCSA FCL_Orientation_Handbook_20260828.pdf",
+      "sha256": "14e3126389d052fa4887170a9a1bbdbe02cadfeaf51d754d6758c8d397430e10",
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:35 GMT",
+      "content_length": "4181642"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/DCSA%20FCL_Orientation_Handbook_20260828.pdf": {
+      "inferred_filename": "DCSA FCL_Orientation_Handbook_20260828.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:35 GMT",
+      "content_length": "4181642"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Organizational%20Charts%20By%20Business%20Structure.pdf": {
+      "inferred_filename": "Job Aid - Organizational Charts By Business Structure.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:33 GMT",
+      "content_length": "1335286"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20DD441.pdf": {
+      "inferred_filename": "Job Aid - DD441.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:31 GMT",
+      "content_length": "492347"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Quick%20Start%20Guide%20for%20the%20FCL%20Process.pdf": {
+      "inferred_filename": "Quick Start Guide for the FCL Process.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:32 GMT",
+      "content_length": "236184"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20KMP%20Authorities%20By%20Position.pdf": {
+      "inferred_filename": "Job Aid - KMP Authorities By Position.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:32 GMT",
+      "content_length": "179986"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20FCL%20Pages%20Common%20Errors.pdf": {
+      "inferred_filename": "Job Aid - FCL Pages Common Errors.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:32 GMT",
+      "content_length": "175645"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20PKI,%20ECA,%20and%20Access%20to%20NCAISS.pdf": {
+      "inferred_filename": "Job Aid - PKI, ECA, and Access to NCAISS.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:31 GMT",
+      "content_length": "179113"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Exclusion%20Resolutions.pdf": {
+      "inferred_filename": "Job Aid - Exclusion Resolutions.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:31 GMT",
+      "content_length": "179326"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20FCL%20Package%20RFI%20and%20Discontinue%20Process.pdf": {
+      "inferred_filename": "Job Aid - FCL Package RFI and Discontinue Process.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:32 GMT",
+      "content_length": "326515"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Business%20Structure%20Slick%20Sheets.pdf": {
+      "inferred_filename": "Job Aid - Business Structure Slick Sheets.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:35 GMT",
+      "content_length": "3274249"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20SF328.pdf": {
+      "inferred_filename": "Job Aid - SF328.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:31 GMT",
+      "content_length": "643203"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Common%20Acronyms.pdf": {
+      "inferred_filename": "Job Aid - Common Acronyms.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:31 GMT",
+      "content_length": "111960"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf": {
+      "inferred_filename": "DCSA Strategic Execution Plan.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    }
+  },
+  "document_urls": [
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/DCSA%20FCL_Orientation_Handbook_20260828.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/Submitting_a_Sponsorship_Request_External.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/DCSA%20FCL_Orientation_Handbook_20260828.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Business%20Structure%20Slick%20Sheets.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Common%20Acronyms.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20DD441.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Exclusion%20Resolutions.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20FCL%20Package%20RFI%20and%20Discontinue%20Process.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20FCL%20Pages%20Common%20Errors.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20KMP%20Authorities%20By%20Position.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Organizational%20Charts%20By%20Business%20Structure.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20PKI,%20ECA,%20and%20Access%20to%20NCAISS.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20SF328.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Quick%20Start%20Guide%20for%20the%20FCL%20Process.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf"
+  ],
+  "pages": [
+    {
+      "url": "https://www.dcsa.mil/FCL/Maintaining-Personnel-Security-Clearances/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/FCL/Maintaining-Personnel-Security-Clearances/",
+      "redirect_chain": [],
+      "sha256": "7d1293491be5c8626dc35c1176266658426c4949a7caaff5e2f97919983528b4"
+    },
+    {
+      "url": "https://www.dcsa.mil/FCL/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/FCL/",
+      "redirect_chain": [],
+      "sha256": "33ea589bb87fd33e35e7501d6b2bfc9e0d5311fe4ee4cdd11aaa9661bf4fa4d6"
+    }
+  ]
+}

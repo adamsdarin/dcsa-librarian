@@ -1,0 +1,37 @@
+{
+  "schema_version": 2,
+  "source_id": "dcsa-cui-policy-training",
+  "scanned_at": "2026-10-01T14:04:33Z",
+  "documents": {
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Training%20Template%20Version%203.pdf": {
+      "inferred_filename": "DCSA CUI Training Template Version 3.pdf",
+      "sha256": "ef9f9a025e5b35b3e39c3bd55a6b2bf0bc07be78408890a18644bed15d0ded8d",
+      "etag": null,
+      "last_modified": "Mon, 06 Nov 2023 21:13:48 GMT",
+      "content_length": "3071559"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf": {
+      "inferred_filename": "DCSA Strategic Execution Plan.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    }
+  },
+  "document_urls": [
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/CUI/DCSA%20CUI%20Training%20Template%20Version%203.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf"
+  ],
+  "pages": [
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Controlled-Unclassified-Information-CUI/Policy-and-Training/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Controlled-Unclassified-Information-CUI/Policy-and-Training/",
+      "redirect_chain": [],
+      "sha256": "5d76278ba95531ad92cd10109c239a032591b33d5049c76f272e388d6ed37d1f"
+    }
+  ]
+}
