@@ -1,0 +1,507 @@
+{
+  "schema_version": 2,
+  "source_id": "dcsa-entity-vetting-fcl",
+  "scanned_at": "2026-10-04T14:07:47Z",
+  "documents": {
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf": {
+      "inferred_filename": "DCSA Strategic Execution Plan.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/pv/fso/Tier_Investigations.pdf?ver=nNzQlrMiota71dcvYkCNAA%3d%3d": {
+      "inferred_filename": "Tier_Investigations.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:01:43 GMT",
+      "content_length": "154547"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/pv/fso/Industry_Guidance_JPAS_Contract.pdf?ver=32Vqm-4kU7DYbKuBTBIVeg%3d%3d": {
+      "inferred_filename": "Industry_Guidance_JPAS_Contract.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:01:41 GMT",
+      "content_length": "435495"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/pv/fso/CTS_Webinar_v17_Revised_Sept8.pdf?ver=klo_QPZHBkhlI2YRZMwm0Q%3d%3d": {
+      "inferred_filename": "CTS_Webinar_v17_Revised_Sept8.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:01:39 GMT",
+      "content_length": "875459"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/pv/cv/CE_Deferment_FAQ_update_June2020.pdf?ver=0AfjxCC1ziystslD8yCdVA%3d%3d": {
+      "inferred_filename": "CE_Deferment_FAQ_update_June2020.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:12:56 GMT",
+      "content_length": "97760"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/pv/fso/High_Level_%20PCL_Process.pptx": {
+      "inferred_filename": "High_Level_ PCL_Process.pptx",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Thu, 31 Oct 2019 14:53:24 GMT",
+      "content_length": "270292"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/Guidelines-for-Trustees-PHs-ODs%20Final%20July%202009.pdf?ver=779OMFS1xa63_hbYcsLDLQ%3d%3d": {
+      "inferred_filename": "Guidelines-for-Trustees-PHs-ODs Final July 2009.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:48:06 GMT",
+      "content_length": "213881"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/OutsideDirectSample.pdf?ver=rICvc3TftpYB0Y6tKdq96g%3d%3d": {
+      "inferred_filename": "OutsideDirectSample.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:48:08 GMT",
+      "content_length": "35888"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/ODPH_white_paper.pdf?ver=3paYtIlyA0HwrhSQuMUTew%3d%3d": {
+      "inferred_filename": "ODPH_white_paper.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:48:04 GMT",
+      "content_length": "206422"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/BoardResolution-28Nov2018.docx?ver=wZeNOraTe4o0q2C3iPMQbQ%3d%3d": {
+      "inferred_filename": "BoardResolution-28Nov2018.docx",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:56:13 GMT",
+      "content_length": "27151"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/SecurityControlAgreement-27Jan2021.docx?ver=BcHpoECTGMYgEfQ-eg0kPw%3d%3d": {
+      "inferred_filename": "SecurityControlAgreement-27Jan2021.docx",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:56:13 GMT",
+      "content_length": "69874"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/SpecialSecurityAgreement-27Jan2021.docx?ver=y3YmiMPlIAjJXAs-ARKfVw%3d%3d": {
+      "inferred_filename": "SpecialSecurityAgreement-27Jan2021.docx",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:56:12 GMT",
+      "content_length": "82153"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/ProxyAgreement-27Jan2021.docx?ver=hm305Hm_CDTyNL5up7weIQ%3d%3d": {
+      "inferred_filename": "ProxyAgreement-27Jan2021.docx",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:56:10 GMT",
+      "content_length": "70971"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/VotingTrustAgreement-27Jan2021.docx?ver=3gE5welXLRiv7zjaLwXNqw%3d%3d": {
+      "inferred_filename": "VotingTrustAgreement-27Jan2021.docx",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:56:08 GMT",
+      "content_length": "46672"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/AOP%20Template%2020243022.docx": {
+      "inferred_filename": "AOP Template 20243022.docx",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 20 Sep 2024 01:34:34 GMT",
+      "content_length": "896917"
+    },
+    "https://www.dcsa.mil/portals/128/documents/ctp/foci/AOP_Guide_51116.pdf": {
+      "inferred_filename": "AOP_Guide_51116.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:38:25 GMT",
+      "content_length": "2423919"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/TCP%20Sample%20230525.docx": {
+      "inferred_filename": "TCP Sample 230525.docx",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Tue, 28 Jan 2025 12:49:06 GMT",
+      "content_length": "21286"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/IndustryNotification20171108-RemovalofPhoneLogRequirement%20(1).pdf?ver=jis1gynAQFPGfVoUn1-XmQ%3d%3d": {
+      "inferred_filename": "IndustryNotification20171108-RemovalofPhoneLogRequirement (1).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Sat, 13 May 2023 00:07:26 GMT",
+      "content_length": "819688"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/ECP%20Template%2020240325.docx": {
+      "inferred_filename": "ECP Template 20240325.docx",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Tue, 28 May 2024 16:28:47 GMT",
+      "content_length": "968168"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/ECMP%20Sample%20220901.docx": {
+      "inferred_filename": "ECMP Sample 220901.docx",
+      "sha256": "e132cc788281a87693e49ba6cacf506fd43ce9abbcd2771772c98c2059c05f94",
+      "etag": null,
+      "last_modified": "Fri, 20 Sep 2024 01:26:18 GMT",
+      "content_length": "20964"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/DCSA%20FCL_Orientation_Handbook_20260828.pdf": {
+      "inferred_filename": "DCSA FCL_Orientation_Handbook_20260828.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:35 GMT",
+      "content_length": "4181642"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/DD254%20(January%202026).pdf": {
+      "inferred_filename": "DD254 (January 2026).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Wed, 21 Jan 2026 21:23:22 GMT",
+      "content_length": "379768"
+    },
+    "https://www.dcsa.mil/portals/128/documents/ctp/foci/Guidelines-for-Trustees-PHs-ODs%20Final%20July%202009.pdf": {
+      "inferred_filename": "Guidelines-for-Trustees-PHs-ODs Final July 2009.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:48:06 GMT",
+      "content_length": "213881"
+    },
+    "https://www.dcsa.mil/portals/128/documents/ctp/foci/OutsideDirectSample.pdf": {
+      "inferred_filename": "OutsideDirectSample.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:48:08 GMT",
+      "content_length": "35888"
+    },
+    "https://www.dcsa.mil/portals/128/documents/ctp/tools/ODPH_white_paper.pdf": {
+      "inferred_filename": "ODPH_white_paper.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Tue, 02 May 2023 18:42:28 GMT",
+      "content_length": "206422"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/NID_Presentation_2017%20(1).pdf?ver=C0ED-ctT-iZukIE1BBuiIQ%3d%3d": {
+      "inferred_filename": "NID_Presentation_2017 (1).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Sat, 13 May 2023 00:15:01 GMT",
+      "content_length": "843635"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/DSS_Facilities_Location_Plan_Template_rv1_20120221%20(3).doc?ver=vqVm7h97tEvLU5kKQcmAmA%3d%3d": {
+      "inferred_filename": "DSS_Facilities_Location_Plan_Template_rv1_20120221 (3).doc",
+      "sha256": "ba1e648c1abe4f3caa46ea38a5e3d90e19c38e6e3594e28220f666f1c59a3feb",
+      "etag": null,
+      "last_modified": "Sat, 13 May 2023 00:15:02 GMT",
+      "content_length": "215552"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/Submitting_a_Sponsorship_Request_External.pdf": {
+      "inferred_filename": "Submitting_a_Sponsorship_Request_External.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Tue, 02 May 2023 19:14:44 GMT",
+      "content_length": "2480084"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/DCSA%20FCL_Orientation_Handbook_20260828.pdf": {
+      "inferred_filename": "DCSA FCL_Orientation_Handbook_20260828.pdf",
+      "sha256": "14e3126389d052fa4887170a9a1bbdbe02cadfeaf51d754d6758c8d397430e10",
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:35 GMT",
+      "content_length": "4181642"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Organizational%20Charts%20By%20Business%20Structure.pdf": {
+      "inferred_filename": "Job Aid - Organizational Charts By Business Structure.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:33 GMT",
+      "content_length": "1335286"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20DD441.pdf": {
+      "inferred_filename": "Job Aid - DD441.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:31 GMT",
+      "content_length": "492347"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Quick%20Start%20Guide%20for%20the%20FCL%20Process.pdf": {
+      "inferred_filename": "Quick Start Guide for the FCL Process.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:32 GMT",
+      "content_length": "236184"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20KMP%20Authorities%20By%20Position.pdf": {
+      "inferred_filename": "Job Aid - KMP Authorities By Position.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:32 GMT",
+      "content_length": "179986"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20FCL%20Pages%20Common%20Errors.pdf": {
+      "inferred_filename": "Job Aid - FCL Pages Common Errors.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:32 GMT",
+      "content_length": "175645"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20PKI,%20ECA,%20and%20Access%20to%20NCAISS.pdf": {
+      "inferred_filename": "Job Aid - PKI, ECA, and Access to NCAISS.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:31 GMT",
+      "content_length": "179113"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Exclusion%20Resolutions.pdf": {
+      "inferred_filename": "Job Aid - Exclusion Resolutions.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:31 GMT",
+      "content_length": "179326"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20FCL%20Package%20RFI%20and%20Discontinue%20Process.pdf": {
+      "inferred_filename": "Job Aid - FCL Package RFI and Discontinue Process.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:32 GMT",
+      "content_length": "326515"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Business%20Structure%20Slick%20Sheets.pdf": {
+      "inferred_filename": "Job Aid - Business Structure Slick Sheets.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:35 GMT",
+      "content_length": "3274249"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20SF328.pdf": {
+      "inferred_filename": "Job Aid - SF328.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:31 GMT",
+      "content_length": "643203"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Common%20Acronyms.pdf": {
+      "inferred_filename": "Job Aid - Common Acronyms.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 31 Aug 2026 22:10:31 GMT",
+      "content_length": "111960"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/sf-328%20(Aug%202026).pdf": {
+      "inferred_filename": "sf-328 (Aug 2026).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Mon, 03 Aug 2026 17:29:33 GMT",
+      "content_length": "57143"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/Updated%20SF328%20-%20Industry%20Information%20Paper%20(final).pdf": {
+      "inferred_filename": "Updated SF328 - Industry Information Paper (final).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Tue, 27 May 2025 19:56:21 GMT",
+      "content_length": "446979"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/sf328_instructions.pdf?ver=6vLgS0VWTiw0cASKM5k-rw%3d%3d": {
+      "inferred_filename": "sf328_instructions.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:24:13 GMT",
+      "content_length": "68034"
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/DSS_Facilities_Location_Plan_Template_rv1_20120221.doc?ver=KJ8Kc-WWYo4Z9hVoEtmYbQ%3d%3d": {
+      "inferred_filename": "DSS_Facilities_Location_Plan_Template_rv1_20120221.doc",
+      "sha256": null,
+      "etag": null,
+      "last_modified": "Fri, 12 May 2023 23:25:44 GMT",
+      "content_length": "215552"
+    }
+  },
+  "document_urls": [
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/DCSA%20FCL_Orientation_Handbook_20260828.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/Submitting_a_Sponsorship_Request_External.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/AOP%20Template%2020243022.docx",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/BoardResolution-28Nov2018.docx?ver=wZeNOraTe4o0q2C3iPMQbQ%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/DD254%20(January%202026).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/DSS_Facilities_Location_Plan_Template_rv1_20120221%20(3).doc?ver=vqVm7h97tEvLU5kKQcmAmA%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/DSS_Facilities_Location_Plan_Template_rv1_20120221.doc?ver=KJ8Kc-WWYo4Z9hVoEtmYbQ%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/ECMP%20Sample%20220901.docx",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/ECP%20Template%2020240325.docx",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/Guidelines-for-Trustees-PHs-ODs%20Final%20July%202009.pdf?ver=779OMFS1xa63_hbYcsLDLQ%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/IndustryNotification20171108-RemovalofPhoneLogRequirement%20(1).pdf?ver=jis1gynAQFPGfVoUn1-XmQ%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/NID_Presentation_2017%20(1).pdf?ver=C0ED-ctT-iZukIE1BBuiIQ%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/ODPH_white_paper.pdf?ver=3paYtIlyA0HwrhSQuMUTew%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/OutsideDirectSample.pdf?ver=rICvc3TftpYB0Y6tKdq96g%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/ProxyAgreement-27Jan2021.docx?ver=hm305Hm_CDTyNL5up7weIQ%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/SecurityControlAgreement-27Jan2021.docx?ver=BcHpoECTGMYgEfQ-eg0kPw%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/SpecialSecurityAgreement-27Jan2021.docx?ver=y3YmiMPlIAjJXAs-ARKfVw%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/TCP%20Sample%20230525.docx",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/Updated%20SF328%20-%20Industry%20Information%20Paper%20(final).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/VotingTrustAgreement-27Jan2021.docx?ver=3gE5welXLRiv7zjaLwXNqw%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/sf-328%20(Aug%202026).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FOCI/sf328_instructions.pdf?ver=6vLgS0VWTiw0cASKM5k-rw%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/DCSA%20FCL_Orientation_Handbook_20260828.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Business%20Structure%20Slick%20Sheets.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Common%20Acronyms.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20DD441.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Exclusion%20Resolutions.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20FCL%20Package%20RFI%20and%20Discontinue%20Process.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20FCL%20Pages%20Common%20Errors.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20KMP%20Authorities%20By%20Position.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20Organizational%20Charts%20By%20Business%20Structure.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20PKI,%20ECA,%20and%20Access%20to%20NCAISS.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Job%20Aid%20-%20SF328.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/Quick%20Start%20Guide%20for%20the%20FCL%20Process.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/pv/cv/CE_Deferment_FAQ_update_June2020.pdf?ver=0AfjxCC1ziystslD8yCdVA%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/pv/fso/CTS_Webinar_v17_Revised_Sept8.pdf?ver=klo_QPZHBkhlI2YRZMwm0Q%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/pv/fso/High_Level_%20PCL_Process.pptx",
+    "https://www.dcsa.mil/Portals/128/Documents/pv/fso/Industry_Guidance_JPAS_Contract.pdf?ver=32Vqm-4kU7DYbKuBTBIVeg%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/pv/fso/Tier_Investigations.pdf?ver=nNzQlrMiota71dcvYkCNAA%3d%3d",
+    "https://www.dcsa.mil/portals/128/documents/ctp/foci/AOP_Guide_51116.pdf",
+    "https://www.dcsa.mil/portals/128/documents/ctp/foci/Guidelines-for-Trustees-PHs-ODs%20Final%20July%202009.pdf",
+    "https://www.dcsa.mil/portals/128/documents/ctp/foci/OutsideDirectSample.pdf",
+    "https://www.dcsa.mil/portals/128/documents/ctp/tools/ODPH_white_paper.pdf"
+  ],
+  "pages": [
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/",
+      "redirect_chain": [],
+      "sha256": "70fc6ef0e99f65c070a87159a3138fb9214beb14ff8d0caf1d4397f4898261db"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Facility-Clearances/Processing-Applicants/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Facility-Clearances/Processing-Applicants/",
+      "redirect_chain": [],
+      "sha256": "bfa337029baea90d7b24f8329282e51532da587cb3681af2fb09d738c1e1f3b8"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Facility-Clearances/Interim-Clearances/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Facility-Clearances/Interim-Clearances/",
+      "redirect_chain": [],
+      "sha256": "c0f5646184780a42fa4d93b446652832922ea70836f714798cd16fdd873cdb8e"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Facility-Clearances/Maintaining-Personnel-Vetting-Clearances/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Facility-Clearances/Maintaining-Personnel-Vetting-Clearances/",
+      "redirect_chain": [],
+      "sha256": "3f1a739d1801f18dc1af216a5158c5b45ed3b5acbb50289234a53d21fb9711c0"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Facility-Clearances/Onboarding/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Facility-Clearances/Onboarding/",
+      "redirect_chain": [],
+      "sha256": "729e47eadfb438f2a079805ee24c95a91870c68e9865c561077efac6c09f1818"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Facility-Clearances/FAQs-Facility-Security-Officers/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Facility-Clearances/FAQs-Facility-Security-Officers/",
+      "redirect_chain": [],
+      "sha256": "19dac50344f687b7ce573cfa31a9d342b663805d3a06672ee606aeac28a5ddb1"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/FOCI-Action-Planning-Implementation/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/FOCI-Action-Planning-Implementation/",
+      "redirect_chain": [],
+      "sha256": "b41155a96a35e3db639aca24759216ba272355d5bd38bcfc854445a01a7c00be"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/FOCI-Roles-Responsibilities/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/FOCI-Roles-Responsibilities/",
+      "redirect_chain": [],
+      "sha256": "b1e7fbb144446aaab2fa5e0d4bcdb9cf78fe25916dd93ab7f28050aaa89b6dc3"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/Mitigation-Agreements/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/Mitigation-Agreements/",
+      "redirect_chain": [],
+      "sha256": "df17e28691f2a3e28c68487768d00c8df954d5acff7dde0705b7ec28124d91d8"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/National-Interest-Determinations/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/National-Interest-Determinations/",
+      "redirect_chain": [],
+      "sha256": "585b2af4ff8ce336be682b266e31c9544f3672f5ab152425e9d94c6ff5ac5977"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/FOCI-Conferences/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/FOCI-Conferences/",
+      "redirect_chain": [],
+      "sha256": "ef11c185a75f703b503302ba32cf06c4afb062444a35eee3c6fbe6038b8400e2"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/FOCI-Tools-Resources/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/FOCI-Tools-Resources/",
+      "redirect_chain": [],
+      "sha256": "ad0447b58d5f25519966cd3e216cd463370f34c6d398785bf2abd8eef6f60b27"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Facility-Clearances/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/FCL/",
+      "redirect_chain": [
+        "https://www.dcsa.mil/FCL/"
+      ],
+      "sha256": "d75067b5680c34f786cb55e1994868f4fb49e536e09b11f9e141feedb9ce5e02"
+    },
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/Entity-Vetting-Facility-Clearances-FOCI/Foreign-Ownership-Control-or-Influence/",
+      "content_type": "text/html",
+      "etag": "",
+      "last_modified": "",
+      "content_length": "",
+      "final_url": "https://www.dcsa.mil/FOCI/",
+      "redirect_chain": [
+        "https://www.dcsa.mil/FOCI/"
+      ],
+      "sha256": "aaf35adadd00e7755ca86f0b472545a339c9c9cc06c696bdd57e2e2cdfedca97"
+    }
+  ]
+}
