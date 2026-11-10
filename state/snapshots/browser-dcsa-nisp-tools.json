@@ -1,0 +1,1355 @@
+{
+  "schema_version": 2,
+  "source_id": "dcsa-nisp-tools",
+  "scanned_at": "2026-09-30T19:17:12Z",
+  "scan_mode": "browser",
+  "documents": {
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/DCSA_147_June2025_FSO_Guide_to_Complete_Form.pdf": {
+      "inferred_filename": "DCSA_147_June2025_FSO_Guide_to_Complete_Form.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Guidance%20for%20DISS%20Management%20Final%2020250127.pdf": {
+      "inferred_filename": "Guidance for DISS Management Final 20250127.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Conditional%20Eligibility%20Determinations%20Industry%20Fact%20Sheet%20Final.pdf": {
+      "inferred_filename": "Conditional Eligibility Determinations Industry Fact Sheet Final.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Insider%20Threat%20Training%20for%20Cleared%20Industry%20Slick%20Sheet%20May2025.pdf": {
+      "inferred_filename": "Insider Threat Training for Cleared Industry Slick Sheet May2025.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Insider%20Threat%20Training%20Information%20Paper%20May2025.pdf": {
+      "inferred_filename": "Insider Threat Training Information Paper May2025.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/NATO%20Briefing%20Job%20Aid%20Final%20v1.0%20(September%202025).pdf": {
+      "inferred_filename": "NATO Briefing Job Aid Final v1.0 (September 2025).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Contractor%20Request%20Template%20FINAL%20Version%201January2026.pdf": {
+      "inferred_filename": "Contractor Request Template FINAL Version 1January2026.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/FSO%20Workflow%20Job%20Aid%20FINAL%20Version%201January2026.pdf": {
+      "inferred_filename": "FSO Workflow Job Aid FINAL Version 1January2026.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/DCSA%20Implementation%20Roadmap%20FINAL%20Version%201January2026.pdf": {
+      "inferred_filename": "DCSA Implementation Roadmap FINAL Version 1January2026.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Self-Inspection_Handbook_NISP.pdf": {
+      "inferred_filename": "Self-Inspection_Handbook_NISP.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Self_Inspection_Handbook_NISP_print.pdf": {
+      "inferred_filename": "Self_Inspection_Handbook_NISP_print.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/SMO%20Slick%20Sheet%20Final%20v%202.0%20(November%202025).pdf": {
+      "inferred_filename": "SMO Slick Sheet Final v 2.0 (November 2025).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/SF328-18b.pdf": {
+      "inferred_filename": "SF328-18b.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Common_Security_Services_Agreement.pdf": {
+      "inferred_filename": "Common_Security_Services_Agreement.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/DCSA%20Form%20147%20with%20Comment%20Capability.pdf": {
+      "inferred_filename": "DCSA Form 147 with Comment Capability.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/FCL_Orientation_Handbook_9_March_2021.pdf": {
+      "inferred_filename": "FCL_Orientation_Handbook_9_March_2021.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/eQIP%20Signature%20Page%20and%20Electronic%20Fingerprint%20Guide%20for%20In-Process%20Faci.pdf?ver=2snJ-8ZvJwD5YYxXth3KOg%3d%3d": {
+      "inferred_filename": "eQIP Signature Page and Electronic Fingerprint Guide for In-Process Faci.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/SB_Guide_Facility_Clearance_Process_NISS.pdf?ver=10luSNFm1GiFeflKvVuD2Q%3d%3d": {
+      "inferred_filename": "SB_Guide_Facility_Clearance_Process_NISS.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/IS/NCCS/GAM_Appointment_Letter.pdf?ver=pZJLj8kgHp0Fu3N_aPA3rg%3d%3d": {
+      "inferred_filename": "GAM_Appointment_Letter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/PROTECTED_DISTRIBUTION_SYSTEM_REQUIREMENTS_July_%202016.pdf?ver=t8Vq0H7xyCEKGkZjxBRp2A%3d%3d": {
+      "inferred_filename": "PROTECTED_DISTRIBUTION_SYSTEM_REQUIREMENTS_July_ 2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/PDS_Installation_Plan_Request.pdf?ver=S5oC77KIT40hoAENlUWu9g%3d%3d": {
+      "inferred_filename": "PDS_Installation_Plan_Request.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/PROTECTED_DISTRIBUTION_SYSTEM_CHECKLIST-October_12_2016.pdf?ver=CMBxQvr-RvVRFrcGKd0p7A%3d%3d": {
+      "inferred_filename": "PROTECTED_DISTRIBUTION_SYSTEM_CHECKLIST-October_12_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/Sample_SIPR_DSS_CTO_10-133_POAM.pdf?ver=VIv00EAslRCh99gjuTHRYA%3d%3d": {
+      "inferred_filename": "Sample_SIPR_DSS_CTO_10-133_POAM.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/NSCAP-v2-4.pdf?ver=pdwWM3d9UV317iqbUyjM3Q%3d%3d": {
+      "inferred_filename": "NSCAP-v2-4.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/DSS_CTO_10-133_Guidance_Checklist.pdf?ver=uVE9VuYaUbR8ndEPgg7v1w%3d%3d": {
+      "inferred_filename": "DSS_CTO_10-133_Guidance_Checklist.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/CNSSI_7003_PDS_September_2015.pdf?ver=VqTZwdXqKUb_fgf55ykXCw%3d%3d": {
+      "inferred_filename": "CNSSI_7003_PDS_September_2015.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/JSIG_2016April11_Final_(53Rev4).pdf": {
+      "inferred_filename": "JSIG_2016April11_Final_(53Rev4).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/How_to_Manage_a_Contamination_091103.pdf?ver=raXTQpir0MnhwO2L2JutHw%3d%3d": {
+      "inferred_filename": "How_to_Manage_a_Contamination_091103.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/security_seals.pdf?ver=i6Y3KL68i-2YB4zhrjfUcA%3d%3d": {
+      "inferred_filename": "security_seals.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/Test_Equipment_031303.pdf?ver=sS09nzu5KAgrG0aleGAZhA%3d%3d": {
+      "inferred_filename": "Test_Equipment_031303.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/security-incident-job-aid%20(1).pdf?ver=PloumXEUfGY1xuVz9UkwWw%3d%3d": {
+      "inferred_filename": "security-incident-job-aid (1).pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/ISL%20Insider%20Threat%20Final%202026-01_rev.pdf": {
+      "inferred_filename": "ISL Insider Threat Final 2026-01_rev.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/ISL_2024_02_eQIP_to_e_APP.pdf": {
+      "inferred_filename": "ISL_2024_02_eQIP_to_e_APP.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/ISL2021-02_SEAD-3_052024_v2.pdf": {
+      "inferred_filename": "ISL2021-02_SEAD-3_052024_v2.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/NISP%20eMASS%20User%20Account%20Request%20Guide%202.1.pdf": {
+      "inferred_filename": "NISP eMASS User Account Request Guide 2.1.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/DD2875_Industry%20SAAR.pdf": {
+      "inferred_filename": "DD2875_Industry SAAR.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260130%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "260130 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260227%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "260227 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260331%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "260331 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260430%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "260430 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260529%20VOI%20Newsletter.2.pdf": {
+      "inferred_filename": "260529 VOI Newsletter.2.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260630%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "260630 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260731%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "260731 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260831%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "260831 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260930%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "260930 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250131%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "250131 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250228%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "250228 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250331%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "250331 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250430%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "250430 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250530%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "250530 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250630%20VOI%20Newsletter%202.1.pdf": {
+      "inferred_filename": "250630 VOI Newsletter 2.1.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250731%20VOI%20Newsletter%202.0.pdf": {
+      "inferred_filename": "250731 VOI Newsletter 2.0.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250829%20VOI%20Newsletter%20v2.0.pdf": {
+      "inferred_filename": "250829 VOI Newsletter v2.0.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250930%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "250930 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/251031%20VOI%20Bulletin.pdf": {
+      "inferred_filename": "251031 VOI Bulletin.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/251128.1%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "251128.1 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/251231%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "251231 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/January%202024%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "January 2024 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240229%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "240229 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240329%20VOI%20Newsletter%20v1.3.pdf": {
+      "inferred_filename": "240329 VOI Newsletter v1.3.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240430.1%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "240430.1 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240531%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "240531 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240628%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "240628 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240731%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "240731 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240830%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "240830 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240930%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "240930 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/241031%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "241031 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/241130%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "241130 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/241231%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "241231 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/VOI_January2023.pdf": {
+      "inferred_filename": "VOI_January2023.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February2023.pdf": {
+      "inferred_filename": "VOI_February2023.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March2023.pdf": {
+      "inferred_filename": "VOI_March2023.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-Of-Industry_April-2023.pdf": {
+      "inferred_filename": "Voice-Of-Industry_April-2023.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_May2023.pdf": {
+      "inferred_filename": "Voice-of-Industry_May2023.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_June2023.pdf": {
+      "inferred_filename": "Voice-of-Industry_June2023.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_July2023.pdf": {
+      "inferred_filename": "Voice-of-Industry_July2023.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_August2023.pdf": {
+      "inferred_filename": "Voice-of-Industry_August2023.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_Special_Bulletin_11Sept23.pdf": {
+      "inferred_filename": "VOI_Special_Bulletin_11Sept23.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_27Sept23.pdf": {
+      "inferred_filename": "Voice-of-Industry_27Sept23.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_October2023.pdf": {
+      "inferred_filename": "Voice-of-Industry_October2023.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_November23.pdf": {
+      "inferred_filename": "Voice-of-Industry_November23.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/231229%20VOI%20Newsletter.pdf": {
+      "inferred_filename": "231229 VOI Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-Of-Industry_December2022.pdf": {
+      "inferred_filename": "Voice-Of-Industry_December2022.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_November2022.pdf": {
+      "inferred_filename": "Voice-of-Industry_November2022.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_October2022.pdf": {
+      "inferred_filename": "Voice-of-Industry_October2022.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/220930_VOI_Newsletter.pdf": {
+      "inferred_filename": "220930_VOI_Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_August2022.pdf": {
+      "inferred_filename": "VOI_August2022.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July2022.pdf": {
+      "inferred_filename": "VOI_July2022.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June2022.pdf": {
+      "inferred_filename": "VOI_June2022.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_May2022.pdf": {
+      "inferred_filename": "VOI_May2022.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_April2022.pdf": {
+      "inferred_filename": "VOI_April2022.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March2022.pdf": {
+      "inferred_filename": "VOI_March2022.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February2022.pdf": {
+      "inferred_filename": "VOI_February2022.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January2022.pdf": {
+      "inferred_filename": "VOI_January2022.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_December2021.pdf": {
+      "inferred_filename": "VOI_December2021.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_November2021.pdf": {
+      "inferred_filename": "VOI_November2021.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_October2021.pdf": {
+      "inferred_filename": "VOI_October2021.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_September2021.pdf": {
+      "inferred_filename": "VOI_September2021.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_August2021.pdf": {
+      "inferred_filename": "VOI_August2021.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July_2021.pdf": {
+      "inferred_filename": "VOI_July_2021.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June_2021.pdf": {
+      "inferred_filename": "VOI_June_2021.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_Newsletter_May2021.pdf": {
+      "inferred_filename": "VOI_Newsletter_May2021.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/April_VOI_Newsletter.pdf": {
+      "inferred_filename": "April_VOI_Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/March_%20VOI_Newsletter.pdf": {
+      "inferred_filename": "March_ VOI_Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February_2021.pdf": {
+      "inferred_filename": "VOI_February_2021.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January_2021.pdf": {
+      "inferred_filename": "VOI_January_2021.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_December_2020.pdf": {
+      "inferred_filename": "VOI_December_2020.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_November_2020.pdf": {
+      "inferred_filename": "VOI_November_2020.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_October_2020_1.pdf": {
+      "inferred_filename": "VOI_October_2020_1.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_September_2020.pdf": {
+      "inferred_filename": "VOI_September_2020.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_August_2020.pdf": {
+      "inferred_filename": "VOI_August_2020.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July_2020.pdf": {
+      "inferred_filename": "VOI_July_2020.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June_2020.pdf": {
+      "inferred_filename": "VOI_June_2020.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_May_2020.pdf": {
+      "inferred_filename": "VOI_May_2020.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_April_2020.pdf": {
+      "inferred_filename": "VOI_April_2020.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March_2020.pdf": {
+      "inferred_filename": "VOI_March_2020.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February_2020.pdf": {
+      "inferred_filename": "VOI_February_2020.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January_2020.pdf": {
+      "inferred_filename": "VOI_January_2020.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_December2019.pdf": {
+      "inferred_filename": "VOI_December2019.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_November_2019.pdf": {
+      "inferred_filename": "VOI_November_2019.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_October_2019.pdf": {
+      "inferred_filename": "VOI_October_2019.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_September_2019.pdf": {
+      "inferred_filename": "VOI_September_2019.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/August_2019_VOI_Newsletter.pdf": {
+      "inferred_filename": "August_2019_VOI_Newsletter.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July_2019.pdf": {
+      "inferred_filename": "VOI_July_2019.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June_2019.pdf": {
+      "inferred_filename": "VOI_June_2019.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_May_2019.pdf": {
+      "inferred_filename": "VOI_May_2019.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_April_2019.pdf": {
+      "inferred_filename": "VOI_April_2019.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March_2019.pdf": {
+      "inferred_filename": "VOI_March_2019.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February2019.pdf": {
+      "inferred_filename": "VOI_February2019.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January_2019.pdf": {
+      "inferred_filename": "VOI_January_2019.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_December_2018.pdf": {
+      "inferred_filename": "VOI_December_2018.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_November_2018.pdf": {
+      "inferred_filename": "VOI_November_2018.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_October_2018.pdf": {
+      "inferred_filename": "VOI_October_2018.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_September_2018.pdf": {
+      "inferred_filename": "VOI_September_2018.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_August_2018.pdf": {
+      "inferred_filename": "VOI_August_2018.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July_2018.pdf": {
+      "inferred_filename": "VOI_July_2018.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June_2018.pdf": {
+      "inferred_filename": "VOI_June_2018.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_May_2018.pdf": {
+      "inferred_filename": "VOI_May_2018.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_April_2018.pdf": {
+      "inferred_filename": "VOI_April_2018.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March_2018.pdf": {
+      "inferred_filename": "VOI_March_2018.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February_2018.pdf": {
+      "inferred_filename": "VOI_February_2018.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January_2018.pdf": {
+      "inferred_filename": "VOI_January_2018.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_December_2017.pdf": {
+      "inferred_filename": "VOI_December_2017.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_November_2017.pdf": {
+      "inferred_filename": "VOI_November_2017.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_October_2017.pdf": {
+      "inferred_filename": "VOI_October_2017.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_September_2017.pdf": {
+      "inferred_filename": "VOI_September_2017.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_August_2017.pdf": {
+      "inferred_filename": "VOI_August_2017.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July_2017.pdf": {
+      "inferred_filename": "VOI_July_2017.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June_2017.pdf": {
+      "inferred_filename": "VOI_June_2017.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_May_2017.pdf": {
+      "inferred_filename": "VOI_May_2017.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_April_2017.pdf": {
+      "inferred_filename": "VOI_April_2017.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March_2017.pdf": {
+      "inferred_filename": "VOI_March_2017.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February_2017.pdf": {
+      "inferred_filename": "VOI_February_2017.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January_2017.pdf": {
+      "inferred_filename": "VOI_January_2017.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_December_2016.pdf": {
+      "inferred_filename": "VOI_December_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_November_2016.pdf": {
+      "inferred_filename": "VOI_November_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_October_2016.pdf": {
+      "inferred_filename": "VOI_October_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_September_2016.pdf": {
+      "inferred_filename": "VOI_September_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_August_2016.pdf": {
+      "inferred_filename": "VOI_August_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July_2016.pdf": {
+      "inferred_filename": "VOI_July_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June_2016.pdf": {
+      "inferred_filename": "VOI_June_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_May_2016.pdf": {
+      "inferred_filename": "VOI_May_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_April_2016.pdf": {
+      "inferred_filename": "VOI_April_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March_2016.pdf": {
+      "inferred_filename": "VOI_March_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February_2016.pdf": {
+      "inferred_filename": "VOI_February_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January_2016.pdf": {
+      "inferred_filename": "VOI_January_2016.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    },
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf": {
+      "inferred_filename": "DCSA Strategic Execution Plan.pdf",
+      "sha256": null,
+      "etag": null,
+      "last_modified": null,
+      "content_length": null
+    }
+  },
+  "document_urls": [
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/FC/FCL_Orientation_Handbook_9_March_2021.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/CNSSI_7003_PDS_September_2015.pdf?ver=VqTZwdXqKUb_fgf55ykXCw%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/DSS_CTO_10-133_Guidance_Checklist.pdf?ver=uVE9VuYaUbR8ndEPgg7v1w%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/How_to_Manage_a_Contamination_091103.pdf?ver=raXTQpir0MnhwO2L2JutHw%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/JSIG_2016April11_Final_(53Rev4).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/NSCAP-v2-4.pdf?ver=pdwWM3d9UV317iqbUyjM3Q%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/PDS_Installation_Plan_Request.pdf?ver=S5oC77KIT40hoAENlUWu9g%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/PROTECTED_DISTRIBUTION_SYSTEM_CHECKLIST-October_12_2016.pdf?ver=CMBxQvr-RvVRFrcGKd0p7A%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/PROTECTED_DISTRIBUTION_SYSTEM_REQUIREMENTS_July_%202016.pdf?ver=t8Vq0H7xyCEKGkZjxBRp2A%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/Sample_SIPR_DSS_CTO_10-133_POAM.pdf?ver=VIv00EAslRCh99gjuTHRYA%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/Test_Equipment_031303.pdf?ver=sS09nzu5KAgrG0aleGAZhA%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/security-incident-job-aid%20(1).pdf?ver=PloumXEUfGY1xuVz9UkwWw%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/NAO/security_seals.pdf?ver=i6Y3KL68i-2YB4zhrjfUcA%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/SB_Guide_Facility_Clearance_Process_NISS.pdf?ver=10luSNFm1GiFeflKvVuD2Q%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/fc/eQIP%20Signature%20Page%20and%20Electronic%20Fingerprint%20Guide%20for%20In-Process%20Faci.pdf?ver=2snJ-8ZvJwD5YYxXth3KOg%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/220930_VOI_Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/231229%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240229%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240329%20VOI%20Newsletter%20v1.3.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240430.1%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240531%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240628%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240731%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240830%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/240930%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/241031%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/241130%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/241231%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250131%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250228%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250331%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250430%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250530%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250630%20VOI%20Newsletter%202.1.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250731%20VOI%20Newsletter%202.0.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250829%20VOI%20Newsletter%20v2.0.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/250930%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/251031%20VOI%20Bulletin.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/251128.1%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/251231%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260130%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260227%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260331%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260430%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260529%20VOI%20Newsletter.2.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260630%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260731%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260831%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260930%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/April_VOI_Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/August_2019_VOI_Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Common_Security_Services_Agreement.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Conditional%20Eligibility%20Determinations%20Industry%20Fact%20Sheet%20Final.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Contractor%20Request%20Template%20FINAL%20Version%201January2026.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/DCSA%20Form%20147%20with%20Comment%20Capability.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/DCSA%20Implementation%20Roadmap%20FINAL%20Version%201January2026.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/DCSA_147_June2025_FSO_Guide_to_Complete_Form.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/DD2875_Industry%20SAAR.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/FSO%20Workflow%20Job%20Aid%20FINAL%20Version%201January2026.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Guidance%20for%20DISS%20Management%20Final%2020250127.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/ISL%20Insider%20Threat%20Final%202026-01_rev.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/ISL2021-02_SEAD-3_052024_v2.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/ISL_2024_02_eQIP_to_e_APP.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Insider%20Threat%20Training%20Information%20Paper%20May2025.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Insider%20Threat%20Training%20for%20Cleared%20Industry%20Slick%20Sheet%20May2025.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/January%202024%20VOI%20Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/March_%20VOI_Newsletter.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/NATO%20Briefing%20Job%20Aid%20Final%20v1.0%20(September%202025).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/NISP%20eMASS%20User%20Account%20Request%20Guide%202.1.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/SF328-18b.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/SMO%20Slick%20Sheet%20Final%20v%202.0%20(November%202025).pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Self-Inspection_Handbook_NISP.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Self_Inspection_Handbook_NISP_print.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_April2022.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_April_2016.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_April_2017.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_April_2018.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_April_2019.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_April_2020.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_August2021.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_August2022.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_August_2016.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_August_2017.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_August_2018.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_August_2020.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_December2019.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_December2021.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_December_2016.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_December_2017.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_December_2018.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_December_2020.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February2019.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February2022.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February2023.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February_2016.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February_2017.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February_2018.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February_2020.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_February_2021.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January2022.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January_2016.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January_2017.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January_2018.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January_2019.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January_2020.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_January_2021.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July2022.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July_2016.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July_2017.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July_2018.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July_2019.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July_2020.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_July_2021.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June2022.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June_2016.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June_2017.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June_2018.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June_2019.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June_2020.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_June_2021.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March2022.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March2023.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March_2016.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March_2017.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March_2018.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March_2019.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_March_2020.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_May2022.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_May_2016.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_May_2017.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_May_2018.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_May_2019.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_May_2020.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_Newsletter_May2021.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_November2021.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_November_2016.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_November_2017.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_November_2018.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_November_2019.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_November_2020.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_October2021.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_October_2016.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_October_2017.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_October_2018.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_October_2019.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_October_2020_1.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_September2021.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_September_2016.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_September_2017.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_September_2018.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_September_2019.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_September_2020.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/VOI_Special_Bulletin_11Sept23.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-Of-Industry_April-2023.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-Of-Industry_December2022.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_27Sept23.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_August2023.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_July2023.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_June2023.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_May2023.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_November2022.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_November23.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_October2022.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/Voice-of-Industry_October2023.pdf",
+    "https://www.dcsa.mil/Portals/128/Documents/IS/NCCS/GAM_Appointment_Letter.pdf?ver=pZJLj8kgHp0Fu3N_aPA3rg%3d%3d",
+    "https://www.dcsa.mil/Portals/128/Documents/about/err/DCSA%20Strategic%20Execution%20Plan.pdf",
+    "https://www.dcsa.mil/Portals/91/Documents/CTP/tools/VOI_January2023.pdf"
+  ],
+  "pages": [
+    {
+      "url": "https://www.dcsa.mil/Industrial-Security/National-Industrial-Security-Program-Oversight/NISP-Tools-Resources/",
+      "title": "NISP Tools & Resources",
+      "captured_at": "2026-09-30T19:16:57.571283Z",
+      "content_fingerprint": "636d0e0de8815b3692838036bf8974b5c653879fcd2d81992f28b29d90a2ec71",
+      "link_count": 492
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "job_id": "voi-release-watch",
+  "period": "2026-09",
+  "satisfied_at": "2026-09-30T19:19:34.619520+00:00",
+  "evidence": {
+    "source_uri": "https://www.dcsa.mil/Portals/128/Documents/CTP/tools/260930%20VOI%20Newsletter.pdf",
+    "source_sha256": "78219950b2349242f44ae1a844a7b2843fdab7d68678546fe43d7dbba8bcbd02",
+    "reviewed_by": "Codex monthly-dcsa-voi-retrieval",
+    "reviewed_utc": "2026-09-30T19:20:00Z",
+    "issue_locator": "Page 1 heading 'September 2026' and document title 'DCSA Voice of Industry'",
+    "review_basis": "Official rendered NISP Tools & Resources page linked this exact URL as September 2026; the downloaded 11-page PDF opens normally, identifies itself as DCSA Voice of Industry, and its first page states September 2026.",
+    "issue_period_verified": true,
+    "source_period": "2026-09",
+    "retained_artifact": "period-evidence/78219950b2349242f44ae1a844a7b2843fdab7d68678546fe43d7dbba8bcbd02.bin",
+    "registry_sha256": "d220d0b3e4368ed11f86f2856e79728a8f9d5a773b498ff5e50222c698efde47",
+    "library_binding": "fc8cab88e0be70316199555cbc6c1e3eb1404acdbf4064e054778fc8c42f67dc"
+  }
+}
