@@ -276,6 +276,10 @@ def run_scheduled_job(
         download=download,
         verify_known=True,
         exclusions_path=exclusions_path,
+        # A job that waits for one publication downloads that publication only.
+        # The rest of the page is still reported for review; it just does not
+        # land in quarantine again on every poll of the window.
+        download_match=job.expect or None,
     )
 
     findings = _findings(report)

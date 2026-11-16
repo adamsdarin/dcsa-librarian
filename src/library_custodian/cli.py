@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .audit import audit_library
-from .discovery import discover, import_browser_capture, preflight, render_preflight_text
+from .discovery import capture_listing, discover, import_browser_capture, preflight, render_preflight_text
 from .runner import run_scheduled_job
 from .schedule import RUNNERS, load_schedule, render
 
@@ -46,6 +46,7 @@ def build_parser() -> argparse.ArgumentParser:
     scan.add_argument("--quarantine-dir", type=Path, default=PROJECT_ROOT / "quarantine")
     scan.add_argument("--source", action="append", dest="sources")
     scan.add_argument("--download", action="store_true", help="Download missing candidates into quarantine; never publishes")
+    scan.add_argument("--download-match", help="With --download, fetch only documents whose URL, link text or filename contains this; the rest are still reported")
     scan.add_argument(
         "--verify-known",
         action=argparse.BooleanOptionalAction,
@@ -58,6 +59,11 @@ def build_parser() -> argparse.ArgumentParser:
     check.add_argument("--registry", type=Path, default=PROJECT_ROOT / "config" / "source_registry.json")
     check.add_argument("--match", help="Only list documents whose URL, link text or filename contains this")
     check.add_argument("--json", action="store_true", help="Emit the raw result instead of the readable report")
+
+    listing = commands.add_parser("capture-listing", help="Save one source's listing page in the browser-capture format, by direct request")
+    listing.add_argument("--source", required=True, help="Source id from config/source_registry.json")
+    listing.add_argument("--output", type=Path, required=True, help="Where to write the capture (JSON)")
+    listing.add_argument("--registry", type=Path, default=PROJECT_ROOT / "config" / "source_registry.json")
 
     commands.add_parser("selftest", help="Run the project's own tests to confirm this install works")
 
@@ -144,6 +150,7 @@ def main(argv: list[str] | None = None) -> int:
             download=args.download,
             verify_known=args.verify_known,
             exclusions_path=args.exclusions.resolve() if args.exclusions else None,
+            download_match=args.download_match,
         )
         print(json.dumps(report, indent=2))
         return 1 if any(source["status"] == "error" for source in report["sources"]) else 0
@@ -155,6 +162,18 @@ def main(argv: list[str] | None = None) -> int:
             return 64
         print(json.dumps(result, indent=2) if args.json else render_preflight_text(result), end="" if not args.json else "\n")
         return 0 if result.get("reachable") else 1
+    if args.command == "capture-listing":
+        try:
+            result = capture_listing(args.registry.resolve(), args.source, args.output.resolve())
+        except KeyError as exc:
+            print(exc.args[0], file=sys.stderr)
+            return 64
+        except Exception as exc:
+            # Unreachable is not "nothing listed": say so and write no file.
+            print(f"capture-listing failed: {type(exc).__name__}: {exc}", file=sys.stderr)
+            return 1
+        print(json.dumps(result, indent=2))
+        return 0
     if args.command == "selftest":
         import unittest
 

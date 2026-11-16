@@ -527,7 +527,16 @@ def discover(
     download: bool = False,
     verify_known: bool = True,
     exclusions_path: Path | None = None,
+    download_match: str | None = None,
 ) -> dict[str, Any]:
+    """Scan the selected sources.
+
+    `download_match` narrows what `download` fetches to documents whose URL,
+    link text or filename contains it (case-insensitive). Everything else on
+    the page is still seen, classified and reported as a candidate: the filter
+    limits what lands in quarantine, never what the scan reports.
+    """
+    wanted = (download_match or "").casefold()
     registry = json.loads(registry_path.read_text(encoding="utf-8-sig"))
     settings = registry.get("settings", {})
     fetcher = Fetcher(
@@ -608,23 +617,32 @@ def discover(
                         provenance.extend(verify_provenance(library_root, unsourced[filename.casefold()], item, data, metadata))
                 # With no corpus (portable bootstrap), all discovered material is
                 # quarantine intake. Known items remain cheap HEAD probes below.
-                elif download and status in {"missing_from_manifest", "manifest_not_checked"}:
-                    data, metadata = fetcher.get(item.url)
-                    source_folder = quarantine_run / source_id
-                    source_folder.mkdir(parents=True, exist_ok=True)
-                    safe_name = re.sub(r"[^A-Za-z0-9._-]+", "_", filename).strip("._") or hashlib.sha256(item.url.encode()).hexdigest()[:16]
-                    destination = source_folder / safe_name
-                    if destination.exists():
-                        destination = source_folder / f"{destination.stem}-{hashlib.sha256(item.url.encode()).hexdigest()[:8]}{destination.suffix}"
-                    destination.write_bytes(data)
-                    item.downloaded_path = str(destination.resolve())
-                    item.sha256 = hashlib.sha256(data).hexdigest()
-                    item.bytes = len(data)
-                    item.content_type = metadata.get("content_type") or mimetypes.guess_type(filename)[0]
-                    item.etag = metadata.get("etag") or None
-                    item.last_modified = metadata.get("last_modified") or None
-                    item.content_length = metadata.get("content_length") or None
-                    intake_packages.append(write_intake_package(destination, item, metadata, source))
+                elif download and status in {"missing_from_manifest", "manifest_not_checked"} and (
+                    not wanted or any(wanted in part.casefold() for part in (link["url"], link["text"], filename))
+                ):
+                    # One dead link on a listing must not hide the rest of the page:
+                    # a 404 here once stopped the scan before it reached the VOI list
+                    # (2026-11-15). The failure is reported and the scan goes on.
+                    try:
+                        data, metadata = fetcher.get(item.url)
+                    except Exception as exc:
+                        verification_errors.append({"url": item.url, "error": f"{type(exc).__name__}: {exc}"})
+                    else:
+                        source_folder = quarantine_run / source_id
+                        source_folder.mkdir(parents=True, exist_ok=True)
+                        safe_name = re.sub(r"[^A-Za-z0-9._-]+", "_", filename).strip("._") or hashlib.sha256(item.url.encode()).hexdigest()[:16]
+                        destination = source_folder / safe_name
+                        if destination.exists():
+                            destination = source_folder / f"{destination.stem}-{hashlib.sha256(item.url.encode()).hexdigest()[:8]}{destination.suffix}"
+                        destination.write_bytes(data)
+                        item.downloaded_path = str(destination.resolve())
+                        item.sha256 = hashlib.sha256(data).hexdigest()
+                        item.bytes = len(data)
+                        item.content_type = metadata.get("content_type") or mimetypes.guess_type(filename)[0]
+                        item.etag = metadata.get("etag") or None
+                        item.last_modified = metadata.get("last_modified") or None
+                        item.content_length = metadata.get("content_length") or None
+                        intake_packages.append(write_intake_package(destination, item, metadata, source))
                 elif source_verify:
                     # A document already in the manifest can still be revised in
                     # place. Probe its headers so a same-URL revision is visible.
@@ -653,8 +671,13 @@ def discover(
                 item.changed_fields = differing or None
                 if item.change_signal == "changed":
                     changed.append({"url": item.url, "inferred_filename": filename, "status": status, "changed_fields": differing})
+                    data = None
                     if download and not item.downloaded_path:
-                        data, metadata = fetcher.get(item.url)
+                        try:
+                            data, metadata = fetcher.get(item.url)
+                        except Exception as exc:
+                            verification_errors.append({"url": item.url, "error": f"{type(exc).__name__}: {exc}"})
+                    if data is not None:
                         source_folder = quarantine_run / source_id
                         source_folder.mkdir(parents=True, exist_ok=True)
                         safe_name = re.sub(r"[^A-Za-z0-9._-]+", "_", filename).strip("._") or "document"
@@ -717,6 +740,7 @@ def discover(
         "library_root": str(library_root.resolve()) if library_root is not None else None,
         "manifest_checked": library_root is not None,
         "download_enabled": download,
+        "download_match": download_match,
         "verify_known_enabled": verify_known,
         "publication_performed": False,
         "sources": sources_report,
@@ -751,6 +775,57 @@ def discover(
             if needs_review(item):
                 handle.write(json.dumps(asdict(item), separators=(",", ":")) + "\n")
     return report
+
+
+def capture_listing(registry_path: Path, source_id: str, output: Path) -> dict[str, Any]:
+    """Save one source's listing page in the browser-capture format.
+
+    The capture format (schemas/browser-scan-page.schema.json) was written for
+    pages a browser had to read. When the official page answers a direct
+    request, this records the same thing without a browser, so a consumer that
+    needs the listing as evidence (the guidance site's source-link import) gets
+    one file in one format either way. It reads the registry's own URL for the
+    source and nothing else; it writes only `output`.
+    """
+    registry = json.loads(registry_path.read_text(encoding="utf-8-sig"))
+    source = next((item for item in registry.get("sources", []) if item.get("id") == source_id), None)
+    if source is None:
+        known = ", ".join(str(item.get("id")) for item in registry.get("sources", []))
+        raise KeyError(f"no source {source_id!r} in the registry. Known sources: {known}")
+    settings = registry.get("settings", {})
+    fetcher = Fetcher(
+        user_agent=settings.get("user_agent", "DCSA-Library-Custodian/0.1 (+local-governance-audit)"),
+        timeout=float(settings.get("timeout_seconds", 20)),
+        max_bytes=int(settings.get("max_response_bytes", 104857600)),
+        delay_seconds=float(settings.get("delay_seconds", 0.5)),
+        respect_robots=bool(settings.get("respect_robots", True)),
+    )
+    fetcher.allowed_domains = source.get("allowed_domains", [urllib.parse.urlsplit(source["url"]).hostname])
+    page_url = canonicalize_url(source["url"])
+    data, metadata = fetcher.get(page_url)
+    if "html" not in metadata.get("content_type", ""):
+        raise ValueError(f"{page_url} did not answer with a page (content type {metadata.get('content_type')!r})")
+    links = extract_links(data.decode("utf-8", errors="replace"), metadata.get("final_url") or page_url)
+    if not links:
+        raise ValueError(f"{page_url} answered with a page that has no links; refusing to record an empty listing")
+    captured_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    capture = {
+        "schema_version": "1.0",
+        "source_id": source_id,
+        "captured_at": captured_at,
+        "pages": [
+            {
+                "url": page_url,
+                "captured_at": captured_at,
+                "content_fingerprint": hashlib.sha256(data).hexdigest(),
+                "links": [{"url": link["url"], "text": link.get("text", "")} for link in links],
+            }
+        ],
+    }
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(capture, indent=1) + "\n", encoding="utf-8", newline="\n")
+    documents = sum(1 for link in links if is_document_link(link["url"], link.get("text", "")))
+    return {"source_id": source_id, "url": page_url, "output": str(output.resolve()), "links": len(links), "document_links": documents, "captured_at": captured_at}
 
 
 def preflight(registry_path: Path, source_id: str, match: str | None = None) -> dict[str, Any]:

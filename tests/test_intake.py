@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from library_custodian.discovery import build_intake_package, discover, WebItem
+from library_custodian.discovery import build_intake_package, capture_listing, discover, WebItem
 
 
 PAGE_URL = "https://www.dcsa.mil/FCL/"
@@ -108,6 +108,83 @@ class ExclusionTests(unittest.TestCase):
             staged = [p.name for p in (root / "q").rglob("*.pdf")]
             self.assertEqual(len(staged), 1)
             self.assertNotIn("DCSA Strategic Execution Plan.pdf", staged)
+
+    def test_a_dead_link_does_not_stop_the_rest_of_the_page(self) -> None:
+        class DeadLinkFetcher(StubFetcher):
+            def get(self, url: str) -> tuple[bytes, dict[str, str]]:
+                if url == HANDBOOK:
+                    raise OSError("HTTP Error 404: Not Found")
+                return super().get(url)
+
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            library, registry, exclusions = fixture(root, with_exclusion=False)
+            with mock.patch("library_custodian.discovery.Fetcher", DeadLinkFetcher):
+                report = discover(library, registry, root / "state", root / "q", download=True, exclusions_path=exclusions)
+
+            source = report["sources"][0]
+            self.assertEqual(source["status"], "ok")
+            self.assertEqual(report["counts"]["documents_seen"], 2)
+            # the document after the dead link is still quarantined
+            self.assertEqual([p.name for p in (root / "q").rglob("*.pdf")], ["DCSA_Strategic_Execution_Plan.pdf"])
+            # and the dead link is reported, not swallowed
+            self.assertEqual([e["url"] for e in source["verification_errors"]], [HANDBOOK])
+            self.assertIn(HANDBOOK, source["candidates_for_review"])
+
+    def test_a_download_match_fetches_only_the_awaited_document(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            library, registry, exclusions = fixture(root, with_exclusion=False)
+            with mock.patch("library_custodian.discovery.Fetcher", StubFetcher):
+                report = discover(
+                    library, registry, root / "state", root / "q",
+                    download=True, exclusions_path=exclusions, download_match="orientation",
+                )
+
+            source = report["sources"][0]
+            # only the match lands in quarantine
+            self.assertEqual([p.name for p in (root / "q").rglob("*.pdf")], ["DCSA_FCL_Orientation_Handbook_20260828.pdf"])
+            # the other document is still seen and still asks for review
+            self.assertEqual(report["counts"]["documents_seen"], 2)
+            self.assertIn(STRATEGY, source["candidates_for_review"])
+            self.assertEqual(report["download_match"], "orientation")
+
+
+class CaptureListingTests(unittest.TestCase):
+    def test_a_direct_capture_matches_the_browser_capture_format(self) -> None:
+        schema = json.loads(Path("schemas/browser-scan-page.schema.json").read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            _library, registry, _exclusions = fixture(root, with_exclusion=False)
+            with mock.patch("library_custodian.discovery.Fetcher", StubFetcher):
+                result = capture_listing(registry, "dcsa-fcl", root / "out" / "capture.json")
+
+            capture = json.loads((root / "out" / "capture.json").read_text(encoding="utf-8"))
+            for field in schema["required"]:
+                self.assertIn(field, capture)
+            self.assertEqual(set(capture) - set(schema["properties"]), set())
+            self.assertEqual(capture["source_id"], "dcsa-fcl")
+            page = capture["pages"][0]
+            self.assertEqual(set(page) - set(schema["properties"]["pages"]["items"]["properties"]), set())
+            self.assertEqual([link["url"] for link in page["links"]], [HANDBOOK, STRATEGY])
+            self.assertRegex(page["content_fingerprint"], r"^[0-9a-f]{64}$")
+            self.assertEqual(result["document_links"], 2)
+
+    def test_an_unknown_source_and_an_empty_page_write_nothing(self) -> None:
+        class EmptyPage(StubFetcher):
+            def get(self, url: str) -> tuple[bytes, dict[str, str]]:
+                return b"<p>maintenance</p>", {"content_type": "text/html", "final_url": url, "etag": "", "last_modified": "", "content_length": ""}
+
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            _library, registry, _exclusions = fixture(root, with_exclusion=False)
+            with mock.patch("library_custodian.discovery.Fetcher", StubFetcher):
+                with self.assertRaises(KeyError):
+                    capture_listing(registry, "no-such-source", root / "capture.json")
+            with mock.patch("library_custodian.discovery.Fetcher", EmptyPage):
+                with self.assertRaises(ValueError):
+                    capture_listing(registry, "dcsa-fcl", root / "capture.json")
+            self.assertFalse((root / "capture.json").exists())
 
 
 class IntakePackageTests(unittest.TestCase):

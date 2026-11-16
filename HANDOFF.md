@@ -1,6 +1,6 @@
 # HANDOFF - dcsa-librarian
 
-Last updated: 2026-11-03 by Claude
+Last updated: 2026-11-15 by Claude
 
 ## Current State
 Librarian owns official-source discovery, integrity checks, provenance and quarantine intake. It never writes to or publishes the approved corpus.
@@ -23,6 +23,8 @@ The Oct 4 bounded retry of nine previously failed sources was interrupted during
 The 11 errored sources require later availability/verification retries. DTM 24-004 remains currency-unresolved as previously recorded.
 
 ## Log
+2026-11-15 Claude - Closed two hand-work steps the VOI rehearsal exposed (owner: "fix all the gaps"). `discover --download-match <text>` limits downloads to matching documents while still reporting the rest; a scheduled job's `expect` is applied as its match, so the VOI watch no longer re-quarantines about 21 unrelated NISP Tools documents per poll. New `capture-listing --source <id> --output <file>` saves a source's listing page in the browser-capture format by direct request, replacing a one-off script; the guidance site's source-link import needs that file. Both documented in skills/dcsa-librarian/references/discovery.md ("The monthly Voice of Industry"). 129 tests pass. Uncommitted.
+2026-11-15 Claude - Rehearsal of the monthly VOI run (scratch manifest without October, scratch state and quarantine; nothing here or in the library changed). Found: `discover --download` had no error handling around a missing document's download, so one dead link on NISP Tools (HTTP 404) ended the source before the VOI list. Fixed in discovery.py: the failure goes into `verification_errors` and the scan continues; test added (126 pass). Uncommitted. With it the October VOI was quarantined with its original hash. DCSA served scripted requests today (no 403). The same scan also quarantines about 21 non-VOI documents the manifest lacks, every run.
 2026-10-05 Claude - Skill-standards audit: skills/dcsa-librarian/SKILL.md now defers to AGENTS.md and keeps only rules AGENTS.md lacks; SKILL.md links governance.md and discovery.md directly instead of references chaining to them; scheduling.md gained a contents list. Uncommitted.
 
 2026-10-04 Codex - Interrupted bounded retry left 109 provenance packages from four sources quarantined; no scan report, review, or publication. Monthly source coverage remains incomplete.

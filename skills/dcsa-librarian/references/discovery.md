@@ -15,6 +15,17 @@ Use `config/source_registry.json` as the allowlist. A search engine may help ide
 
 The `--download` option writes only to the independent project's quarantine directory. Publication requires a separate reviewed release workflow.
 
+`--download-match <text>` narrows what `--download` fetches to documents whose URL, link text or filename contains the text. Every other document on the page is still seen and reported as a candidate; it just is not quarantined again. A scheduled job that names an `expect` value applies it as its download match, so the Voice of Industry watch quarantines the awaited issue and not the rest of the NISP Tools page on every poll. One document that fails to download is recorded under `verification_errors` and the scan goes on.
+
+## The monthly Voice of Industry
+
+```
+python custodian.py discover --library <library> --source dcsa-nisp-tools --download --download-match voi
+python custodian.py capture-listing --source dcsa-nisp-tools --output state/captures/nisp-tools-<YYYYMMDD>.json
+```
+
+The first command quarantines any Voice of Industry the manifest lacks, with its original bytes, SHA-256 and `.intake.json` (`requested_source_uri` is the official address; `publisher_claim` is the link text, which carries the issue's month). The second saves the listing page in the capture format, which the guidance site's source-link import needs as evidence of what DCSA lists. Both go by direct request. Use the browser fallback below only when the direct request is refused, and say in the handoff which path was used. "The page was unreachable" and "the page lists no new issue" are different results: never report the first as the second.
+
 ## Revision detection
 
 A manifest hit proves the library once held that URL. It is not evidence that
