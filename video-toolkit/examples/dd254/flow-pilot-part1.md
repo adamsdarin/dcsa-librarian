@@ -15,16 +15,16 @@ named as they were when this was written; check the current Flow UI before relyi
 
 ## 1. Style lock (paste at the start of every prompt)
 
-Two options. **A is recommended** because it matches the PCL video and the DD 254 graphics.
+**Decided 17 Nov 2026: Option A.** Option B is kept below only for the record.
 
-**Option A: flat 2D vector (recommended)**
+**Option A: flat 2D vector (chosen)**
 > Flat 2D vector cartoon, educational explainer style. Thick dark navy-charcoal outlines (#2b2d42) of even
 > weight, flat fills, no gradients, no textures, soft simple shadows only. Rounded friendly shapes,
 > slightly oversized heads, simple dot eyes. Palette: cream walls (#fbeed7), warm tan floors (#e3c9a0),
 > teal (#2a9d8f), navy (#1d3557), mustard yellow (#e9c46a), soft orange (#f4a261), coral (#e76f51),
 > pale sky blue (#dff1f7). Gentle, smooth, limited animation. 16:9.
 
-**Option B: soft 3D clay**
+**Option B: soft 3D clay (not chosen)**
 > Stylized soft 3D clay-like cartoon, matte surfaces, rounded forms, warm studio lighting, shallow depth of
 > field, same palette as above. 16:9.
 
@@ -43,9 +43,8 @@ program names out by construction. Mute whatever audio Flow generates anyway.
 
 ## 3. Cast sheet (reuse word for word)
 
-These are fresh designs: the originals were lost. The names are gender-neutral; the presentations below
-are proposals. **Check them against the narration before generating:** if the review doc uses pronouns for
-any character, the design must match it.
+These are fresh designs: the originals were lost. **Accepted by the owner on 17 Nov 2026.** If the review
+doc later turns out to use pronouns that conflict with a design, flag it rather than silently changing either.
 
 **MORGAN, government contracting officer's security representative (the GCA)**
 > MORGAN: a woman in her mid-40s with medium-brown skin, short dark curly hair and round black glasses.
@@ -86,6 +85,46 @@ any character, the design must match it.
    the images, to this folder once chosen (decide later whether the images themselves belong in the repo).
 4. Optional style anchor: a still of the toolkit's flat-vector look can be uploaded as a style reference.
    The PCL video's frames are the closest thing that exists today.
+
+
+### 5a. Ready-to-paste reference image prompts
+
+Each block is complete: style lock, subject and exclusions already joined. Generate 3–4 variants of each and keep one.
+
+**R1 · MORGAN (character reference)**
+```
+Flat 2D vector cartoon, educational explainer style. Thick dark navy-charcoal outlines (#2b2d42) of even weight, flat fills, no gradients, no textures, soft simple shadows only. Rounded friendly shapes, slightly oversized heads, simple dot eyes. Palette: cream walls (#fbeed7), warm tan floors (#e3c9a0), teal (#2a9d8f), navy (#1d3557), mustard yellow (#e9c46a), soft orange (#f4a261), coral (#e76f51), pale sky blue (#dff1f7). 16:9. Full-body character reference: MORGAN: a woman in her mid-40s with medium-brown skin, short dark curly hair and round black glasses. Navy blazer (#1d3557) over a pale sky-blue shirt (#dff1f7), grey trousers, black flats. Carries a plain manila folder. A blank lanyard card with no writing. Calm, organised, precise gestures. Standing alone, front three-quarter view, neutral pose, plain cream background (#fbeed7). No text, letters, numbers, labels, signs, screens with readable content, logos, seals, emblems, flags, insignia, badges with writing, or uniforms. No real people or likenesses. No dialogue; characters do not speak; mouths closed or smiling. No music or voices.
+```
+
+**R2 · JORDAN (character reference)**
+```
+Flat 2D vector cartoon, educational explainer style. Thick dark navy-charcoal outlines (#2b2d42) of even weight, flat fills, no gradients, no textures, soft simple shadows only. Rounded friendly shapes, slightly oversized heads, simple dot eyes. Palette: cream walls (#fbeed7), warm tan floors (#e3c9a0), teal (#2a9d8f), navy (#1d3557), mustard yellow (#e9c46a), soft orange (#f4a261), coral (#e76f51), pale sky blue (#dff1f7). 16:9. Full-body character reference: JORDAN: a man in his early 30s with light-olive skin and short straight black hair, neatly parted. Teal quarter-zip sweater (#2a9d8f) over a white collar, khaki trousers, brown shoes. Carries a plain grey tablet with a blank screen. Friendly, attentive, quick to nod. Standing alone, front three-quarter view, neutral pose, plain cream background (#fbeed7). No text, letters, numbers, labels, signs, screens with readable content, logos, seals, emblems, flags, insignia, badges with writing, or uniforms. No real people or likenesses. No dialogue; characters do not speak; mouths closed or smiling. No music or voices.
+```
+
+**R3 · RILEY (character reference)**
+```
+Flat 2D vector cartoon, educational explainer style. Thick dark navy-charcoal outlines (#2b2d42) of even weight, flat fills, no gradients, no textures, soft simple shadows only. Rounded friendly shapes, slightly oversized heads, simple dot eyes. Palette: cream walls (#fbeed7), warm tan floors (#e3c9a0), teal (#2a9d8f), navy (#1d3557), mustard yellow (#e9c46a), soft orange (#f4a261), coral (#e76f51), pale sky blue (#dff1f7). 16:9. Full-body character reference: RILEY: a person in their mid-50s with light skin, a short grey beard and a grey buzz cut. Soft-orange work shirt (#f4a261) with sleeves rolled up, dark charcoal canvas apron, clear safety glasses pushed up on the forehead. Sturdy, practical, warm smile. Standing alone, front three-quarter view, neutral pose, plain cream background (#fbeed7). No text, letters, numbers, labels, signs, screens with readable content, logos, seals, emblems, flags, insignia, badges with writing, or uniforms. No real people or likenesses. No dialogue; characters do not speak; mouths closed or smiling. No music or voices.
+```
+
+**R4 · GOV OFFICE (location reference)**
+```
+Flat 2D vector cartoon, educational explainer style. Thick dark navy-charcoal outlines (#2b2d42) of even weight, flat fills, no gradients, no textures, soft simple shadows only. Rounded friendly shapes, slightly oversized heads, simple dot eyes. Palette: cream walls (#fbeed7), warm tan floors (#e3c9a0), teal (#2a9d8f), navy (#1d3557), mustard yellow (#e9c46a), soft orange (#f4a261), coral (#e76f51), pale sky blue (#dff1f7). 16:9. Empty establishing view, no people: GOV OFFICE: a tidy government office with cream walls, a wooden desk, a grey filing cabinet, a potted plant and a window with pale blue sky. Plain walls: no flags, seals, framed emblems or posters. Wide shot, eye level. No text, letters, numbers, labels, signs, screens with readable content, logos, seals, emblems, flags, insignia, badges with writing, or uniforms. No real people or likenesses. No dialogue; characters do not speak; mouths closed or smiling. No music or voices.
+```
+
+**R5 · PLANT LAB (location reference)**
+```
+Flat 2D vector cartoon, educational explainer style. Thick dark navy-charcoal outlines (#2b2d42) of even weight, flat fills, no gradients, no textures, soft simple shadows only. Rounded friendly shapes, slightly oversized heads, simple dot eyes. Palette: cream walls (#fbeed7), warm tan floors (#e3c9a0), teal (#2a9d8f), navy (#1d3557), mustard yellow (#e9c46a), soft orange (#f4a261), coral (#e76f51), pale sky blue (#dff1f7). 16:9. Empty establishing view, no people: PLANT LAB: a clean, bright electronics lab at a contractor plant. A workbench with a generic grey electronics chassis, its lid open to show green circuit boards, and a small instrument with a blank screen. Teal and white walls, no signs. Wide shot, eye level. No text, letters, numbers, labels, signs, screens with readable content, logos, seals, emblems, flags, insignia, badges with writing, or uniforms. No real people or likenesses. No dialogue; characters do not speak; mouths closed or smiling. No music or voices.
+```
+
+**R6 · MACHINE SHOP (location reference)**
+```
+Flat 2D vector cartoon, educational explainer style. Thick dark navy-charcoal outlines (#2b2d42) of even weight, flat fills, no gradients, no textures, soft simple shadows only. Rounded friendly shapes, slightly oversized heads, simple dot eyes. Palette: cream walls (#fbeed7), warm tan floors (#e3c9a0), teal (#2a9d8f), navy (#1d3557), mustard yellow (#e9c46a), soft orange (#f4a261), coral (#e76f51), pale sky blue (#dff1f7). 16:9. Empty establishing view, no people: MACHINE SHOP: a small, warm-lit machine shop with a milling machine, a workbench, neat tool racks and a few bare aluminium housings on a cart. No signs or labels. Wide shot, eye level. No text, letters, numbers, labels, signs, screens with readable content, logos, seals, emblems, flags, insignia, badges with writing, or uniforms. No real people or likenesses. No dialogue; characters do not speak; mouths closed or smiling. No music or voices.
+```
+
+**R7 · TEST RANGE (location reference)**
+```
+Flat 2D vector cartoon, educational explainer style. Thick dark navy-charcoal outlines (#2b2d42) of even weight, flat fills, no gradients, no textures, soft simple shadows only. Rounded friendly shapes, slightly oversized heads, simple dot eyes. Palette: cream walls (#fbeed7), warm tan floors (#e3c9a0), teal (#2a9d8f), navy (#1d3557), mustard yellow (#e9c46a), soft orange (#f4a261), coral (#e76f51), pale sky blue (#dff1f7). 16:9. Empty establishing view, no people: TEST RANGE: open desert scrubland under a wide pale-blue sky. A trailer-mounted radar dish, painted plain white, behind a chain-link fence. No vehicles with markings, no military insignia. Wide shot, eye level. No text, letters, numbers, labels, signs, screens with readable content, logos, seals, emblems, flags, insignia, badges with writing, or uniforms. No real people or likenesses. No dialogue; characters do not speak; mouths closed or smiling. No music or voices.
+```
 
 ## 6. Part 1: footage or graphics, scene by scene
 
@@ -161,7 +200,5 @@ Run all five core clips, then judge:
 tooling rebuilt (course-handoff.md §10–11). That decision goes to the owner with the pilot results.
 
 ## 9. Still open for this pilot
-- Option A or B (§1). Recommended: A.
-- Accept or change the three character designs (§3).
 - Which editor composites clips, graphics, captions and narration.
 - `dd254-course-script-review.md` is still needed: it fixes the scene timings and any character pronouns.
