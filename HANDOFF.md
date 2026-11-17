@@ -56,6 +56,12 @@ Hearing Decisions - 2") is inaccessible with no recovery date.
   lifecycle review? Owner decision.
 
 ## Log
+2026-11-17 Claude — DD 254 Flow pilot: the owner kept the fictional radar contract (decision 2) and approved
+a Part 1 pilot before any wider Flow work. flow-pilot-part1.md holds a style lock (flat 2D vector matching the
+PCL palette recommended over 3D clay, which would clash with the form graphics), proposed cast and location
+sheets, and 5 core clips. Flow carries only about 8% of Part 1; the form and all text stay graphics, and
+prompts forbid any text so seals, NCCS/NI2 and garbled marks can't appear. Pass/fail rests on character
+consistency and style match; failing either falls back to rebuilding the toolkit. Still missing: the review doc.
 2026-11-17 Claude — DD 254 video: the owner chose a six-part course (~1 hour, a stop every
 ~10 min) that follows one form from GCA to prime to sub, replacing the three short videos. No
 NCCS/NI2 anywhere. Scripts were voiced at 53.5 min total and sent for review on 10-04; the owner has
