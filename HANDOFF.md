@@ -1,6 +1,6 @@
 # HANDOFF — dcsa-librarian
 
-Last updated: 2026-10-31 by Claude
+Last updated: 2026-11-17 by Claude
 
 ## Current State
 Librarian owns official-source discovery, integrity checks and quarantine intake; it
@@ -56,6 +56,14 @@ Hearing Decisions - 2") is inaccessible with no recovery date.
   lifecycle review? Owner decision.
 
 ## Log
+2026-11-17 Claude — DD 254 video: the owner chose a six-part course (~1 hour, a stop every
+~10 min) that follows one form from GCA to prime to sub, replacing the three short videos. No
+NCCS/NI2 anywhere. Scripts were voiced at 53.5 min total and sent for review on 10-04; the owner has
+not yet approved them. Five decisions are open, length among them. The scratch workspace (script
+generator, XFA form tooling, props) was lost in a container reset before it was committed. Lesson:
+commit tooling at each checkpoint. The decisions, sources, scene plan, surviving narration and
+Google Flow notes are now in video-toolkit/examples/dd254/. The full narration is only in the
+owner's downloaded review doc, which needs adding there.
 2026-10-31 Claude — Owner asked to split the PCL video into four episodes (submission,
 investigation, adjudication, maintenance), "as long as necessary", reviewing all four scripts at
 once. Approved wording is kept; new lines are verified against 32 CFR 117/155/147, SEADs 4 and 7,
